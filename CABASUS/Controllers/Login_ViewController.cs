@@ -86,7 +86,7 @@ namespace CABASUS.Controllers
             gestor.Direction = UISwipeGestureRecognizerDirection.Right;
             gestol.Direction = UISwipeGestureRecognizerDirection.Left;
 
-            view_circle.Frame = new CGRect(0, 200, View.Frame.Width, 150);
+            view_circle.Frame = new CGRect(0, (View.Frame.Height/2)-75, View.Frame.Width, 150);
             view_circle.BackgroundColor = UIColor.Clear;
 
 
