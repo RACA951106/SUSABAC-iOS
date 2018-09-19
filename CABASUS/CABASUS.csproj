@@ -122,6 +122,10 @@
     <Compile Include="Controllers\Login_ViewController.designer.cs">
       <DependentUpon>Login_ViewController.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controllers\Sesion_ViewController.cs" />
+    <Compile Include="Controllers\Sesion_ViewController.designer.cs">
+      <DependentUpon>Sesion_ViewController.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\bell_icon.png" />

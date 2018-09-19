@@ -39,6 +39,7 @@ namespace CABASUS.Controllers
             videoPlayerItem = new AVPlayerItem(videoAsset);
             videoPlayer = new AVPlayer(videoPlayerItem);
             videoPlayerLayer = AVPlayerLayer.FromPlayer(videoPlayer);
+            videoPlayerLayer.VideoGravity = AVLayerVideoGravity.ResizeAspectFill;
             videoPlayerLayer.Frame = View.Frame;
             View.Layer.InsertSublayer(videoPlayerLayer, 0);
             videoPlayer.Play();
