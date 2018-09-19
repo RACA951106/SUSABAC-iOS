@@ -134,7 +134,7 @@ namespace CABASUS.Controllers
             #endregion
 
             #region Puntos inferiores;
-            view_points.Frame = new CGRect((View.Frame.Width / 2) - 30, 350, 60, 20);
+            view_points.Frame = new CGRect((View.Frame.Width / 2) - 30, (View.Frame.Height / 2) + 75, 60, 20);
             view_points.BackgroundColor = UIColor.Clear;
 
             view_point1.Frame = new CGRect(0, 5, 8, 8);
