@@ -124,12 +124,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Downloads\PagerViewController-master\Sources\PagerViewController\PagerViewController.csproj">
-      <Project>{7129BABF-BDFF-492B-A19E-73240656573D}</Project>
-      <Name>PagerViewController</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <BundleResource Include="Resources\bell_icon.png" />
     <BundleResource Include="Resources\horse_icon.png" />
     <BundleResource Include="Resources\lupa_icon.png" />
