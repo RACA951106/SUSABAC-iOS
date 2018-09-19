@@ -81,8 +81,12 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="Xamarin.iOS" />
+    <Reference Include="PagerViewController">
+      <HintPath>..\PagerViewController\bin\Debug\PagerViewController.dll</HintPath>
+    </Reference>
     <Reference Include="Xamarin.iOS.iCarousel.Binding">
-      <HintPath>..\..\Xamarin.iOS.iCarousel-master\src\Xamarin.iOS.iCarousel.Example\bin\iPhoneSimulator\Debug\Xamarin.iOS.iCarousel.Binding.dll</HintPath>
+      <HintPath>..\packages\Xamarin.iOS.iCarousel.1.8.4\lib\Xamarin.iOS10\Xamarin.iOS.iCarousel.Binding.dll</HintPath>
+      <Private>False</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -101,6 +105,7 @@
   <ItemGroup>
     <None Include="Info.plist" />
     <None Include="Entitlements.plist" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Main.cs" />
