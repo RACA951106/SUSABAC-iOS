@@ -28,19 +28,19 @@ namespace CABASUS.Controllers
 		UIKit.UIView view_circle { get; set; }
 
 		[Outlet]
-		UIKit.UIView view_point1 { get; set; }
+		UIKit.UIButton view_point1 { get; set; }
 
 		[Outlet]
-		UIKit.UIView view_point2 { get; set; }
+		UIKit.UIButton view_point2 { get; set; }
 
 		[Outlet]
-		UIKit.UIView view_point3 { get; set; }
+		UIKit.UIButton view_point3 { get; set; }
 
 		[Outlet]
 		UIKit.UIView view_points { get; set; }
 
 		[Outlet]
-		UIKit.UIView view_poitn4 { get; set; }
+		UIKit.UIButton view_poitn4 { get; set; }
 		
 		void ReleaseDesignerOutlets ()
 		{

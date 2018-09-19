@@ -61,7 +61,7 @@
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Already a user?" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="T9z-mZ-b71">
                                 <rect key="frame" x="137" y="516" width="118" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="10"/>
+                                <fontDescription key="fontDescription" type="italicSystem" pointSize="9"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
@@ -74,26 +74,22 @@
                                 <rect key="frame" x="93" y="388" width="190" height="36"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
-                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gYJ-ZZ-hna">
-                                        <rect key="frame" x="0.0" y="-8" width="34" height="36"/>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LH6-aG-Lzj">
+                                        <rect key="frame" x="8" y="8" width="30" height="30"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                    </view>
-                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="XXX-5i-6Qy">
-                                        <rect key="frame" x="65" y="0.0" width="34" height="36"/>
+                                    </button>
+                                    <button opaque="NO" alpha="0.5" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aOJ-um-QBI">
+                                        <rect key="frame" x="62" y="8" width="30" height="30"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                    </view>
-                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lLf-68-SA7">
-                                        <rect key="frame" x="133" y="0.0" width="34" height="36"/>
+                                    </button>
+                                    <button opaque="NO" alpha="0.5" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="I7x-g3-rRd">
+                                        <rect key="frame" x="152" y="8" width="30" height="30"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                    </view>
-                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gj1-gB-S39">
-                                        <rect key="frame" x="166" y="0.0" width="34" height="36"/>
+                                    </button>
+                                    <button opaque="NO" alpha="0.5" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="66N-06-6ah">
+                                        <rect key="frame" x="110" y="8" width="30" height="30"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                    </view>
+                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
@@ -106,11 +102,11 @@
                         <outlet property="img_logo" destination="Aa6-tV-iJO" id="C8B-Wz-7jH"/>
                         <outlet property="lbl_already" destination="T9z-mZ-b71" id="2Ji-Ef-Mn5"/>
                         <outlet property="view_circle" destination="Ees-FN-rl3" id="yWM-Ib-mL3"/>
-                        <outlet property="view_point1" destination="gYJ-ZZ-hna" id="XbP-r7-Gq7"/>
-                        <outlet property="view_point2" destination="XXX-5i-6Qy" id="YKf-YW-KYh"/>
-                        <outlet property="view_point3" destination="lLf-68-SA7" id="yQg-QN-jLR"/>
+                        <outlet property="view_point1" destination="LH6-aG-Lzj" id="T48-N5-x1k"/>
+                        <outlet property="view_point2" destination="66N-06-6ah" id="Ffr-ap-Hxh"/>
+                        <outlet property="view_point3" destination="I7x-g3-rRd" id="5jg-ZN-DpE"/>
                         <outlet property="view_points" destination="x7E-51-2pa" id="w9P-gG-TVh"/>
-                        <outlet property="view_poitn4" destination="gj1-gB-S39" id="Zro-oD-FqP"/>
+                        <outlet property="view_poitn4" destination="aOJ-um-QBI" id="Tzk-WX-5hv"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ZBE-rX-MHE" userLabel="First Responder" sceneMemberID="firstResponder"/>
