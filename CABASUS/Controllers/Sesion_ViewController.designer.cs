@@ -19,6 +19,9 @@ namespace CABASUS.Controllers
 		UIKit.UIButton btn_recovery { get; set; }
 
 		[Outlet]
+		UIKit.UIButton btnback { get; set; }
+
+		[Outlet]
 		UIKit.UILabel lbl_login { get; set; }
 
 		[Outlet]
@@ -35,9 +38,24 @@ namespace CABASUS.Controllers
 		
 		void ReleaseDesignerOutlets ()
 		{
+			if (btn_login != null) {
+				btn_login.Dispose ();
+				btn_login = null;
+			}
+
+			if (btn_recovery != null) {
+				btn_recovery.Dispose ();
+				btn_recovery = null;
+			}
+
 			if (lbl_login != null) {
 				lbl_login.Dispose ();
 				lbl_login = null;
+			}
+
+			if (lbl_password != null) {
+				lbl_password.Dispose ();
+				lbl_password = null;
 			}
 
 			if (lblemail != null) {
@@ -50,24 +68,14 @@ namespace CABASUS.Controllers
 				txt_email = null;
 			}
 
-			if (lbl_password != null) {
-				lbl_password.Dispose ();
-				lbl_password = null;
-			}
-
 			if (txt_password != null) {
 				txt_password.Dispose ();
 				txt_password = null;
 			}
 
-			if (btn_login != null) {
-				btn_login.Dispose ();
-				btn_login = null;
-			}
-
-			if (btn_recovery != null) {
-				btn_recovery.Dispose ();
-				btn_recovery = null;
+			if (btnback != null) {
+				btnback.Dispose ();
+				btnback = null;
 			}
 		}
 	}

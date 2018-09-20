@@ -106,6 +106,7 @@
     <None Include="Info.plist" />
     <None Include="Entitlements.plist" />
     <None Include="packages.config" />
+    <None Include="Video.mp4" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Main.cs" />
@@ -126,6 +127,10 @@
     <Compile Include="Controllers\Sesion_ViewController.designer.cs">
       <DependentUpon>Sesion_ViewController.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controllers\Register_ViewController.cs" />
+    <Compile Include="Controllers\Register_ViewController.designer.cs">
+      <DependentUpon>Register_ViewController.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\bell_icon.png" />
@@ -135,9 +140,6 @@
     <BundleResource Include="Resources\menu_icon.png" />
     <BundleResource Include="Resources\timeline_icon.png" />
     <BundleResource Include="Resources\cabasuslogo.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Video.mp4" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
 </Project>

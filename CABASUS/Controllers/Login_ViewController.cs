@@ -44,7 +44,7 @@ namespace CABASUS.Controllers
             View.Layer.InsertSublayer(videoPlayerLayer, 0);
             videoPlayer.Play();
             videoPlayer.Volume = 0;
-
+ 
             // Subscribe to video end notification
             videoPlayer.ActionAtItemEnd = AVPlayerActionAtItemEnd.None;
             videoEndNotificationToken = NSNotificationCenter.DefaultCenter.AddObserver(AVPlayerItem.DidPlayToEndTimeNotification, VideoDidFinishPlaying, videoPlayerItem);
