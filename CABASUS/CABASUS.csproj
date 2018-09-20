@@ -81,12 +81,12 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="Xamarin.iOS" />
-    <Reference Include="PagerViewController">
-      <HintPath>..\PagerViewController\bin\Debug\PagerViewController.dll</HintPath>
-    </Reference>
     <Reference Include="Xamarin.iOS.iCarousel.Binding">
       <HintPath>..\packages\Xamarin.iOS.iCarousel.1.8.4\lib\Xamarin.iOS10\Xamarin.iOS.iCarousel.Binding.dll</HintPath>
       <Private>False</Private>
+    </Reference>
+    <Reference Include="PagerViewController">
+      <HintPath>..\PagerViewController\bin\Debug\PagerViewController.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
