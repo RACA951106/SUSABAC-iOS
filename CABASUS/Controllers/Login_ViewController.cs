@@ -33,7 +33,7 @@ namespace CABASUS.Controllers
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
-           
+            //Medidas de iphone
             //Iphone x =414
             //Iphone 6=375
             //Iphone 5s=320
