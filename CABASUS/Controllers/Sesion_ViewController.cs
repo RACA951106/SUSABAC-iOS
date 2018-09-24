@@ -77,6 +77,14 @@ namespace CABASUS.Controllers
                 GenerarAlerta(View, contenedor);
             };
             #endregion
+
+            btn_login.TouchUpInside+=delegate {
+
+                var detalle = this.Storyboard.InstantiateViewController("ViewController") as ViewController;
+                detalle.ModalTransitionStyle = UIModalTransitionStyle.CrossDissolve;
+                detalle.ModalPresentationStyle = UIModalPresentationStyle.OverFullScreen;
+                this.PresentViewController(detalle, true, null);
+            };
         }
 
 

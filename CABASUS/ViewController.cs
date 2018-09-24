@@ -10,6 +10,9 @@ namespace CABASUS
         {
             // Note: this .ctor should not contain any initialization logic.
         }
+        public ViewController() : base("ViewController", null)
+        {
+        }
 
         public override void ViewDidLoad()
         {

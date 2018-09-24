@@ -94,6 +94,7 @@ namespace CABASUS.Controllers
                 btn_login.Frame = new CGRect(50, View.Frame.Height - 90, View.Frame.Width - 100, 35);
             else 
                 btn_login.Frame = new CGRect(50, View.Frame.Height - 130, View.Frame.Width - 100, 35);
+
             #endregion
 
             #region Carrousel
