@@ -21,7 +21,7 @@ namespace CABASUS
                 UIColor.FromRGB(255,255,255),
                 UIColor.FromRGB(255,255,255),
                 UIColor.FromRGB(255,255,255),
-            };
+            }; //lol
 
             var pages = new[]
             {
