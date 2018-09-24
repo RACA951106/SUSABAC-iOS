@@ -34,8 +34,12 @@ namespace CABASUS.Controllers
         {
             base.ViewDidLoad();
 
+            //Iphone x =414
+            //Iphone 6=375
+            //Iphone 5s=320
+
             #region Video de fondo           
-            videoAsset = AVAsset.FromUrl(NSUrl.FromFilename("Video.mp4"));
+            videoAsset = AVAsset.FromUrl(NSUrl.FromFilename("VideoLogin.mp4"));
             videoPlayerItem = new AVPlayerItem(videoAsset);
             videoPlayer = new AVPlayer(videoPlayerItem);
             videoPlayerLayer = AVPlayerLayer.FromPlayer(videoPlayer);
@@ -60,26 +64,36 @@ namespace CABASUS.Controllers
 
             #region Ubicacion y tamaño boton create account
 
-            btn_createaccount.Frame = new CGRect(50, View.Frame.Height - 200, View.Frame.Width - 100, 35);
             btn_createaccount.Layer.CornerRadius = 15f;
             btn_createaccount.ClipsToBounds = true;
+            if (View.Frame.Width == 320)
+                btn_createaccount.Frame = new CGRect(50, View.Frame.Height - 160, View.Frame.Width - 100, 35);
+            else
+                btn_createaccount.Frame = new CGRect(50, View.Frame.Height - 200, View.Frame.Width - 100, 35);
+
 
             #endregion
 
             #region Ubicacion y tamaño label already a user
 
-            lbl_already.Frame = new CGRect(0, View.Frame.Height - 145, View.Frame.Width, 12);
             lbl_already.TextAlignment = UITextAlignment.Center;
             lbl_already.TextColor = UIColor.White;
             lbl_already.Font = UIFont.BoldSystemFontOfSize(11f);
+            if (View.Frame.Width == 320)
+                lbl_already.Frame = new CGRect(0, View.Frame.Height - 105, View.Frame.Width, 12);
+            else
+                lbl_already.Frame = new CGRect(0, View.Frame.Height - 145, View.Frame.Width, 12);
+
+
             #endregion
 
             #region Ubicacion y tamaño boton log in
-
-            btn_login.Frame = new CGRect(50, View.Frame.Height - 130, View.Frame.Width - 100, 35);
             btn_login.Layer.CornerRadius = 15f;
             btn_login.ClipsToBounds = true;
-
+            if (View.Frame.Width==320)
+                btn_login.Frame = new CGRect(50, View.Frame.Height - 90, View.Frame.Width - 100, 35);
+            else 
+                btn_login.Frame = new CGRect(50, View.Frame.Height - 130, View.Frame.Width - 100, 35);
             #endregion
 
             #region Carrousel

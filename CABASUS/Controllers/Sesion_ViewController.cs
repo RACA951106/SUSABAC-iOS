@@ -15,7 +15,7 @@ namespace CABASUS.Controllers
             base.ViewDidLoad();
 
             #region Medidas y ubicacion de objetos en la interfaz
-            //Iphone x =404
+            //Iphone x =414
             //Iphone 6=375
             //Iphone 5s=320
             btnback.Frame = new CGRect(0, 35, 50, 20);
@@ -37,13 +37,21 @@ namespace CABASUS.Controllers
             btn_login.ClipsToBounds = true;
 
             btn_recovery.Frame = new CGRect(25, 355, View.Frame.Width - 50, 50);
-
+            btn_recovery.TitleLabel.Lines = 2;
+            btn_recovery.TitleLabel.TextAlignment = UITextAlignment.Center;
             #endregion
 
             #region Accion para boton recovery
             btn_recovery.TouchUpInside += delegate
             {
-                var contenedor = new UIView(new CGRect(50, 150, View.Frame.Width - 100, View.Frame.Height - 300));
+                var contenedor = new UIView();
+                if (View.Frame.Width==320)
+                    contenedor.Frame = new CGRect(30, 120, View.Frame.Width - 60, View.Frame.Height - 240);
+                else if (View.Frame.Width == 414)
+                    contenedor.Frame = new CGRect(50, 250, View.Frame.Width - 100, View.Frame.Height - 500);
+                else
+                    contenedor.Frame = new CGRect(50, 150, View.Frame.Width - 100, View.Frame.Height - 300);
+
                 var lbl_reset = new UILabel(new CGRect(0,20,contenedor.Frame.Width,20));
                 lbl_reset.Text = "Reset your password";
                 lbl_reset.TextAlignment = UITextAlignment.Center;

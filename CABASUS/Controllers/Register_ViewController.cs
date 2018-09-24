@@ -57,7 +57,7 @@ namespace CABASUS.Controllers
             btn_terms.TitleLabel.Lines = 3;
             btn_terms.TitleLabel.TextAlignment=UITextAlignment.Center;
 
-            scroll_register.Frame = new CGRect(0, 35, View.Frame.Width, View.Frame.Height - 35);
+            scroll_register.Frame = new CGRect(0, 55, View.Frame.Width, View.Frame.Height - 55);
             scroll_register.ContentSize= new CGSize(View.Frame.Width, 670);
             #endregion
         }

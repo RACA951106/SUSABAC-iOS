@@ -106,7 +106,6 @@
     <None Include="Info.plist" />
     <None Include="Entitlements.plist" />
     <None Include="packages.config" />
-    <None Include="Video.mp4" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Main.cs" />
@@ -140,6 +139,9 @@
     <BundleResource Include="Resources\menu_icon.png" />
     <BundleResource Include="Resources\timeline_icon.png" />
     <BundleResource Include="Resources\cabasuslogo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="VideoLogin.mp4" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
 </Project>
