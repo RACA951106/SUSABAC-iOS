@@ -1,5 +1,9 @@
 ﻿using System;
+using AssetsLibrary;
 using CoreGraphics;
+using Foundation;
+using ImageIO;
+using Photos;
 using UIKit;
 
 namespace CABASUS.Controllers
@@ -44,11 +48,6 @@ namespace CABASUS.Controllers
             txt_dob.Layer.BorderColor = UIColor.FromRGB(246, 128, 25).CGColor;
             txt_dob.Layer.BorderWidth = 1f;
 
-            lbl_phone.Frame = new CGRect(25, 460, View.Frame.Width - 50, 30);
-            txt_phone.Frame = new CGRect(25, 495, View.Frame.Width - 50, 40);
-            txt_phone.Layer.BorderColor = UIColor.FromRGB(246, 128, 25).CGColor;
-            txt_phone.Layer.BorderWidth = 1f;
-
             btn_done.Frame = new CGRect(25, 550, View.Frame.Width - 50, 40);
             btn_done.Layer.CornerRadius = 20f;
             btn_done.ClipsToBounds = true;
@@ -59,7 +58,144 @@ namespace CABASUS.Controllers
 
             scroll_register.Frame = new CGRect(0, 55, View.Frame.Width, View.Frame.Height - 55);
             scroll_register.ContentSize= new CGSize(View.Frame.Width, 670);
-            #endregion
+            #endregion;
+
+            #region ocultar teclado al tocar la pantalla;
+
+            var g = new UITapGestureRecognizer(() => View.EndEditing(true));
+            g.CancelsTouchesInView = false; //for iOS5
+
+            View.AddGestureRecognizer(g);
+
+            #endregion;
+
+            #region mover pantalla cuando se este llenando el formulario;
+
+            UIKeyboard.Notifications.ObserveWillShow((sender, args) =>
+            {
+                Action action = () =>
+                {
+                    scroll_register.ContentSize = new CGSize(View.Frame.Width, 670 + args.FrameEnd.Height);
+                };
+
+                UIViewPropertyAnimator animator = new UIViewPropertyAnimator(.3, UIViewAnimationCurve.Linear, action);
+                animator.StartAnimation();
+
+                if (txt_dob.IsEditing)
+                {
+                    scroll_register.SetContentOffset(new CGPoint(0, 150), true);
+                }
+            });
+
+
+            UIKeyboard.Notifications.ObserveWillHide((sender, args) =>
+            {
+                Action action = () =>
+                {
+                    scroll_register.ContentSize = new CGSize(View.Frame.Width, 670);
+                };
+
+                UIViewPropertyAnimator animator = new UIViewPropertyAnimator(.3, UIViewAnimationCurve.Linear, action);
+                animator.StartAnimation();
+            });
+
+            #endregion;
+
+            #region abrir camara o galeria para la foto del ususario;
+
+            btn_foto.TouchUpInside+=delegate {
+
+                GaleryCameraAccessController obj = new GaleryCameraAccessController();
+
+                var okCancelAlertController = UIAlertController.Create(null, "Selecciona una opcion", UIAlertControllerStyle.Alert);
+
+                okCancelAlertController.AddAction(UIAlertAction.Create("Galeria", UIAlertActionStyle.Default, alert => obj.BringUpPhotoGallery(btn_foto, 50)));
+                okCancelAlertController.AddAction(UIAlertAction.Create("Camara", UIAlertActionStyle.Default, alert => obj.BringUpCamera(btn_foto, 50)));
+                okCancelAlertController.AddAction(UIAlertAction.Create("Cancelar", UIAlertActionStyle.Cancel, null));
+
+                PresentViewController(okCancelAlertController, true, null);
+            };
+
+            #endregion;
+
+            #region guardar datos al precionar boton aceptar;
+
+            btn_done.TouchUpInside += delegate
+            {
+                var documentsDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
+                var directoryname = System.IO.Path.Combine(documentsDirectory, "FotosUsuario");
+                System.IO.Directory.CreateDirectory(directoryname);
+                string jpgFilename = System.IO.Path.Combine(directoryname, "FotoUsuario.jpg"); // hardcoded filename, overwritten each time. You can make it dynamic as per your requirement.
+
+                UIImage imagen = new UIImage(jpgFilename);
+
+                var assetCollection = new PHAssetCollection();
+                var albumFound = false;
+                var assetCollectionPlaceholder = new PHObjectPlaceholder();
+
+
+                var fetchOptions = new PHFetchOptions();
+                fetchOptions.Predicate = NSPredicate.FromFormat("title LIKE \"CABASUS\"");
+                var collection = PHAssetCollection.FetchAssetCollections(PHAssetCollectionType.Album, PHAssetCollectionSubtype.Any, fetchOptions);
+
+                if (collection.firstObject != null)
+                {
+                    albumFound = true;
+                    assetCollection = collection.firstObject as PHAssetCollection;
+
+                    //PHPhotoLibrary.SharedPhotoLibrary.PerformChanges(() =>
+                    //{
+                    //    var assetRequest = PHAssetChangeRequest.FromImage(imagen);
+                    //    var assetPlaceholder = assetRequest.PlaceholderForCreatedAsset;
+                    //    var albumChangeRequest = PHAssetCollectionChangeRequest.ChangeRequest(assetCollection, collection);
+                    //    albumChangeRequest.AddAssets(new PHObject[] { assetPlaceholder });
+                    //}, (ok, error) =>
+                    //{
+                    //    Console.WriteLine("added image to album");
+                    //    Console.WriteLine(error);
+                    //});
+
+                    GuardarFoto(imagen, assetCollection, collection);
+
+                }
+                else
+                {
+                    PHPhotoLibrary.SharedPhotoLibrary.PerformChanges(() =>
+                    {
+
+                        var createAlbumRequest = PHAssetCollectionChangeRequest.CreateAssetCollection("CABASUS");
+                        assetCollectionPlaceholder = createAlbumRequest.PlaceholderForCreatedAssetCollection;
+                    },
+                    (ok, error) =>
+                    {
+                        albumFound = ok;
+                        if (ok)
+                        {
+                            var collectionFetchResult = PHAssetCollection.FetchAssetCollections(new string[] { assetCollectionPlaceholder.LocalIdentifier }, null);
+                            Console.WriteLine(collectionFetchResult);
+                            collection = collectionFetchResult;
+                            assetCollection = collectionFetchResult.firstObject as PHAssetCollection;
+                            GuardarFoto(imagen, assetCollection, collection);
+                        }
+                    });
+                }
+            };
+            #endregion;
+        }
+
+        public void GuardarFoto(UIImage imagen, PHAssetCollection pHAssetCollection, PHFetchResult pHFetchResult)
+        {
+            PHPhotoLibrary.SharedPhotoLibrary.PerformChanges(() =>
+            {
+                var assetRequest = PHAssetChangeRequest.FromImage(imagen);
+                var assetPlaceholder = assetRequest.PlaceholderForCreatedAsset;
+                var albumChangeRequest = PHAssetCollectionChangeRequest.ChangeRequest(pHAssetCollection, pHFetchResult);
+                albumChangeRequest.AddAssets(new PHObject[] { assetPlaceholder });
+            }, (ok, error) =>
+            {
+                Console.WriteLine("added image to album");
+                Console.WriteLine(error);
+            });
         }
 
         public override void DidReceiveMemoryWarning()

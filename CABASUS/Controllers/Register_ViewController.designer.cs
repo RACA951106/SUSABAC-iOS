@@ -31,9 +31,6 @@ namespace CABASUS.Controllers
 		UIKit.UILabel lbl_email { get; set; }
 
 		[Outlet]
-		UIKit.UILabel lbl_phone { get; set; }
-
-		[Outlet]
 		UIKit.UILabel lbl_pw { get; set; }
 
 		[Outlet]
@@ -47,9 +44,6 @@ namespace CABASUS.Controllers
 
 		[Outlet]
 		UIKit.UITextField txt_email { get; set; }
-
-		[Outlet]
-		UIKit.UITextField txt_phone { get; set; }
 
 		[Outlet]
 		UIKit.UITextField txt_pw { get; set; }
@@ -89,11 +83,6 @@ namespace CABASUS.Controllers
 				lbl_email = null;
 			}
 
-			if (lbl_phone != null) {
-				lbl_phone.Dispose ();
-				lbl_phone = null;
-			}
-
 			if (lbl_pw != null) {
 				lbl_pw.Dispose ();
 				lbl_pw = null;
@@ -102,6 +91,11 @@ namespace CABASUS.Controllers
 			if (lbl_username != null) {
 				lbl_username.Dispose ();
 				lbl_username = null;
+			}
+
+			if (scroll_register != null) {
+				scroll_register.Dispose ();
+				scroll_register = null;
 			}
 
 			if (txt_dob != null) {
@@ -114,11 +108,6 @@ namespace CABASUS.Controllers
 				txt_email = null;
 			}
 
-			if (txt_phone != null) {
-				txt_phone.Dispose ();
-				txt_phone = null;
-			}
-
 			if (txt_pw != null) {
 				txt_pw.Dispose ();
 				txt_pw = null;
@@ -127,11 +116,6 @@ namespace CABASUS.Controllers
 			if (txt_username != null) {
 				txt_username.Dispose ();
 				txt_username = null;
-			}
-
-			if (scroll_register != null) {
-				scroll_register.Dispose ();
-				scroll_register = null;
 			}
 		}
 	}

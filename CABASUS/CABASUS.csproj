@@ -101,6 +101,7 @@
     <InterfaceDefinition Include="LaunchScreen.storyboard" />
     <InterfaceDefinition Include="Main.storyboard" />
     <InterfaceDefinition Include="Paginas.xib" />
+    <InterfaceDefinition Include="Controllers\GaleryCameraAccessController.xib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -129,6 +130,10 @@
     <Compile Include="Controllers\Register_ViewController.cs" />
     <Compile Include="Controllers\Register_ViewController.designer.cs">
       <DependentUpon>Register_ViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controllers\GaleryCameraAccessController.cs" />
+    <Compile Include="Controllers\GaleryCameraAccessController.designer.cs">
+      <DependentUpon>GaleryCameraAccessController.cs</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
