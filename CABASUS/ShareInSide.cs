@@ -26,6 +26,6 @@ namespace CABASUS
             var datos = (tokens)serializador.Deserialize(Lectura);
             Lectura.Close();
             return datos;
-        }
+        } 
     }
 }
