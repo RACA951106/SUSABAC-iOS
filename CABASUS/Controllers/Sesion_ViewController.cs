@@ -90,7 +90,7 @@ namespace CABASUS.Controllers
                 {
                     //Servidor APIS
                     var login = new Modelos.login { usuario = txt_email.Text, contrasena = txt_password.Text };
-                    var data = .JsonConvert.SerializeObject(login);
+                    var data = JsonConvert.SerializeObject(login);
                     var respuesta = await cliente.PostAsync(serverLogin, new StringContent(data, System.Text.Encoding.UTF8, "application/json"));
 
                     if(respuesta.IsSuccessStatusCode)

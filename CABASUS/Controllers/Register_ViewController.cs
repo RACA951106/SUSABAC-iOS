@@ -1,10 +1,6 @@
 using System;
 using System.Net.Http;
-<<<<<<< HEAD
 using System.Text;
-=======
-using AssetsLibrary;
->>>>>>> a462261... Xml
 using CoreGraphics;
 using Foundation;
 using Photos;
@@ -151,19 +147,6 @@ namespace CABASUS.Controllers
                 {
                     albumFound = true;
                     assetCollection = collection.firstObject as PHAssetCollection;
-
-                    //PHPhotoLibrary.SharedPhotoLibrary.PerformChanges(() =>
-                    //{
-                    //    var assetRequest = PHAssetChangeRequest.FromImage(imagen);
-                    //    var assetPlaceholder = assetRequest.PlaceholderForCreatedAsset;
-                    //    var albumChangeRequest = PHAssetCollectionChangeRequest.ChangeRequest(assetCollection, collection);
-                    //    albumChangeRequest.AddAssets(new PHObject[] { assetPlaceholder });
-                    //}, (ok, error) =>
-                    //{
-                    //    Console.WriteLine("added image to album");
-                    //    Console.WriteLine(error);
-                    //});
-
                     GuardarFoto(imagen, assetCollection, collection);
 
                 }
@@ -191,7 +174,6 @@ namespace CABASUS.Controllers
                 #endregion;
 
                 #region usar API para registrar;
-<<<<<<< HEAD
 
                 string server = "http://192.168.1.73:5001/api/Account/registrar";
                 string formato = "application/json";
@@ -218,6 +200,17 @@ namespace CABASUS.Controllers
                     if (respuesta.IsSuccessStatusCode)
                     {
                         Console.WriteLine(content);
+                        var contenido = JsonConvert.DeserializeObject<tokens>(content);
+
+                        new ShareInSide().savexmlToken(contenido.token, contenido.expiration);
+
+                        string id = new ShareInSide().conseguirIDUsuarioDelToken(contenido.token);
+
+
+                        var detalle = this.Storyboard.InstantiateViewController("ViewController") as ViewController;
+                        detalle.ModalTransitionStyle = UIModalTransitionStyle.CrossDissolve;
+                        detalle.ModalPresentationStyle = UIModalPresentationStyle.OverFullScreen;
+                        this.PresentViewController(detalle, true, null);
                     }
                     else
                     {
@@ -231,9 +224,6 @@ namespace CABASUS.Controllers
 
                 #endregion;
             };
-=======
-
->>>>>>> a462261... Xml
 
             #endregion;
         }
