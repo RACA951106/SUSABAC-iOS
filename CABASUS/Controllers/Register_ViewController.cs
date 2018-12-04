@@ -120,8 +120,11 @@ namespace CABASUS.Controllers
 
             #region guardar datos al precionar boton aceptar;
 
-            btn_done.TouchUpInside += delegate
+            btn_done.TouchUpInside += async delegate
             {
+
+                #region guardar foto en la galeria;
+
                 var documentsDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
                 var directoryname = System.IO.Path.Combine(documentsDirectory, "FotosUsuario");
                 System.IO.Directory.CreateDirectory(directoryname);
@@ -179,7 +182,27 @@ namespace CABASUS.Controllers
                         }
                     });
                 }
-            };
+                #endregion;
+
+                #region usar API para registrar;
+                string server = "https://cabasus-mobile.azurewebsites.net/v1/auth/login";
+                string json = "application/json";
+                JsonObject jsonObject = new JsonObject();
+                jsonObject.Add("email", txtLoginMail.Text);
+                jsonObject.Add("password", txtLoginPass.Text);
+                HttpClient cliente = new HttpClient();
+
+                var respuesta = await cliente.PostAsync(server, new StringContent(jsonObject.ToString(), Encoding.UTF8, json));
+                var contenterror = await respuesta.Content.ReadAsStringAsync();
+
+                respuesta.EnsureSuccessStatusCode();
+                if (respuesta.IsSuccessStatusCode)
+                {
+                }
+
+                    #endregion;
+                };
+
             #endregion;
         }
 
