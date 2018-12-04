@@ -206,11 +206,24 @@ namespace CABASUS.Controllers
 
                         string id = new ShareInSide().conseguirIDUsuarioDelToken(contenido.token);
 
+                        var URL = await new ShareInSide().SubirImagen("usuarios", id);
+
+                        //actualizar la foto en los datos del ususario
+                        server = "http://192.168.1.73:5001/api/Usuario/actualizarFoto?URL=" + URL;
+                        cliente.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", new ShareInSide().consultxmlToken().token);
+                        respuesta = await cliente.GetAsync(server);
+                        content = await respuesta.Content.ReadAsStringAsync();
+                        if (respuesta.IsSuccessStatusCode)
+                            Console.WriteLine("foto guradada");
+                        else
+                            Console.WriteLine("no se pudo actualizar la foto");
+
+                        Console.WriteLine(URL);
+
                         var detalle = this.Storyboard.InstantiateViewController("ViewController") as ViewController;
                         detalle.ModalTransitionStyle = UIModalTransitionStyle.CrossDissolve;
                         detalle.ModalPresentationStyle = UIModalPresentationStyle.OverFullScreen;
                         this.PresentViewController(detalle, true, null);
-                        //hola
                     }
                     else
                     {
