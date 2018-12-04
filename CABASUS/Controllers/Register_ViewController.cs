@@ -1,10 +1,12 @@
 ﻿using System;
-using AssetsLibrary;
+using System.Net.Http;
+using System.Text;
 using CoreGraphics;
 using Foundation;
-using ImageIO;
 using Photos;
 using UIKit;
+using CABASUS.Modelos;
+using Newtonsoft.Json;
 
 namespace CABASUS.Controllers
 {
@@ -185,23 +187,45 @@ namespace CABASUS.Controllers
                 #endregion;
 
                 #region usar API para registrar;
-                string server = "https://cabasus-mobile.azurewebsites.net/v1/auth/login";
-                string json = "application/json";
-                JsonObject jsonObject = new JsonObject();
-                jsonObject.Add("email", txtLoginMail.Text);
-                jsonObject.Add("password", txtLoginPass.Text);
-                HttpClient cliente = new HttpClient();
 
-                var respuesta = await cliente.PostAsync(server, new StringContent(jsonObject.ToString(), Encoding.UTF8, json));
-                var contenterror = await respuesta.Content.ReadAsStringAsync();
+                string server = "http://192.168.1.73:5001/api/Account/registrar";
+                string formato = "application/json";
 
-                respuesta.EnsureSuccessStatusCode();
-                if (respuesta.IsSuccessStatusCode)
+                usuarios us = new usuarios()
                 {
+                    nombre = txt_username.Text,
+                    email = txt_email.Text,
+                    contrasena = txt_pw.Text,
+                    fecha_nacimiento = txt_dob.Text
+                };
+
+                var json = new StringContent(JsonConvert.SerializeObject(us), Encoding.UTF8, formato);
+
+                try
+                {
+                    HttpClient cliente = new HttpClient();
+
+                    var respuesta = await cliente.PostAsync(server, json);
+                    var content = await respuesta.Content.ReadAsStringAsync();
+
+                    respuesta.EnsureSuccessStatusCode();
+
+                    if (respuesta.IsSuccessStatusCode)
+                    {
+                        Console.WriteLine(content);
+                    }
+                    else
+                    {
+                        Console.WriteLine(content);
+                    }
+                }
+                catch(Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
                 }
 
-                    #endregion;
-                };
+                #endregion;
+            };
 
             #endregion;
         }

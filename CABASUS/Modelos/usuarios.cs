@@ -10,5 +10,6 @@
         public string id_dispositivo { get; set; }
         public string SO { get; set; }
         public string tokenFB { get; set; }
+        public string fecha_nacimiento { get; set; }
     }
 }
