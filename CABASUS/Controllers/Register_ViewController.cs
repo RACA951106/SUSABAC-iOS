@@ -1,6 +1,10 @@
-﻿using System;
+using System;
 using System.Net.Http;
+<<<<<<< HEAD
 using System.Text;
+=======
+using AssetsLibrary;
+>>>>>>> a462261... Xml
 using CoreGraphics;
 using Foundation;
 using Photos;
@@ -187,6 +191,7 @@ namespace CABASUS.Controllers
                 #endregion;
 
                 #region usar API para registrar;
+<<<<<<< HEAD
 
                 string server = "http://192.168.1.73:5001/api/Account/registrar";
                 string formato = "application/json";
@@ -226,6 +231,9 @@ namespace CABASUS.Controllers
 
                 #endregion;
             };
+=======
+
+>>>>>>> a462261... Xml
 
             #endregion;
         }

@@ -85,13 +85,13 @@
       <HintPath>..\packages\Xamarin.iOS.iCarousel.1.8.4\lib\Xamarin.iOS10\Xamarin.iOS.iCarousel.Binding.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="PagerViewController">
-      <HintPath>..\PagerViewController\bin\Debug\PagerViewController.dll</HintPath>
-    </Reference>
+    <Reference Include="System.Net.Http" />
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.12.0.1\lib\netstandard2.0\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="System.Net.Http" />
+    <Reference Include="PagerViewController">
+      <HintPath>..\PagerViewController\bin\Debug\PagerViewController.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Contents.json" />
@@ -146,6 +146,8 @@
     <Compile Include="Modelos\fotos.cs" />
     <Compile Include="Modelos\login.cs" />
     <Compile Include="Modelos\usuarios.cs" />
+    <Compile Include="ShareInSide.cs" />
+    <Compile Include="Modelos\tokens.cs" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\bell_icon.png" />

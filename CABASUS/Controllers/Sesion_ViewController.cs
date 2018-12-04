@@ -1,11 +1,17 @@
 ﻿using System;
 using UIKit;
 using CoreGraphics;
+using System.Net.Http;
+using Newtonsoft.Json;
+
 
 namespace CABASUS.Controllers
 {
     public partial class Sesion_ViewController : UIViewController
     {
+        internal string serverLogin = "http://192.168.1.73:5001/api/Account/registrar";
+        HttpClient cliente = new HttpClient();
+
         public Sesion_ViewController(IntPtr handle) : base(handle)
         {
         }
@@ -78,12 +84,33 @@ namespace CABASUS.Controllers
             };
             #endregion
 
-            btn_login.TouchUpInside+=delegate {
+            btn_login.TouchUpInside+= async delegate {
 
-                var detalle = this.Storyboard.InstantiateViewController("ViewController") as ViewController;
-                detalle.ModalTransitionStyle = UIModalTransitionStyle.CrossDissolve;
-                detalle.ModalPresentationStyle = UIModalPresentationStyle.OverFullScreen;
-                this.PresentViewController(detalle, true, null);
+                try
+                {
+                    //Servidor APIS
+                    var login = new Modelos.login { usuario = txt_email.Text, contrasena = txt_password.Text };
+                    var data = .JsonConvert.SerializeObject(login);
+                    var respuesta = await cliente.PostAsync(serverLogin, new StringContent(data, System.Text.Encoding.UTF8, "application/json"));
+
+                    if(respuesta.IsSuccessStatusCode)
+                    {
+                        //XML
+                        
+                        Console.WriteLine("Success!!");
+                        var detalle = this.Storyboard.InstantiateViewController("ViewController") as ViewController;
+                        detalle.ModalTransitionStyle = UIModalTransitionStyle.CrossDissolve;
+                        detalle.ModalPresentationStyle = UIModalPresentationStyle.OverFullScreen;
+                        this.PresentViewController(detalle, true, null);
+                    }
+                    
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+
+
             };
         }
 
