@@ -206,11 +206,11 @@ namespace CABASUS.Controllers
 
                         string id = new ShareInSide().conseguirIDUsuarioDelToken(contenido.token);
 
-
                         var detalle = this.Storyboard.InstantiateViewController("ViewController") as ViewController;
                         detalle.ModalTransitionStyle = UIModalTransitionStyle.CrossDissolve;
                         detalle.ModalPresentationStyle = UIModalPresentationStyle.OverFullScreen;
                         this.PresentViewController(detalle, true, null);
+                        //hola
                     }
                     else
                     {
