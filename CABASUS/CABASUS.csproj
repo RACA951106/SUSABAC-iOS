@@ -88,6 +88,10 @@
     <Reference Include="PagerViewController">
       <HintPath>..\PagerViewController\bin\Debug\PagerViewController.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.1\lib\netstandard2.0\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http" />
   </ItemGroup>
   <ItemGroup>
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Contents.json" />
@@ -96,6 +100,7 @@
   <ItemGroup>
     <Folder Include="Resources\" />
     <Folder Include="Controllers\" />
+    <Folder Include="Modelos\" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="LaunchScreen.storyboard" />
@@ -134,6 +139,13 @@
     <Compile Include="Controllers\GaleryCameraAccessController.designer.cs">
       <DependentUpon>GaleryCameraAccessController.cs</DependentUpon>
     </Compile>
+    <Compile Include="Modelos\actividades.cs" />
+    <Compile Include="Modelos\caballos.cs" />
+    <Compile Include="Modelos\compartidos.cs" />
+    <Compile Include="Modelos\diarios.cs" />
+    <Compile Include="Modelos\fotos.cs" />
+    <Compile Include="Modelos\login.cs" />
+    <Compile Include="Modelos\usuarios.cs" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\bell_icon.png" />
