@@ -44,6 +44,7 @@ namespace CABASUS.Controllers
             txt_pw.Frame = new CGRect(25, 325, View.Frame.Width - 50, 40);
             txt_pw.Layer.BorderColor = UIColor.FromRGB(246, 128, 25).CGColor;
             txt_pw.Layer.BorderWidth = 1f;
+            txt_pw.SecureTextEntry = true;
 
             lbl_dob.Frame = new CGRect(25, 375, View.Frame.Width - 50, 30);
             txt_dob.Frame = new CGRect(25, 410, View.Frame.Width - 50, 40);
