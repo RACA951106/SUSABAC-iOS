@@ -37,6 +37,9 @@ namespace CABASUS.Controllers
 		UIKit.UILabel lbl_username { get; set; }
 
 		[Outlet]
+		UIKit.UIActivityIndicatorView progreso { get; set; }
+
+		[Outlet]
 		UIKit.UIScrollView scroll_register { get; set; }
 
 		[Outlet]
@@ -53,6 +56,11 @@ namespace CABASUS.Controllers
 		
 		void ReleaseDesignerOutlets ()
 		{
+			if (progreso != null) {
+				progreso.Dispose ();
+				progreso = null;
+			}
+
 			if (btn_done != null) {
 				btn_done.Dispose ();
 				btn_done = null;

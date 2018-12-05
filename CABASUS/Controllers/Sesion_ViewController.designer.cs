@@ -31,6 +31,9 @@ namespace CABASUS.Controllers
 		UIKit.UILabel lblemail { get; set; }
 
 		[Outlet]
+		UIKit.UIActivityIndicatorView progreso { get; set; }
+
+		[Outlet]
 		UIKit.UITextField txt_email { get; set; }
 
 		[Outlet]
@@ -38,6 +41,11 @@ namespace CABASUS.Controllers
 		
 		void ReleaseDesignerOutlets ()
 		{
+			if (progreso != null) {
+				progreso.Dispose ();
+				progreso = null;
+			}
+
 			if (btn_login != null) {
 				btn_login.Dispose ();
 				btn_login = null;
@@ -46,6 +54,11 @@ namespace CABASUS.Controllers
 			if (btn_recovery != null) {
 				btn_recovery.Dispose ();
 				btn_recovery = null;
+			}
+
+			if (btnback != null) {
+				btnback.Dispose ();
+				btnback = null;
 			}
 
 			if (lbl_login != null) {
@@ -71,11 +84,6 @@ namespace CABASUS.Controllers
 			if (txt_password != null) {
 				txt_password.Dispose ();
 				txt_password = null;
-			}
-
-			if (btnback != null) {
-				btnback.Dispose ();
-				btnback = null;
 			}
 		}
 	}

@@ -25,30 +25,31 @@ namespace CABASUS.Controllers
             btnback.Frame = new CGRect(0, 35, 50, 20);
 
             btn_foto.Frame = new CGRect((View.Frame.Width / 2) - 50, 0, 100, 100);
-            btn_foto.Layer.BorderColor = UIColor.FromRGB(246, 128, 25).CGColor;
+            btn_foto.Layer.BorderColor = UIColor.FromRGB(203, 30, 30).CGColor;
             btn_foto.Layer.BorderWidth = 1f;
             btn_foto.Layer.CornerRadius = 50f;
             btn_foto.ClipsToBounds = true;
+            btn_foto.Tag = 1;
 
             lbl_username.Frame= new CGRect(25, 120, View.Frame.Width - 50, 30);
             txt_username.Frame = new CGRect(25, 155, View.Frame.Width - 50, 40);
-            txt_username.Layer.BorderColor = UIColor.FromRGB(246, 128, 25).CGColor;
+            txt_username.Layer.BorderColor = UIColor.FromRGB(203, 30, 30).CGColor;
             txt_username.Layer.BorderWidth = 1f;
 
             lbl_email.Frame= new CGRect(25,205, View.Frame.Width - 50, 30);
             txt_email.Frame= new CGRect(25, 240, View.Frame.Width - 50, 40);
-            txt_email.Layer.BorderColor = UIColor.FromRGB(246, 128, 25).CGColor;
+            txt_email.Layer.BorderColor = UIColor.FromRGB(203, 30, 30).CGColor;
             txt_email.Layer.BorderWidth = 1f;
 
             lbl_pw.Frame = new CGRect(25, 290, View.Frame.Width - 50, 30);
             txt_pw.Frame = new CGRect(25, 325, View.Frame.Width - 50, 40);
-            txt_pw.Layer.BorderColor = UIColor.FromRGB(246, 128, 25).CGColor;
+            txt_pw.Layer.BorderColor = UIColor.FromRGB(203, 30, 30).CGColor;
             txt_pw.Layer.BorderWidth = 1f;
             txt_pw.SecureTextEntry = true;
 
             lbl_dob.Frame = new CGRect(25, 375, View.Frame.Width - 50, 30);
             txt_dob.Frame = new CGRect(25, 410, View.Frame.Width - 50, 40);
-            txt_dob.Layer.BorderColor = UIColor.FromRGB(246, 128, 25).CGColor;
+            txt_dob.Layer.BorderColor = UIColor.FromRGB(203, 30, 30).CGColor;
             txt_dob.Layer.BorderWidth = 1f;
 
             btn_done.Frame = new CGRect(25, 550, View.Frame.Width - 50, 40);
@@ -61,6 +62,9 @@ namespace CABASUS.Controllers
 
             scroll_register.Frame = new CGRect(0, 55, View.Frame.Width, View.Frame.Height - 55);
             scroll_register.ContentSize= new CGSize(View.Frame.Width, 670);
+
+            progreso.Frame = new CGRect((View.Frame.Width / 2) - (progreso.Frame.Width / 2), (View.Frame.Height / 2) - (progreso.Frame.Height / 2), progreso.Frame.Width, progreso.Frame.Height);
+            progreso.Hidden = true;
             #endregion;
 
             #region ocultar teclado al tocar la pantalla;
@@ -107,7 +111,6 @@ namespace CABASUS.Controllers
             #region abrir camara o galeria para la foto del ususario;
 
             btn_foto.TouchUpInside+=delegate {
-
                 GaleryCameraAccessController obj = new GaleryCameraAccessController();
 
                 var okCancelAlertController = UIAlertController.Create(null, "Selecciona una opcion", UIAlertControllerStyle.Alert);
@@ -125,53 +128,60 @@ namespace CABASUS.Controllers
 
             btn_done.TouchUpInside += async delegate
             {
+                btn_done.Enabled = false;
+                btn_foto.Enabled = false;
 
-                #region guardar foto en la galeria;
+                #region guardar foto en la galeria si se cambio por la de defecto;
 
-                var documentsDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
-                var directoryname = System.IO.Path.Combine(documentsDirectory, "FotosUsuario");
-                System.IO.Directory.CreateDirectory(directoryname);
-                string jpgFilename = System.IO.Path.Combine(directoryname, "FotoUsuario.jpg"); // hardcoded filename, overwritten each time. You can make it dynamic as per your requirement.
-
-                UIImage imagen = new UIImage(jpgFilename);
-
-                var assetCollection = new PHAssetCollection();
-                var albumFound = false;
-                var assetCollectionPlaceholder = new PHObjectPlaceholder();
-
-
-                var fetchOptions = new PHFetchOptions();
-                fetchOptions.Predicate = NSPredicate.FromFormat("title LIKE \"CABASUS\"");
-                var collection = PHAssetCollection.FetchAssetCollections(PHAssetCollectionType.Album, PHAssetCollectionSubtype.Any, fetchOptions);
-
-                if (collection.firstObject != null)
+                if (btn_foto.Tag == 2)
                 {
-                    albumFound = true;
-                    assetCollection = collection.firstObject as PHAssetCollection;
-                    GuardarFoto(imagen, assetCollection, collection);
 
-                }
-                else
-                {
-                    PHPhotoLibrary.SharedPhotoLibrary.PerformChanges(() =>
-                    {
+                    var documentsDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
+                    var directoryname = System.IO.Path.Combine(documentsDirectory, "FotosUsuario");
+                    System.IO.Directory.CreateDirectory(directoryname);
+                    string jpgFilename = System.IO.Path.Combine(directoryname, "FotoUsuario.jpg"); // hardcoded filename, overwritten each time. You can make it dynamic as per your requirement.
 
-                        var createAlbumRequest = PHAssetCollectionChangeRequest.CreateAssetCollection("CABASUS");
-                        assetCollectionPlaceholder = createAlbumRequest.PlaceholderForCreatedAssetCollection;
-                    },
-                    (ok, error) =>
+                    UIImage imagen = new UIImage(jpgFilename);
+
+                    var assetCollection = new PHAssetCollection();
+                    var albumFound = false;
+                    var assetCollectionPlaceholder = new PHObjectPlaceholder();
+
+
+                    var fetchOptions = new PHFetchOptions();
+                    fetchOptions.Predicate = NSPredicate.FromFormat("title LIKE \"CABASUS\"");
+                    var collection = PHAssetCollection.FetchAssetCollections(PHAssetCollectionType.Album, PHAssetCollectionSubtype.Any, fetchOptions);
+
+                    if (collection.firstObject != null)
                     {
-                        albumFound = ok;
-                        if (ok)
+                        albumFound = true;
+                        assetCollection = collection.firstObject as PHAssetCollection;
+                        GuardarFoto(imagen, assetCollection, collection);
+
+                    }
+                    else
+                    {
+                        PHPhotoLibrary.SharedPhotoLibrary.PerformChanges(() =>
                         {
-                            var collectionFetchResult = PHAssetCollection.FetchAssetCollections(new string[] { assetCollectionPlaceholder.LocalIdentifier }, null);
-                            Console.WriteLine(collectionFetchResult);
-                            collection = collectionFetchResult;
-                            assetCollection = collectionFetchResult.firstObject as PHAssetCollection;
-                            GuardarFoto(imagen, assetCollection, collection);
-                        }
-                    });
+
+                            var createAlbumRequest = PHAssetCollectionChangeRequest.CreateAssetCollection("CABASUS");
+                            assetCollectionPlaceholder = createAlbumRequest.PlaceholderForCreatedAssetCollection;
+                        },
+                        (ok, error) =>
+                        {
+                            albumFound = ok;
+                            if (ok)
+                            {
+                                var collectionFetchResult = PHAssetCollection.FetchAssetCollections(new string[] { assetCollectionPlaceholder.LocalIdentifier }, null);
+                                Console.WriteLine(collectionFetchResult);
+                                collection = collectionFetchResult;
+                                assetCollection = collectionFetchResult.firstObject as PHAssetCollection;
+                                GuardarFoto(imagen, assetCollection, collection);
+                            }
+                        });
+                    }
                 }
+
                 #endregion;
 
                 #region usar API para registrar;
@@ -193,6 +203,9 @@ namespace CABASUS.Controllers
                 {
                     HttpClient cliente = new HttpClient();
 
+                    progreso.StartAnimating();
+                    progreso.Hidden = false;
+
                     var respuesta = await cliente.PostAsync(server, json);
                     var content = await respuesta.Content.ReadAsStringAsync();
 
@@ -207,19 +220,26 @@ namespace CABASUS.Controllers
 
                         string id = new ShareInSide().conseguirIDUsuarioDelToken(contenido.token);
 
-                        var URL = await new ShareInSide().SubirImagen("usuarios", id);
+                        //saber si la foto se cambio o no, para subirla o no XD
+                        if (btn_foto.Tag == 2) 
+                        {
+                            var URL = await new ShareInSide().SubirImagen("usuarios", id);
 
-                        //actualizar la foto en los datos del ususario
-                        server = "http://192.168.1.73:5001/api/Usuario/actualizarFoto?URL=" + URL;
-                        cliente.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", new ShareInSide().consultxmlToken().token);
-                        respuesta = await cliente.GetAsync(server);
-                        content = await respuesta.Content.ReadAsStringAsync();
-                        if (respuesta.IsSuccessStatusCode)
-                            Console.WriteLine("foto guradada");
-                        else
-                            Console.WriteLine("no se pudo actualizar la foto");
+                            //actualizar la foto en los datos del ususario
+                            server = "http://192.168.1.73:5001/api/Usuario/actualizarFoto?URL=" + URL;
+                            cliente.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", new ShareInSide().consultxmlToken().token);
+                            respuesta = await cliente.GetAsync(server);
+                            content = await respuesta.Content.ReadAsStringAsync();
+                            if (respuesta.IsSuccessStatusCode)
+                                Console.WriteLine("foto guradada");
+                            else
+                                Console.WriteLine("no se pudo actualizar la foto");
 
-                        Console.WriteLine(URL);
+                            Console.WriteLine(URL);
+                        }
+
+                        progreso.StopAnimating();
+                        progreso.Hidden = true;
 
                         var detalle = this.Storyboard.InstantiateViewController("ViewController") as ViewController;
                         detalle.ModalTransitionStyle = UIModalTransitionStyle.CrossDissolve;
@@ -237,6 +257,9 @@ namespace CABASUS.Controllers
                 }
 
                 #endregion;
+
+                btn_done.Enabled = true;
+                btn_foto.Enabled = true;
             };
 
             #endregion;

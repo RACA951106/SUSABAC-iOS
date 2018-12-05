@@ -57,6 +57,7 @@ namespace CABASUS.Controllers
                     imgseleccion.SetImage(originalImage, UIControlState.Normal);
                     imgseleccion.ImageView.Layer.CornerRadius = redondeo;
                     imgseleccion.ImageView.Layer.MasksToBounds = true;
+                    imgseleccion.Tag = 2;
 
                     PHPhotoLibrary.RequestAuthorization(status =>
                     {
@@ -123,6 +124,7 @@ namespace CABASUS.Controllers
                     imgseleccion.SetImage(imagen, UIControlState.Normal);
                     imgseleccion.ImageView.Layer.CornerRadius = redondeo;
                     imgseleccion.ImageView.Layer.MasksToBounds = true;
+                    imgseleccion.Tag = 2;
 
                     PHPhotoLibrary.RequestAuthorization(status =>
                     {
