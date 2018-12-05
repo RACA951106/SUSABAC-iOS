@@ -2,9 +2,12 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 using CABASUS.Modelos;
+using Foundation;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
 
@@ -12,7 +15,7 @@ namespace CABASUS
 {
     public class ShareInSide
     {
-       public void savexmlToken(string token, string expiration)
+        public void savexmlToken(string token, string expiration)
         {
             var tokens = new tokens();
             tokens.token = token;
@@ -74,5 +77,40 @@ namespace CABASUS
                 return "Error";
             }
         }
+
+        const int _downloadImageTimeoutInSeconds = 15;
+        readonly HttpClient _httpClient = new HttpClient { Timeout = TimeSpan.FromSeconds(_downloadImageTimeoutInSeconds) };
+
+        public async Task<bool> DownloadImageAsync(string imageUrl)
+        {
+            try
+            {
+                using (var httpResponse = await _httpClient.GetAsync(imageUrl))
+                {
+                    if (httpResponse.StatusCode == HttpStatusCode.OK)
+                    {
+                        var img = await httpResponse.Content.ReadAsByteArrayAsync();
+
+                        var documentsDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
+                        var directoryname = System.IO.Path.Combine(documentsDirectory, "FotosUsuario");
+                        System.IO.Directory.CreateDirectory(directoryname);
+                        string jpgFilename = System.IO.Path.Combine(directoryname, "FotosUsuario.jpg"); // hardcoded filename, overwritten each time. You can make it dynamic as per your requirement.
+
+                        NSData data = NSData.FromArray(img);
+                        NSError error = null;
+                        data.Save(jpgFilename, false, out error);
+                        return true;
+
+                    }
+                    return false;
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return false;
+            }
+        }
+
     }
 }

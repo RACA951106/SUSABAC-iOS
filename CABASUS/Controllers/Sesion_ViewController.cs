@@ -3,14 +3,16 @@ using UIKit;
 using CoreGraphics;
 using System.Net.Http;
 using Newtonsoft.Json;
-
+using System.Net.Http.Headers;
+using System.Collections.Generic;
 
 namespace CABASUS.Controllers
 {
     public partial class Sesion_ViewController : UIViewController
     {
-        internal string serverLogin = "http://192.168.1.73:5001/api/Account/registrar";
         HttpClient cliente = new HttpClient();
+        internal string serverLogin = "http://192.168.1.73:5001/api/Account/Login";
+        internal string serverConsulta = "http://192.168.1.73:5001/api/Usuario/consultar";
 
         public Sesion_ViewController(IntPtr handle) : base(handle)
         {
@@ -51,21 +53,21 @@ namespace CABASUS.Controllers
             btn_recovery.TouchUpInside += delegate
             {
                 var contenedor = new UIView();
-                if (View.Frame.Width==320)
+                if (View.Frame.Width == 320)
                     contenedor.Frame = new CGRect(30, 120, View.Frame.Width - 60, View.Frame.Height - 240);
                 else if (View.Frame.Width == 414)
                     contenedor.Frame = new CGRect(50, 250, View.Frame.Width - 100, View.Frame.Height - 500);
                 else
                     contenedor.Frame = new CGRect(50, 150, View.Frame.Width - 100, View.Frame.Height - 300);
 
-                var lbl_reset = new UILabel(new CGRect(0,20,contenedor.Frame.Width,20));
+                var lbl_reset = new UILabel(new CGRect(0, 20, contenedor.Frame.Width, 20));
                 lbl_reset.Text = "Reset your password";
                 lbl_reset.TextAlignment = UITextAlignment.Center;
 
-                var lbl_msjrecovery = new UILabel( new CGRect(15,45,contenedor.Frame.Width-30,100));
+                var lbl_msjrecovery = new UILabel(new CGRect(15, 45, contenedor.Frame.Width - 30, 100));
                 lbl_msjrecovery.Text = "Enter the email address you used to register. We will send you a message with your password.";
                 lbl_msjrecovery.Lines = 5;
-                var lbl_emailrecovery = new UILabel(new CGRect(15,160,contenedor.Frame.Width-20,30));
+                var lbl_emailrecovery = new UILabel(new CGRect(15, 160, contenedor.Frame.Width - 20, 30));
                 lbl_emailrecovery.Text = "Email";
 
                 var txt_emailrecovery = new UILabel(new CGRect(15, 195, contenedor.Frame.Width - 30, 40));
@@ -73,18 +75,19 @@ namespace CABASUS.Controllers
                 txt_emailrecovery.Layer.BorderWidth = 1f;
 
                 var btn_send = new UIButton(new CGRect(25, 270, contenedor.Frame.Width - 50, 40));
-                btn_send.SetTitle("SEND",UIControlState.Normal);
+                btn_send.SetTitle("SEND", UIControlState.Normal);
                 btn_send.Layer.CornerRadius = 20f;
                 btn_send.ClipsToBounds = true;
-                btn_send.BackgroundColor = UIColor.FromRGB(246,128,25);
+                btn_send.BackgroundColor = UIColor.FromRGB(246, 128, 25);
 
-                contenedor.AddSubviews(lbl_reset,lbl_msjrecovery,lbl_emailrecovery, txt_emailrecovery, btn_send);
+                contenedor.AddSubviews(lbl_reset, lbl_msjrecovery, lbl_emailrecovery, txt_emailrecovery, btn_send);
 
                 GenerarAlerta(View, contenedor);
             };
             #endregion
 
-            btn_login.TouchUpInside+= async delegate {
+            btn_login.TouchUpInside += async delegate
+            {
 
                 try
                 {
@@ -92,25 +95,34 @@ namespace CABASUS.Controllers
                     var login = new Modelos.login { usuario = txt_email.Text, contrasena = txt_password.Text };
                     var data = JsonConvert.SerializeObject(login);
                     var respuesta = await cliente.PostAsync(serverLogin, new StringContent(data, System.Text.Encoding.UTF8, "application/json"));
+                    var datos = await respuesta.Content.ReadAsStringAsync();
 
-                    if(respuesta.IsSuccessStatusCode)
+                    if (respuesta.IsSuccessStatusCode)
                     {
                         //XML
-                        
-                        Console.WriteLine("Success!!");
+                        var contenido = JsonConvert.DeserializeObject<Modelos.tokens>(datos);
+                        new ShareInSide().savexmlToken(contenido.token, contenido.expiration);
+
+                        cliente.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", new ShareInSide().consultxmlToken().token);
+                        var url = await cliente.GetAsync(serverConsulta);
+                        datos = await url.Content.ReadAsStringAsync();
+                        var usuario = JsonConvert.DeserializeObject<List<Modelos.usuarios>>(datos);
+
+                        await new ShareInSide().DownloadImageAsync(usuario[0].foto);
+
                         var detalle = this.Storyboard.InstantiateViewController("ViewController") as ViewController;
                         detalle.ModalTransitionStyle = UIModalTransitionStyle.CrossDissolve;
                         detalle.ModalPresentationStyle = UIModalPresentationStyle.OverFullScreen;
                         this.PresentViewController(detalle, true, null);
                     }
-                    
+                    else
+                        Console.WriteLine(datos);
+
                 }
                 catch (Exception ex)
                 {
                     Console.WriteLine(ex.Message);
                 }
-
-
             };
         }
 
