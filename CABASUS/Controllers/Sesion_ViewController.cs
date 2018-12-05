@@ -86,6 +86,15 @@ namespace CABASUS.Controllers
             };
             #endregion
 
+            #region ocultar teclado al tocar la pantalla;
+
+            var g = new UITapGestureRecognizer(() => View.EndEditing(true));
+            g.CancelsTouchesInView = false; //for iOS5
+
+            View.AddGestureRecognizer(g);
+
+            #endregion;
+
             btn_login.TouchUpInside += async delegate
             {
 
