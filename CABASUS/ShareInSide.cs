@@ -92,9 +92,9 @@ namespace CABASUS
                         var img = await httpResponse.Content.ReadAsByteArrayAsync();
 
                         var documentsDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
-                        var directoryname = System.IO.Path.Combine(documentsDirectory, "FotosUsuario");
-                        System.IO.Directory.CreateDirectory(directoryname);
-                        string jpgFilename = System.IO.Path.Combine(directoryname, "FotosUsuario.jpg"); // hardcoded filename, overwritten each time. You can make it dynamic as per your requirement.
+                        var directoryname = Path.Combine(documentsDirectory, "FotosUsuario");
+                        Directory.CreateDirectory(directoryname);
+                        string jpgFilename = Path.Combine(directoryname, "FotosUsuario.jpg"); // hardcoded filename, overwritten each time. You can make it dynamic as per your requirement.
 
                         NSData data = NSData.FromArray(img);
                         NSError error = null;
@@ -110,6 +110,30 @@ namespace CABASUS
                 Console.WriteLine(e.Message);
                 return false;
             }
+        }
+
+        public async Task<bool> EliminarImagen(string Contenedor, string id)
+        {
+            CloudStorageAccount cloudStorageAccount = CloudStorageAccount.Parse(
+               "DefaultEndpointsProtocol=https;" +
+               "AccountName=susabac;" +
+               "AccountKey=p6EvYU5CRlr7U3nXEp0A+Q/M1ZRtReQjomO8EwaBJ00LxKoo/7MG/m7aX7pbdJGGcJ0HcYGzn6LM7lFYbMeR+g==;EndpointSuffix=core.windows.net");
+
+            CloudBlobClient blobClient = cloudStorageAccount.CreateCloudBlobClient();
+
+            CloudBlobContainer cloudBlobContainer = blobClient.GetContainerReference(Contenedor);
+            CloudBlockBlob blockBlob = cloudBlobContainer.GetBlockBlobReference(id + ".jpg");
+
+            if (await blockBlob.DeleteIfExistsAsync())
+            {
+                var RutaImage = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), id + ".jpg");
+                if (!File.Exists(RutaImage))
+                    File.Delete(RutaImage);
+
+                return true;
+            }
+            else
+                return false;
         }
 
     }
