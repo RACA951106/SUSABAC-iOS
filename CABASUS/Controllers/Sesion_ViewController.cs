@@ -57,7 +57,7 @@ namespace CABASUS.Controllers
             btn_recovery.TitleLabel.Lines = 2;
             btn_recovery.TitleLabel.TextAlignment = UITextAlignment.Center;
 
-            progreso.Frame = new CGRect((View.Frame.Width / 2) - (progreso.Frame.Width / 2), (View.Frame.Height / 2) - (progreso.Frame.Height / 2), progreso.Frame.Width, progreso.Frame.Height);
+            progreso.Frame = new CGRect((View.Frame.Width / 2) - (progreso.Frame.Width / 2), (View.Frame.Height / 1.5) - (progreso.Frame.Height / 2), progreso.Frame.Width, progreso.Frame.Height);
             progreso.Hidden = true;
             #endregion
 
@@ -188,6 +188,7 @@ namespace CABASUS.Controllers
                                 progreso.Hidden = false;
 
                                 btn_login.Enabled = false;
+                                btn_recovery.Enabled = false;
 
                                 //Servidor APIS
                                 var login = new Modelos.login { usuario = txt_email.Text, contrasena = txt_password.Text };
@@ -221,6 +222,7 @@ namespace CABASUS.Controllers
                                     Console.WriteLine(datos);
                                     progreso.StopAnimating();
                                     progreso.Hidden = true;
+                                    btn_recovery.Enabled = true;
                                 }
                             }
                             else
@@ -237,8 +239,11 @@ namespace CABASUS.Controllers
                 catch (Exception ex)
                 {
                     Console.WriteLine(ex.Message);
+                    progreso.StopAnimating();
+                    progreso.Hidden = true;
                 }
                 btn_login.Enabled = true;
+                btn_recovery.Enabled = true;
             };
         }
 
