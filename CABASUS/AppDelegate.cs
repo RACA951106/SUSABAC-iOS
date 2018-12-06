@@ -1,59 +1,12 @@
-﻿using Foundation;
+﻿using System;
+using Firebase.CloudMessaging;
+using Firebase.Core;
+using Foundation;
 using UIKit;
+using UserNotifications;
 
 namespace CABASUS
 {
-    // The UIApplicationDelegate for the application. This class is responsible for launching the
-    // User Interface of the application, as well as listening (and optionally responding) to application events from iOS.
-    [Register("AppDelegate")]
-    public class AppDelegate : UIApplicationDelegate
-    {
-        // class-level declarations
-
-        public override UIWindow Window
-        {
-            get;
-            set;
-        }
-
-        public override bool FinishedLaunching(UIApplication application, NSDictionary launchOptions)
-        {
-            // Override point for customization after application launch.
-            // If not required for your application you can safely delete this method
-
-            return true;
-        }
-
-        public override void OnResignActivation(UIApplication application)
-        {
-            // Invoked when the application is about to move from active to inactive state.
-            // This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) 
-            // or when the user quits the application and it begins the transition to the background state.
-            // Games should use this method to pause the game.
-        }
-
-        public override void DidEnterBackground(UIApplication application)
-        {
-            // Use this method to release shared resources, save user data, invalidate timers and store the application state.
-            // If your application supports background exection this method is called instead of WillTerminate when the user quits.
-        }
-
-        public override void WillEnterForeground(UIApplication application)
-        {
-            // Called as part of the transiton from background to active state.
-            // Here you can undo many of the changes made on entering the background.
-        }
-
-        public override void OnActivated(UIApplication application)
-        {
-            // Restart any tasks that were paused (or not yet started) while the application was inactive. 
-            // If the application was previously in the background, optionally refresh the user interface.
-        }
-
-        public override void WillTerminate(UIApplication application)
-        {
-            // Called when the application is about to terminate. Save data, if needed. See also DidEnterBackground.
-        }
-    }
+    [Register("AppDelegate")]     public class AppDelegate : UIApplicationDelegate, IUNUserNotificationCenterDelegate, IMessagingDelegate     {                   public event EventHandler<UserInfoEventArgs> MessageReceived;          // class-level declarations          public override UIWindow Window         {             get;             set;         }          public override bool FinishedLaunching(UIApplication application, NSDictionary launchOptions)         {             //GetLocalFilePath("Chat.sqlite", "Chat", "db");             //var stringCone2 = Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal), "Chat.sqlite");             //var c2 = new SQLiteConnection(stringCone2);               //c2.Query<Conversacion>("DELETE FROM Conversacion", new Conversacion().usuario);               // Override point for customization after application launch.             // If not required for your application you can safely delete this method              //  (Window.RootViewController as UINavigationController).PushViewController(new UserInfoViewController(this), true);             UIApplication.SharedApplication.StatusBarStyle = UIStatusBarStyle.LightContent;              App.Configure();              // Register your app for remote notifications.             if (UIDevice.CurrentDevice.CheckSystemVersion(10, 0))             {                 // For iOS 10 display notification (sent via APNS)                 UNUserNotificationCenter.Current.Delegate = this;                  var authOptions = UNAuthorizationOptions.Alert | UNAuthorizationOptions.Badge | UNAuthorizationOptions.Sound;                 UNUserNotificationCenter.Current.RequestAuthorization(authOptions, (granted, error) => {                     Console.WriteLine(granted);                 });             }             else             {                 // iOS 9 or before                 var allNotificationTypes = UIUserNotificationType.Alert | UIUserNotificationType.Badge | UIUserNotificationType.Sound;                 var settings = UIUserNotificationSettings.GetSettingsForTypes(allNotificationTypes, null);                 UIApplication.SharedApplication.RegisterUserNotificationSettings(settings);             }              UIApplication.SharedApplication.RegisterForRemoteNotifications();              Messaging.SharedInstance.Delegate = this;              // To connect with FCM. FCM manages the connection, closing it             // when your app goes into the background and reopening it              // whenever the app is foregrounded.             Messaging.SharedInstance.ShouldEstablishDirectChannel = true;              return true;         }          [Export("messaging:didReceiveRegistrationToken:")]         public void DidReceiveRegistrationToken(Messaging messaging, string fcmToken)         {             // Monitor token generation: To be notified whenever the token is updated.              LogInformation(nameof(DidReceiveRegistrationToken), $"Firebase registration token: { fcmToken}");              //Guardar bd Token              //var stringCone = Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal), "Chat.sqlite");             //var c = new SQLiteConnection(stringCone);              //c.Query<Token>("DELETE FROM Token", new Token().tokens);             //c.Query<Token>("INSERT INTO Token VALUES('" + fcmToken + "')", new Token().tokens);              //c.Insert(new Conversacion { usuario = 2, mensaje = body });              //c.Close();              //NSNotificationCenter.DefaultCenter.PostNotificationName("Tokensaved", this);              // TODO: If necessary send token to application server.             // Note: This callback is fired at each app startup and whenever a new token is generated.         }          // You'll need this method if you set "FirebaseAppDelegateProxyEnabled": NO in GoogleService-Info.plist         public override void RegisteredForRemoteNotifications (UIApplication application, NSData deviceToken)         {           Messaging.SharedInstance.ApnsToken = deviceToken;         }          public override void DidReceiveRemoteNotification(UIApplication application, NSDictionary userInfo, Action<UIBackgroundFetchResult> completionHandler)         {             // Handle Notification messages in the background and foreground.             // Handle Data messages for iOS 9 and below.              // If you are receiving a notification message while your app is in the background,             // this callback will not be fired till the user taps on the notification launching the application.             // TODO: Handle data of notification              // With swizzling disabled you must let Messaging know about the message, for Analytics             //Messaging.SharedInstance.AppDidReceiveMessage (userInfo);              HandleMessage(userInfo);              // Print full message.             LogInformation(nameof(DidReceiveRemoteNotification), userInfo);              completionHandler(UIBackgroundFetchResult.NewData);              //NSObject cuerpo;              //userInfo.TryGetValue(new NSString("gcm.notification.data"), out cuerpo);              //var cosas = JsonConvert.DeserializeObject<Mensaje>(cuerpo.ToString());              //var stringCone = Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal), "Chat.sqlite");             //var c = new SQLiteConnection(stringCone);              //c.Query<Conversacion>("INSERT INTO Conversacion VALUES(null,1,'" + cosas.men + "', '" + cosas.id + "')", new Conversacion().usuario);              //c.Close();              NSNotificationCenter.DefaultCenter.PostNotificationName("MensajeNuevo", this);          }          [Export("messaging:didReceiveMessage:")]         public void DidReceiveMessage(Messaging messaging, RemoteMessage remoteMessage)         {             //Information:             //{             //    "collapse_key" = "com.Germany.Cabasus.notificacionesfirebase";             //    from = 386368652630;             //    notification =     {             //        body = "{\"men\":\"Holi\",\"id\":\"3OWtTU6PIkmrUk8r9oqz\"}";             //        e = 1;             //        title = "Mensaje para Pegasus";             //    };             //}              // Handle Data messages for iOS 10 and above.              HandleMessage(remoteMessage.AppData);              LogInformation(nameof(DidReceiveMessage), remoteMessage.AppData);              //NSError error;             //var json = NSJsonSerialization.Serialize(remoteMessage.AppData, NSJsonWritingOptions.PrettyPrinted, out error);              //var objeto = JsonConvert.DeserializeObject<RootObject>(json.ToString(NSStringEncoding.UTF8));              //var stringCone = Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal), "Chat.sqlite");             //var c = new SQLiteConnection(stringCone);              //c.Query<Conversacion>("INSERT INTO Conversacion VALUES(null,1,'" + objeto.men + "', '" + objeto.id + "')", new Conversacion().usuario);              //c.Close();              //NSNotificationCenter.DefaultCenter.PostNotificationName("MensajeNuevo", this);         }          void HandleMessage(NSDictionary message)         {             if (MessageReceived == null)                 return;              MessageType messageType;             if (message.ContainsKey(new NSString("aps")))                 messageType = MessageType.Notification;             else                 messageType = MessageType.Data;              var e = new UserInfoEventArgs(message, messageType);             MessageReceived(this, e);         }          public static void ShowMessage(string title, string message, UIViewController fromViewController, Action actionForOk = null)         {             var alert = UIAlertController.Create(title, message, UIAlertControllerStyle.Alert);             alert.AddAction(UIAlertAction.Create("Ok", UIAlertActionStyle.Default, (obj) => actionForOk?.Invoke()));             fromViewController.PresentViewController(alert, true, null);         }          void LogInformation(string methodName, object information) => Console.WriteLine($"\nMethod name: { methodName}\nInformation: { information}");          //public static string GetLocalFilePath(string filename, string nombreenresources, string tipoenresources)         //{         //    string docFolder = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);         //    string dbPath = Path.Combine(docFolder, filename);         //    CopyDatabaseIfNotExists(dbPath, nombreenresources, tipoenresources);          //    return dbPath;         //}          //private static void CopyDatabaseIfNotExists(string dbPath, string nameinres, string typeinres)         //{         //    if (!File.Exists(dbPath))         //    {         //        var existingDb = NSBundle.MainBundle.PathForResource(nameinres, typeinres);         //        File.Copy(existingDb, dbPath);         //    }         //}      }      public class UserInfoEventArgs : EventArgs     {         public NSDictionary UserInfo { get; private set; }         public MessageType MessageType { get; private set; }          public UserInfoEventArgs(NSDictionary userInfo, MessageType messageType)         {             UserInfo = userInfo;             MessageType = messageType;         }     }      public enum MessageType     {         Notification,         Data     }      //public class Mensaje     //{     //    public string id { get; set; }     //    public string men { get; set; }     //} 
 }
 

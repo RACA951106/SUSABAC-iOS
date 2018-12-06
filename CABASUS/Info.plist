@@ -4,8 +4,6 @@
 <dict>
 	<key>CFBundleName</key>
 	<string>CABASUS</string>
-	<key>CFBundleIdentifier</key>
-	<string>com.companyname.CABASUS</string>
 	<key>CFBundleShortVersionString</key>
 	<string>1.0</string>
 	<key>CFBundleVersion</key>
@@ -29,8 +27,6 @@
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
-		<string>UIInterfaceOrientationLandscapeLeft</string>
-		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>XSAppIconAssets</key>
 	<string>Assets.xcassets/AppIcon.appiconset</string>
@@ -40,5 +36,12 @@
 	<string>Para guardar una copia de tus fotos en la libreria de tu iPhone</string>
 	<key>NSAppleMusicUsageDescription</key>
 	<string>New Entry</string>
+	<key>CFBundleIdentifier</key>
+	<string>com.cabasus.germany.mexico</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>fetch</string>
+		<string>remote-notification</string>
+	</array>
 </dict>
 </plist>
