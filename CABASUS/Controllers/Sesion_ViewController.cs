@@ -16,7 +16,7 @@ namespace CABASUS.Controllers
         internal string serverConsulta = "http://192.168.1.73:5001/api/Usuario/consultar";
 
         public Sesion_ViewController(IntPtr handle) : base(handle)
-        {
+        { 
         }
 
         public override void ViewDidLoad()
@@ -217,7 +217,11 @@ namespace CABASUS.Controllers
                                     this.PresentViewController(detalle, true, null);
                                 }
                                 else
+                                {
                                     Console.WriteLine(datos);
+                                    progreso.StopAnimating();
+                                    progreso.Hidden = true;
+                                }
                             }
                             else
                             {

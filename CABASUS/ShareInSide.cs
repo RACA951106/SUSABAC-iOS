@@ -131,7 +131,7 @@ namespace CABASUS
                     File.Delete(RutaImage);
 
                 return true;
-            }
+            }  
             else
                 return false;
         }
