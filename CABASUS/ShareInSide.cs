@@ -36,6 +36,26 @@ namespace CABASUS
             return datos;
         }
 
+        public void savexmlTokenFB(string token)
+        {
+            var tokens = new tokens();
+            tokens.token = token;
+
+            var data = new XmlSerializer(typeof(tokens));
+            var Escritura = new StreamWriter(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "tokenFB.xml"));
+            data.Serialize(Escritura, tokens);
+            Escritura.Close();
+        }
+
+        public tokens consultxmlTokenFB()
+        {
+            var serializador = new XmlSerializer(typeof(tokens));
+            var Lectura = new StreamReader(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "tokenFB.xml"));
+            var datos = (tokens)serializador.Deserialize(Lectura);
+            Lectura.Close();
+            return datos;
+        }
+
         public string conseguirIDUsuarioDelToken(string token)
         {
             var handler = new JwtSecurityTokenHandler(); 

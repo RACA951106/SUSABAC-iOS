@@ -337,7 +337,8 @@ namespace CABASUS.Controllers
                     contrasena = txt_pw.Text,
                     fecha_nacimiento = txt_dob.Text,
                     id_dispositivo = UIDevice.CurrentDevice.IdentifierForVendor.AsString(),
-                    SO = "iOS"
+                    SO = "iOS",
+                    tokenFB = new ShareInSide().consultxmlTokenFB().token
                 };
 
                 var json = new StringContent(JsonConvert.SerializeObject(us), Encoding.UTF8, formato);
