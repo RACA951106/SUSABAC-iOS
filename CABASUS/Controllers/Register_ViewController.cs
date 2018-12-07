@@ -341,7 +341,8 @@ namespace CABASUS.Controllers
                 };
 
                 var json = new StringContent(JsonConvert.SerializeObject(us), Encoding.UTF8, formato);
-
+                HttpResponseMessage respuesta = null;
+                string content = "";
                 try
                 {
                     HttpClient cliente = new HttpClient();
@@ -349,8 +350,8 @@ namespace CABASUS.Controllers
                     progreso.StartAnimating();
                     progreso.Hidden = false;
 
-                    var respuesta = await cliente.PostAsync(server, json);
-                    var content = await respuesta.Content.ReadAsStringAsync();
+                    respuesta = await cliente.PostAsync(server, json);
+                    content = await respuesta.Content.ReadAsStringAsync();
 
                     respuesta.EnsureSuccessStatusCode();
 
@@ -397,6 +398,7 @@ namespace CABASUS.Controllers
                 catch(Exception ex)
                 {
                     Console.WriteLine(ex.Message);
+                    Console.WriteLine(content);
                 }
 
                 #endregion;
