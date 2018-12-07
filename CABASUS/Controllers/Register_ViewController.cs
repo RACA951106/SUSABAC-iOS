@@ -272,135 +272,139 @@ namespace CABASUS.Controllers
                 #endregion;
 
 
-                //#region guardar foto en la galeria si se cambio por la de defecto;
+                #region guardar foto en la galeria si se cambio por la de defecto;
 
-                //if (btn_foto.Tag == 2)
-                //{
+                if (btn_foto.Tag == 2)
+                {
 
-                //    var documentsDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
-                //    var directoryname = System.IO.Path.Combine(documentsDirectory, "FotosUsuario");
-                //    System.IO.Directory.CreateDirectory(directoryname);
-                //    string jpgFilename = System.IO.Path.Combine(directoryname, "FotoUsuario.jpg"); // hardcoded filename, overwritten each time. You can make it dynamic as per your requirement.
+                    var documentsDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
+                    var directoryname = System.IO.Path.Combine(documentsDirectory, "FotosUsuario");
+                    System.IO.Directory.CreateDirectory(directoryname);
+                    string jpgFilename = System.IO.Path.Combine(directoryname, "FotoUsuario.jpg"); // hardcoded filename, overwritten each time. You can make it dynamic as per your requirement.
 
-                //    UIImage imagen = new UIImage(jpgFilename);
+                    UIImage imagen = new UIImage(jpgFilename);
 
-                //    var assetCollection = new PHAssetCollection();
-                //    var albumFound = false;
-                //    var assetCollectionPlaceholder = new PHObjectPlaceholder();
+                    var assetCollection = new PHAssetCollection();
+                    var albumFound = false;
+                    var assetCollectionPlaceholder = new PHObjectPlaceholder();
 
 
-                //    var fetchOptions = new PHFetchOptions();
-                //    fetchOptions.Predicate = NSPredicate.FromFormat("title LIKE \"CABASUS\"");
-                //    var collection = PHAssetCollection.FetchAssetCollections(PHAssetCollectionType.Album, PHAssetCollectionSubtype.Any, fetchOptions);
+                    var fetchOptions = new PHFetchOptions();
+                    fetchOptions.Predicate = NSPredicate.FromFormat("title LIKE \"CABASUS\"");
+                    var collection = PHAssetCollection.FetchAssetCollections(PHAssetCollectionType.Album, PHAssetCollectionSubtype.Any, fetchOptions);
 
-                //    if (collection.firstObject != null)
-                //    {
-                //        albumFound = true;
-                //        assetCollection = collection.firstObject as PHAssetCollection;
-                //        GuardarFoto(imagen, assetCollection, collection);
+                    if (collection.firstObject != null)
+                    {
+                        albumFound = true;
+                        assetCollection = collection.firstObject as PHAssetCollection;
+                        GuardarFoto(imagen, assetCollection, collection);
 
-                //    }
-                //    else
-                //    {
-                //        PHPhotoLibrary.SharedPhotoLibrary.PerformChanges(() =>
-                //        {
+                    }
+                    else
+                    {
+                        PHPhotoLibrary.SharedPhotoLibrary.PerformChanges(() =>
+                        {
 
-                //            var createAlbumRequest = PHAssetCollectionChangeRequest.CreateAssetCollection("CABASUS");
-                //            assetCollectionPlaceholder = createAlbumRequest.PlaceholderForCreatedAssetCollection;
-                //        },
-                //        (ok, error) =>
-                //        {
-                //            albumFound = ok;
-                //            if (ok)
-                //            {
-                //                var collectionFetchResult = PHAssetCollection.FetchAssetCollections(new string[] { assetCollectionPlaceholder.LocalIdentifier }, null);
-                //                Console.WriteLine(collectionFetchResult);
-                //                collection = collectionFetchResult;
-                //                assetCollection = collectionFetchResult.firstObject as PHAssetCollection;
-                //                GuardarFoto(imagen, assetCollection, collection);
-                //            }
-                //        });
-                //    }
-                //}
+                            var createAlbumRequest = PHAssetCollectionChangeRequest.CreateAssetCollection("CABASUS");
+                            assetCollectionPlaceholder = createAlbumRequest.PlaceholderForCreatedAssetCollection;
+                        },
+                        (ok, error) =>
+                        {
+                            albumFound = ok;
+                            if (ok)
+                            {
+                                var collectionFetchResult = PHAssetCollection.FetchAssetCollections(new string[] { assetCollectionPlaceholder.LocalIdentifier }, null);
+                                Console.WriteLine(collectionFetchResult);
+                                collection = collectionFetchResult;
+                                assetCollection = collectionFetchResult.firstObject as PHAssetCollection;
+                                GuardarFoto(imagen, assetCollection, collection);
+                            }
+                        });
+                    }
+                }
 
-                //#endregion;
+                #endregion;
 
-                //#region usar API para registrar;
+                #region usar API para registrar;
 
-                //string server = "http://192.168.1.73:5001/api/Account/registrar";
-                //string formato = "application/json";
+                string server = "http://192.168.1.74:5001/api/Account/registrar";
+                string formato = "application/json";
 
-                //usuarios us = new usuarios()
-                //{
-                //    nombre = txt_username.Text,
-                //    email = txt_email.Text,
-                //    contrasena = txt_pw.Text,
-                //    fecha_nacimiento = txt_dob.Text
-                //};
+                usuarios us = new usuarios()
+                {
+                    nombre = txt_username.Text,
+                    email = txt_email.Text,
+                    contrasena = txt_pw.Text,
+                    fecha_nacimiento = txt_dob.Text,
+                    id_dispositivo = UIDevice.CurrentDevice.IdentifierForVendor.AsString(),
+                    SO = "iOS"
+                };
 
-                //var json = new StringContent(JsonConvert.SerializeObject(us), Encoding.UTF8, formato);
+                var json = new StringContent(JsonConvert.SerializeObject(us), Encoding.UTF8, formato);
 
-                //try
-                //{
-                //    HttpClient cliente = new HttpClient();
+                try
+                {
+                    HttpClient cliente = new HttpClient();
 
-                //    progreso.StartAnimating();
-                //    progreso.Hidden = false;
+                    progreso.StartAnimating();
+                    progreso.Hidden = false;
 
-                //    var respuesta = await cliente.PostAsync(server, json);
-                //    var content = await respuesta.Content.ReadAsStringAsync();
+                    var respuesta = await cliente.PostAsync(server, json);
+                    var content = await respuesta.Content.ReadAsStringAsync();
 
-                //    respuesta.EnsureSuccessStatusCode();
+                    respuesta.EnsureSuccessStatusCode();
 
-                //    if (respuesta.IsSuccessStatusCode)
-                //    {
-                //        Console.WriteLine(content);
-                //        var contenido = JsonConvert.DeserializeObject<tokens>(content);
+                    if (respuesta.IsSuccessStatusCode)
+                    {
+                        Console.WriteLine(content);
+                        var contenido = JsonConvert.DeserializeObject<tokens>(content);
 
-                //        new ShareInSide().savexmlToken(contenido.token, contenido.expiration);
+                        new ShareInSide().savexmlToken(contenido.token, contenido.expiration);
 
-                //        string id = new ShareInSide().conseguirIDUsuarioDelToken(contenido.token);
+                        string id = new ShareInSide().conseguirIDUsuarioDelToken(contenido.token);
 
-                //        //saber si la foto se cambio o no, para subirla o no XD
-                //        if (btn_foto.Tag == 2) 
-                //        {
-                //            var URL = await new ShareInSide().SubirImagen("usuarios", id);
+                        //saber si la foto se cambio o no, para subirla o no XD
+                        if (btn_foto.Tag == 2) 
+                        {
+                            var URL = await new ShareInSide().SubirImagen("usuarios", id);
 
-                //            //actualizar la foto en los datos del ususario
-                //            server = "http://192.168.1.73:5001/api/Usuario/actualizarFoto?URL=" + URL;
-                //            cliente.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", new ShareInSide().consultxmlToken().token);
-                //            respuesta = await cliente.GetAsync(server);
-                //            content = await respuesta.Content.ReadAsStringAsync();
-                //            if (respuesta.IsSuccessStatusCode)
-                //                Console.WriteLine("foto guradada");
-                //            else
-                //                Console.WriteLine("no se pudo actualizar la foto");
+                            //actualizar la foto en los datos del ususario
+                            server = "http://192.168.1.74:5001/api/Usuario/actualizarFoto?URL=" + URL;
+                            cliente.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", new ShareInSide().consultxmlToken().token);
+                            respuesta = await cliente.GetAsync(server);
+                            content = await respuesta.Content.ReadAsStringAsync();
+                            if (respuesta.IsSuccessStatusCode)
+                                Console.WriteLine("foto guradada");
+                            else
+                                Console.WriteLine("no se pudo actualizar la foto");
 
-                //            Console.WriteLine(URL);
-                //        }
+                            Console.WriteLine(URL);
+                        }
 
-                //        progreso.StopAnimating();
-                //        progreso.Hidden = true;
+                        progreso.StopAnimating();
+                        progreso.Hidden = true;
 
-                //        var detalle = this.Storyboard.InstantiateViewController("ViewController") as ViewController;
-                //        detalle.ModalTransitionStyle = UIModalTransitionStyle.CrossDissolve;
-                //        detalle.ModalPresentationStyle = UIModalPresentationStyle.OverFullScreen;
-                //        this.PresentViewController(detalle, true, null);
-                //    }
-                //    else
-                //    {
-                //        Console.WriteLine(content);
-                //    }
-                //}
-                //catch(Exception ex)
-                //{
-                //    Console.WriteLine(ex.Message);
-                //}
+                        var detalle = this.Storyboard.InstantiateViewController("ViewController") as ViewController;
+                        detalle.ModalTransitionStyle = UIModalTransitionStyle.CrossDissolve;
+                        detalle.ModalPresentationStyle = UIModalPresentationStyle.OverFullScreen;
+                        this.PresentViewController(detalle, true, null);
+                    }
+                    else
+                    {
+                        Console.WriteLine(content);
+                    }
+                }
+                catch(Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
 
-                //#endregion;
+                #endregion;
 
                 btn_done.Enabled = true;
                 btn_foto.Enabled = true;
+                progreso.StopAnimating();
+                progreso.Hidden = true;
             };
 
             #endregion;

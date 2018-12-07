@@ -38,7 +38,7 @@ namespace CABASUS
 
         public string conseguirIDUsuarioDelToken(string token)
         {
-            var handler = new JwtSecurityTokenHandler();
+            var handler = new JwtSecurityTokenHandler(); 
 
             var tokenS = handler.ReadToken(token) as JwtSecurityToken;
             var jti = tokenS.Claims.First(claim => claim.Type == "id").Value;
