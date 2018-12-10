@@ -11,9 +11,11 @@ namespace CABASUS.Controllers
 {
     public partial class Sesion_ViewController : UIViewController
     {
+        string ip = "192.168.0.20";
         HttpClient cliente = new HttpClient();
-        internal string serverLogin = "http://192.168.1.73:5001/api/Account/Login";
-        internal string serverConsulta = "http://192.168.1.73:5001/api/Usuario/consultar";
+        string serverLogin;
+        string serverConsulta;
+        string serverRecovery;
 
         public Sesion_ViewController(IntPtr handle) : base(handle)
         { 
@@ -21,6 +23,10 @@ namespace CABASUS.Controllers
 
         public override void ViewDidLoad()
         {
+            serverLogin = "http://" + ip + ":5001/api/Account/Login";
+            serverConsulta = "http://"+ ip +":5001/api/Usuario/consultar";
+            serverRecovery = "http://" + ip + ":5001/api/Account/recuperarPass";
+
             base.ViewDidLoad();
             string emailGuardado = "", emailGuardadoRecovery = "";
             Regex email = new Regex(@"^([0-9a-zA-Z]" + //Start with a digit or alphabetical
@@ -42,6 +48,7 @@ namespace CABASUS.Controllers
             txt_email.Frame = new CGRect(25, 165, View.Frame.Width - 50, 40);
             txt_email.Layer.BorderColor = UIColor.FromRGB(203, 30, 30).CGColor;
             txt_email.Layer.BorderWidth = 1f;
+            txt_email.KeyboardType = UIKeyboardType.EmailAddress;
 
             lbl_password.Frame = new CGRect(25, 215, View.Frame.Width - 50, 30);
             txt_password.Frame = new CGRect(25, 250, View.Frame.Width - 50, 40);
@@ -87,6 +94,7 @@ namespace CABASUS.Controllers
                 var txt_emailrecovery = new UITextField(new CGRect(15, 195, contenedor.Frame.Width - 30, 40));
                 txt_emailrecovery.Layer.BorderColor = UIColor.FromRGB(203, 30, 30).CGColor;
                 txt_emailrecovery.Layer.BorderWidth = 1f;
+                txt_emailrecovery.KeyboardType = UIKeyboardType.EmailAddress;
 
                 var btn_send = new UIButton(new CGRect(25, 270, contenedor.Frame.Width - 50, 40));
                 btn_send.SetTitle("SEND", UIControlState.Normal);
@@ -113,20 +121,52 @@ namespace CABASUS.Controllers
                     txt_email.Placeholder = "";
                 };
 
-                btn_send.TouchUpInside += delegate
+                btn_send.TouchUpInside += async delegate
                 {
+                    progreso.Frame = new CGRect((View.Frame.Width / 2) - (progreso.Frame.Width / 2), (View.Frame.Height / 2) - (progreso.Frame.Height / 2), progreso.Frame.Width, progreso.Frame.Height);
+
+                    View.BringSubviewToFront(progreso);
+                    progreso.StartAnimating();
+                    progreso.Hidden = false;
+
                     if (email.IsMatch(txt_emailrecovery.Text))
                     {
                         #region Consumo API Recovery Password
+                        txt_emailrecovery.Enabled = false;
+                        btn_send.Enabled = false;
+
+                        cliente.Timeout = TimeSpan.FromSeconds(20);
+                        serverRecovery += "?email=" + txt_emailrecovery.Text + "&idioma=" + 1;
+                        var respuesta = await cliente.GetAsync(serverRecovery);
+                        var datos = await respuesta.Content.ReadAsStringAsync();
+
+                        if (respuesta.IsSuccessStatusCode)
+                        {
+                            txt_emailrecovery.Enabled = false;
+                            btn_send.Enabled = false;
+
+                            progreso.StopAnimating();
+                            progreso.Hidden = true;
+
+                            new ShareInSide().Toast("Te enviamos una contraseña de repuesto a tu correo, por favor revisala :)\n\r"
+                                                    + "Si no recives ninguna contraseña, favor de intentar nuevamente");
+                        }
                         #endregion
                     }
                     else
                     {
+
                         emailGuardadoRecovery = txt_emailrecovery.Text;
                         txt_emailrecovery.Text = "";
                         txt_emailrecovery.BackgroundColor = UIColor.FromRGB(255, 178, 178);
                         txt_emailrecovery.Placeholder = "Formato no valido para email";
                     }
+
+                    txt_emailrecovery.Enabled = true;
+                    btn_send.Enabled = true;
+
+                    progreso.StopAnimating();
+                    progreso.Hidden = true;
                 };
 
                 GenerarAlerta(View, contenedor);
@@ -191,7 +231,16 @@ namespace CABASUS.Controllers
                                 btn_recovery.Enabled = false;
 
                                 //Servidor APIS
-                                var login = new Modelos.login { usuario = txt_email.Text, contrasena = txt_password.Text };
+                                var login = new Modelos.login
+                                {
+                                    usuario = txt_email.Text,
+                                    contrasena = txt_password.Text,
+                                    id_dispositivo = UIDevice.CurrentDevice.IdentifierForVendor.AsString(),
+                                    SO = "iOS",
+                                    TokenFB = new ShareInSide().consultxmlTokenFB().token
+                                };
+
+                                cliente.Timeout = TimeSpan.FromSeconds(20);
                                 var data = JsonConvert.SerializeObject(login);
                                 var respuesta = await cliente.PostAsync(serverLogin, new StringContent(data, System.Text.Encoding.UTF8, "application/json"));
                                 var datos = await respuesta.Content.ReadAsStringAsync();
@@ -276,6 +325,8 @@ namespace CABASUS.Controllers
             contenido.Frame = new CGRect(0,0,alerta1.Frame.Width,alerta1.Frame.Height);
             alerta1.AddSubview(contenido);
             alerta.TouchUpInside += delegate {
+
+                progreso.Frame = new CGRect((View.Frame.Width / 2) - (progreso.Frame.Width / 2), (View.Frame.Height / 1.5) - (progreso.Frame.Height / 2), progreso.Frame.Width, progreso.Frame.Height);
 
                 alerta.RemoveFromSuperview();
                 btn_recovery.Enabled = true;

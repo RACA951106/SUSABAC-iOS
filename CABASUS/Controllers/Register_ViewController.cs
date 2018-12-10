@@ -14,6 +14,8 @@ namespace CABASUS.Controllers
 {
     public partial class Register_ViewController : UIViewController
     {
+        string ip = "192.168.0.20";
+
         public Register_ViewController(IntPtr handle) : base(handle)
         {
         }
@@ -327,7 +329,7 @@ namespace CABASUS.Controllers
 
                 #region usar API para registrar;
 
-                string server = "http://192.168.1.74:5001/api/Account/registrar";
+                string server = "http://"+ ip +":5001/api/Account/registrar";
                 string formato = "application/json";
 
                 usuarios us = new usuarios()
@@ -344,14 +346,22 @@ namespace CABASUS.Controllers
                 var json = new StringContent(JsonConvert.SerializeObject(us), Encoding.UTF8, formato);
                 HttpResponseMessage respuesta = null;
                 string content = "";
+
                 try
                 {
                     HttpClient cliente = new HttpClient();
+                    cliente.Timeout = TimeSpan.FromSeconds(20);
 
                     progreso.StartAnimating();
                     progreso.Hidden = false;
 
+                    txt_username.Enabled = false;
+                    txt_email.Enabled = false;
+                    txt_dob.Enabled = false;
+                    txt_pw.Enabled = false;
+
                     respuesta = await cliente.PostAsync(server, json);
+
                     content = await respuesta.Content.ReadAsStringAsync();
 
                     respuesta.EnsureSuccessStatusCode();
@@ -371,7 +381,7 @@ namespace CABASUS.Controllers
                             var URL = await new ShareInSide().SubirImagen("usuarios", id);
 
                             //actualizar la foto en los datos del ususario
-                            server = "http://192.168.1.74:5001/api/Usuario/actualizarFoto?URL=" + URL;
+                            server = "http://"+ ip +":5001/api/Usuario/actualizarFoto?URL=" + URL;
                             cliente.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", new ShareInSide().consultxmlToken().token);
                             respuesta = await cliente.GetAsync(server);
                             content = await respuesta.Content.ReadAsStringAsync();
@@ -408,6 +418,11 @@ namespace CABASUS.Controllers
                 btn_foto.Enabled = true;
                 progreso.StopAnimating();
                 progreso.Hidden = true;
+
+                txt_username.Enabled = true;
+                txt_email.Enabled = true;
+                txt_dob.Enabled = true;
+                txt_pw.Enabled = true;
             };
 
             #endregion;

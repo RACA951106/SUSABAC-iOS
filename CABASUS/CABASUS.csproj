@@ -110,9 +110,6 @@
       <HintPath>..\packages\WindowsAzure.Storage.9.3.3\lib\netstandard1.3\Microsoft.WindowsAzure.Storage.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="PagerViewController">
-      <HintPath>..\PagerViewController\bin\Debug\PagerViewController.dll</HintPath>
-    </Reference>
     <Reference Include="Firebase.Core">
       <HintPath>..\packages\Xamarin.Firebase.iOS.Core.5.1.3\lib\Xamarin.iOS10\Firebase.Core.dll</HintPath>
     </Reference>
@@ -121,6 +118,9 @@
     </Reference>
     <Reference Include="Firebase.CloudMessaging">
       <HintPath>..\packages\Xamarin.Firebase.iOS.CloudMessaging.3.1.2\lib\Xamarin.iOS10\Firebase.CloudMessaging.dll</HintPath>
+    </Reference>
+    <Reference Include="PagerViewController">
+      <HintPath>..\PagerViewController\bin\Debug\PagerViewController.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

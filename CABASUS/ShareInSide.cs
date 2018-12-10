@@ -10,6 +10,7 @@ using CABASUS.Modelos;
 using Foundation;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
+using UIKit;
 
 namespace CABASUS
 {
@@ -156,5 +157,14 @@ namespace CABASUS
                 return false;
         }
 
+        public void Toast(string mensaje)
+        {
+            UIAlertView alert = new UIAlertView()
+            {
+                Message = mensaje
+            };
+            alert.AddButton("OK");
+            alert.Show();
+        }
     }
 }
