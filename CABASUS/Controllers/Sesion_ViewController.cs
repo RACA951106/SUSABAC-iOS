@@ -127,7 +127,7 @@ namespace CABASUS.Controllers
 
                     View.BringSubviewToFront(progreso);
                     progreso.StartAnimating();
-                    progreso.Hidden = false;
+                    progreso.Hidden = false; 
 
                     if (email.IsMatch(txt_emailrecovery.Text))
                     {
