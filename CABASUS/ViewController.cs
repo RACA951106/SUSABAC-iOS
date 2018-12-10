@@ -51,7 +51,7 @@ namespace CABASUS
 
             View.Add(pager.View);
         }
-
+         
         public override void DidReceiveMemoryWarning()
         {
             base.DidReceiveMemoryWarning();
