@@ -19,7 +19,7 @@ namespace CABASUS.Controllers
 
         public Sesion_ViewController(IntPtr handle) : base(handle)
         { 
-        }
+        } 
 
         public override void ViewDidLoad()
         {
