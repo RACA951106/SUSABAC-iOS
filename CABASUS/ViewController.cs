@@ -1,6 +1,7 @@
 ﻿using System;
 using Pager;
 using UIKit;
+using CABASUS.Controllers;
 
 namespace CABASUS
 {
@@ -27,13 +28,12 @@ namespace CABASUS
             }; //lol
 
             var pages = new[]
-            {
-                new Paginas() { Title = "First"  },
+            {   new Paginas() { Title = "First"  },
                 new Paginas() { Title = "Second" },
                 new Paginas() { Title = "Third" },
                 new Paginas() { Title = "Fourth" },
                 new Paginas() { Title = "Last" },
-};
+            };
 
             var style = new PagerStyle()
             {

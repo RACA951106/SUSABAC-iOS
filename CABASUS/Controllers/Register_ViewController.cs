@@ -16,6 +16,10 @@ namespace CABASUS.Controllers
     {
         string ip = "192.168.0.20";
 
+        public Register_ViewController() : base("Register_ViewController", null)
+        {
+        }
+
         public Register_ViewController(IntPtr handle) : base(handle)
         {
         }
