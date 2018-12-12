@@ -37,7 +37,44 @@ namespace CABASUS.Controllers
         {
             base.ViewDidLoad();
             S.saveTabState("u");
-            // Perform any additional setup after loading the view, typically from a nib.
+
+            #region tamanio elementos
+
+            viewBuscadorFondo.Frame = new CGRect(0, 20, View.Frame.Width, 50);
+
+
+            imgIconoBuscador.Image = UIImage.FromFile("lupa_icon.png");
+            imgIconoBuscador.Frame = new CGRect(20, 15, 20, 20);
+
+            txtBuscador.Frame = new CGRect(50, 5, viewBuscadorFondo.Frame.Width - 50, 40);
+            txtBuscador.Placeholder = "Buscar";
+            txtBuscador.AttributedPlaceholder = new Foundation.NSAttributedString("Buscar", null, UIColor.FromRGB(255, 188, 188));
+            txtBuscador.Layer.BorderColor = UIColor.Clear.CGColor;
+            txtBuscador.ClipsToBounds = true;
+
+            viewLinea.Frame = new CGRect(20, viewBuscadorFondo.Frame.Height - 10, viewBuscadorFondo.Frame.Width - 40, 1);
+
+            tableCaballos.Frame = new CGRect(0, 70, View.Frame.Width, View.Frame.Height - 70);
+
+
+            btnAgregar.Frame = new CGRect((View.Frame.Width / 2) - 30, (View.Frame.Height -150), 60, 60);
+            btnAgregar.Layer.CornerRadius = 30;
+
+            progress.Frame = new CGRect((View.Frame.Width / 2) - (progress.Frame.Width / 2), (View.Frame.Height / 2) - (progress.Frame.Height / 2), progress.Frame.Width, progress.Frame.Height);
+
+
+            #endregion
+
+
+            #region ocultar teclado al tocar la pantalla;
+
+            var g = new UITapGestureRecognizer(() => View.EndEditing(true));
+            g.CancelsTouchesInView = false; //for iOS5
+
+            View.AddGestureRecognizer(g);
+
+            #endregion;
+
         }
 
         public override void DidReceiveMemoryWarning()

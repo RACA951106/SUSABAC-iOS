@@ -18,10 +18,26 @@ namespace CABASUS.Controllers
         {
             base.ViewWillAppear(animated);
 
-            if (primeraVez)
+            if (primeraVez && S.consulTabState() == "u")
             {
-                await Task.Delay(1000);
+                await Task.Delay(500);
                 primeraVez = false;
+
+
+            }
+
+            else if (primeraVez && S.consulTabState() == "d")
+            {
+                await Task.Delay(500);
+                primeraVez = false;
+
+                Action a = () =>
+                {
+                    View.Frame = new CGRect(0, 130, View.Frame.Width, View.Frame.Height - 130);
+                };
+                UIViewPropertyAnimator Animar = new UIViewPropertyAnimator(.5, UIViewAnimationCurve.EaseInOut, a);
+                Animar.StartAnimation();
+                S.saveTabState("d");
             }
 
             if (S.consulTabState() == "u")

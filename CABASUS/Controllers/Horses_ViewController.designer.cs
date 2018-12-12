@@ -1,21 +1,74 @@
-﻿// WARNING
+// WARNING
 //
-// This file has been generated automatically by Xamarin Studio from the outlets and
-// actions declared in your storyboard file.
-// Manual changes to this file will not be maintained.
+// This file has been generated automatically by Visual Studio to store outlets and
+// actions made in the UI designer. If it is removed, they will be lost.
+// Manual changes to this file may not be handled correctly.
 //
 using Foundation;
-using System;
 using System.CodeDom.Compiler;
-using UIKit;
 
 namespace CABASUS.Controllers
 {
-    [Register("Horses_ViewController")]
-    partial class Horses_ViewController
-    {
-        void ReleaseDesignerOutlets()
-        {
-        }
-    }
+	[Register ("Horses_ViewController")]
+	partial class Horses_ViewController
+	{
+		[Outlet]
+		UIKit.UIButton btnAgregar { get; set; }
+
+		[Outlet]
+		UIKit.UIImageView imgIconoBuscador { get; set; }
+
+		[Outlet]
+		UIKit.UIActivityIndicatorView progress { get; set; }
+
+		[Outlet]
+		UIKit.UITableView tableCaballos { get; set; }
+
+		[Outlet]
+		UIKit.UITextField txtBuscador { get; set; }
+
+		[Outlet]
+		UIKit.UIView viewBuscadorFondo { get; set; }
+
+		[Outlet]
+		UIKit.UIView viewLinea { get; set; }
+		
+		void ReleaseDesignerOutlets ()
+		{
+			if (viewBuscadorFondo != null) {
+				viewBuscadorFondo.Dispose ();
+				viewBuscadorFondo = null;
+			}
+
+			if (txtBuscador != null) {
+				txtBuscador.Dispose ();
+				txtBuscador = null;
+			}
+
+			if (imgIconoBuscador != null) {
+				imgIconoBuscador.Dispose ();
+				imgIconoBuscador = null;
+			}
+
+			if (progress != null) {
+				progress.Dispose ();
+				progress = null;
+			}
+
+			if (btnAgregar != null) {
+				btnAgregar.Dispose ();
+				btnAgregar = null;
+			}
+
+			if (tableCaballos != null) {
+				tableCaballos.Dispose ();
+				tableCaballos = null;
+			}
+
+			if (viewLinea != null) {
+				viewLinea.Dispose ();
+				viewLinea = null;
+			}
+		}
+	}
 }

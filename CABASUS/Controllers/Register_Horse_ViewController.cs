@@ -11,6 +11,8 @@ namespace CABASUS.Controllers
         {
         }
 
+        protected Register_Horse_ViewController(IntPtr handle) : base(handle){}
+
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
@@ -54,22 +56,22 @@ namespace CABASUS.Controllers
             txt_dob.Layer.BorderWidth = 1f;
 
             lbl_gender.Frame = new CGRect(25, 545, View.Frame.Width - 50, 30);
-            txt_gender.Frame = new CGRect(25, 480, View.Frame.Width - 50, 40);
+            txt_gender.Frame = new CGRect(25, 580, View.Frame.Width - 50, 40);
             txt_gender.Layer.BorderColor = UIColor.FromRGB(203, 30, 30).CGColor;
             txt_gender.Layer.BorderWidth = 1f;
 
             lbl_oat.Frame = new CGRect(25, 630, View.Frame.Width - 50, 30);
-            txt_oat.Frame = new CGRect(25, 465, View.Frame.Width - 50, 40);
+            txt_oat.Frame = new CGRect(25, 665, View.Frame.Width - 50, 40);
             txt_oat.Layer.BorderColor = UIColor.FromRGB(203, 30, 30).CGColor;
             txt_oat.Layer.BorderWidth = 1f;
 
-            btn_done.Frame = new CGRect(25, 715, View.Frame.Width - 50, 40);
+            btn_done.Frame = new CGRect(25, 770, View.Frame.Width - 50, 40);
             btn_done.Layer.CornerRadius = 20f;
             btn_done.ClipsToBounds = true;
 
 
             scroll.Frame = new CGRect(0, 55, View.Frame.Width, View.Frame.Height - 55);
-            scroll.ContentSize = new CGSize(View.Frame.Width, 770);
+            scroll.ContentSize = new CGSize(View.Frame.Width, 850);
 
             progress.Frame = new CGRect((View.Frame.Width / 2) - (progress.Frame.Width / 2), (View.Frame.Height / 2) - (progress.Frame.Height / 2), progress.Frame.Width, progress.Frame.Height);
             progress.Hidden = true;
@@ -90,7 +92,7 @@ namespace CABASUS.Controllers
             {
                 Action action = () =>
                 {
-                    scroll.ContentSize = new CGSize(View.Frame.Width, 770 + args.FrameEnd.Height);
+                    scroll.ContentSize = new CGSize(View.Frame.Width, 850 + args.FrameEnd.Height);
                 };
 
                 UIViewPropertyAnimator animator = new UIViewPropertyAnimator(.3, UIViewAnimationCurve.Linear, action);
@@ -107,7 +109,7 @@ namespace CABASUS.Controllers
             {
                 Action action = () =>
                 {
-                    scroll.ContentSize = new CGSize(View.Frame.Width, 770);
+                    scroll.ContentSize = new CGSize(View.Frame.Width, 850);
                 };
 
                 UIViewPropertyAnimator animator = new UIViewPropertyAnimator(.3, UIViewAnimationCurve.Linear, action);
