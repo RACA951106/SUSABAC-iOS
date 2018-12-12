@@ -9,6 +9,7 @@ namespace CABASUS.Controllers
     public partial class TimeLine_ViewController : UIViewController
     {
         ShareInSide S = new ShareInSide();
+        bool primeraVez = true;
         public TimeLine_ViewController() : base("TimeLine_ViewController", null)
         {
         }
@@ -16,7 +17,12 @@ namespace CABASUS.Controllers
         public override async void ViewWillAppear(bool animated)
         {
             base.ViewWillAppear(animated);
-            await Task.Delay(2000);
+
+            if (primeraVez)
+            {
+                await Task.Delay(1000);
+                primeraVez = false;
+            }
 
             if (S.consulTabState() == "u")
             {

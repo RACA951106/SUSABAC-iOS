@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using CoreGraphics;
 using UIKit;
 
@@ -7,15 +8,24 @@ namespace CABASUS.Controllers
     public partial class Map_ViewController : UIViewController
     {
         ShareInSide S = new ShareInSide();
+        bool primeraVez = true;
+
         public Map_ViewController() : base("Map_ViewController", null)
         {
         }
 
         protected Map_ViewController(IntPtr handle) : base(handle) { }
 
-        public override void ViewWillAppear(bool animated)
+        public override async void ViewWillAppear(bool animated)
         {
             base.ViewWillAppear(animated);
+
+            if (primeraVez)
+            {
+                await Task.Delay(1000);
+                primeraVez = false;
+            }
+
             if (S.consulTabState() == "u")
             {
                 Action a = () =>
