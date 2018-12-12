@@ -23,6 +23,9 @@ namespace CABASUS.Controllers
 
         public override void ViewDidLoad()
         {
+            txt_email.Text = "a@a.com";
+            txt_password.Text = "q";
+
             serverLogin = "http://" + ip + ":5001/api/Account/Login";
             serverConsulta = "http://"+ ip +":5001/api/Usuario/consultar";
             serverRecovery = "http://" + ip + ":5001/api/Account/recuperarPass";
@@ -261,7 +264,7 @@ namespace CABASUS.Controllers
                                     progreso.StopAnimating();
                                     progreso.Hidden = true;
 
-                                    var detalle = this.Storyboard.InstantiateViewController("ViewController") as ViewController;
+                                    var detalle = this.Storyboard.InstantiateViewController("Tabs_ViewController") as Tabs_ViewController;
                                     detalle.ModalTransitionStyle = UIModalTransitionStyle.CrossDissolve;
                                     detalle.ModalPresentationStyle = UIModalPresentationStyle.OverFullScreen;
                                     this.PresentViewController(detalle, true, null);

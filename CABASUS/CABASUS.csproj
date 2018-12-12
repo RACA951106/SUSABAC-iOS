@@ -119,13 +119,32 @@
     <Reference Include="Firebase.CloudMessaging">
       <HintPath>..\packages\Xamarin.Firebase.iOS.CloudMessaging.3.1.2\lib\Xamarin.iOS10\Firebase.CloudMessaging.dll</HintPath>
     </Reference>
-    <Reference Include="PagerViewController">
-      <HintPath>..\PagerViewController\bin\Debug\PagerViewController.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Contents.json" />
     <ImageAsset Include="Assets.xcassets\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\rsz_bell_icon.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\rsz_bell_icon.imageset\rsz_bell_icon.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\rsz_horse_icon.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\rsz_horse_icon.imageset\rsz_horse_icon.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\rsz_map_icon.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\rsz_map_icon.imageset\rsz_map_icon.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\rsz_menu_icon.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\rsz_menu_icon.imageset\rsz_menu_icon.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\rsz_timeline_icon.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\rsz_timeline_icon.imageset\rsz_timeline_icon.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\Image.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\Image.imageset\campana_vector.pdf" />
+    <ImageAsset Include="Resources\Assets.xcassets\bell.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\bell.imageset\vector_bell.pdf" />
+    <ImageAsset Include="Resources\Assets.xcassets\horse.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\horse.imageset\vector_horse.pdf" />
+    <ImageAsset Include="Resources\Assets.xcassets\map.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\map.imageset\vector_map.pdf" />
+    <ImageAsset Include="Resources\Assets.xcassets\menu.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\menu.imageset\vector_menu.pdf" />
+    <ImageAsset Include="Resources\Assets.xcassets\timeline.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\timeline.imageset\vector_timeline.pdf" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />
@@ -135,7 +154,6 @@
   <ItemGroup>
     <InterfaceDefinition Include="LaunchScreen.storyboard" />
     <InterfaceDefinition Include="Main.storyboard" />
-    <InterfaceDefinition Include="Paginas.xib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -145,14 +163,6 @@
   <ItemGroup>
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
-    <Compile Include="ViewController.cs" />
-    <Compile Include="ViewController.designer.cs">
-      <DependentUpon>ViewController.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Paginas.cs" />
-    <Compile Include="Paginas.designer.cs">
-      <DependentUpon>Paginas.cs</DependentUpon>
-    </Compile>
     <Compile Include="Controllers\Login_ViewController.cs" />
     <Compile Include="Controllers\Login_ViewController.designer.cs">
       <DependentUpon>Login_ViewController.cs</DependentUpon>
@@ -182,14 +192,33 @@
     <Compile Include="Controllers\Register_Horse_ViewController.designer.cs">
       <DependentUpon>Register_Horse_ViewController.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controllers\Tabs_ViewController.cs" />
+    <Compile Include="Controllers\Tabs_ViewController.designer.cs">
+      <DependentUpon>Tabs_ViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controllers\Horses_ViewController.cs" />
+    <Compile Include="Controllers\Horses_ViewController.designer.cs">
+      <DependentUpon>Horses_ViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controllers\TimeLine_ViewController.cs" />
+    <Compile Include="Controllers\TimeLine_ViewController.designer.cs">
+      <DependentUpon>TimeLine_ViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controllers\Map_ViewController.cs" />
+    <Compile Include="Controllers\Map_ViewController.designer.cs">
+      <DependentUpon>Map_ViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controllers\Notifications_ViewController.cs" />
+    <Compile Include="Controllers\Notifications_ViewController.designer.cs">
+      <DependentUpon>Notifications_ViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controllers\Menu_ViewController.cs" />
+    <Compile Include="Controllers\Menu_ViewController.designer.cs">
+      <DependentUpon>Menu_ViewController.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
-    <BundleResource Include="Resources\bell_icon.png" />
-    <BundleResource Include="Resources\horse_icon.png" />
     <BundleResource Include="Resources\lupa_icon.png" />
-    <BundleResource Include="Resources\map_icon.png" />
-    <BundleResource Include="Resources\menu_icon.png" />
-    <BundleResource Include="Resources\timeline_icon.png" />
     <BundleResource Include="Resources\cabasuslogo.png" />
     <BundleResource Include="GoogleService-Info.plist" />
   </ItemGroup>

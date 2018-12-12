@@ -9,10 +9,10 @@ using System;
 using System.CodeDom.Compiler;
 using UIKit;
 
-namespace CABASUS
+namespace CABASUS.Controllers
 {
-    [Register("Paginas")]
-    partial class Paginas
+    [Register("TimeLine_ViewController")]
+    partial class TimeLine_ViewController
     {
         void ReleaseDesignerOutlets()
         {

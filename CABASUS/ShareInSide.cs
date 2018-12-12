@@ -57,6 +57,26 @@ namespace CABASUS
             return datos;
         }
 
+        public void saveTabState(string estado)
+        {
+            var tokens = new tokens();
+            tokens.token = estado;
+
+            var data = new XmlSerializer(typeof(tokens));
+            var Escritura = new StreamWriter(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "TabState.xml"));
+            data.Serialize(Escritura, tokens);
+            Escritura.Close();
+        }
+
+        public string consulTabState()
+        {
+            var serializador = new XmlSerializer(typeof(tokens));
+            var Lectura = new StreamReader(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "TabState.xml"));
+            var datos = (tokens)serializador.Deserialize(Lectura);
+            Lectura.Close();
+            return datos.token;
+        }
+
         public string conseguirIDUsuarioDelToken(string token)
         {
             var handler = new JwtSecurityTokenHandler(); 

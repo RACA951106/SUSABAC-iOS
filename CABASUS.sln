@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CABASUS", "CABASUS\CABASUS.csproj", "{259A752A-B66B-4EBE-A44C-4DCD68246FA1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PagerViewController", "PagerViewController\PagerViewController.csproj", "{7129BABF-BDFF-492B-A19E-73240656573D}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|iPhoneSimulator = Debug|iPhoneSimulator
@@ -21,13 +19,5 @@ Global
 		{259A752A-B66B-4EBE-A44C-4DCD68246FA1}.Release|iPhoneSimulator.Build.0 = Release|iPhoneSimulator
 		{259A752A-B66B-4EBE-A44C-4DCD68246FA1}.Debug|iPhone.ActiveCfg = Debug|iPhone
 		{259A752A-B66B-4EBE-A44C-4DCD68246FA1}.Debug|iPhone.Build.0 = Debug|iPhone
-		{7129BABF-BDFF-492B-A19E-73240656573D}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
-		{7129BABF-BDFF-492B-A19E-73240656573D}.Debug|iPhoneSimulator.Build.0 = Debug|Any CPU
-		{7129BABF-BDFF-492B-A19E-73240656573D}.Release|iPhone.ActiveCfg = Release|Any CPU
-		{7129BABF-BDFF-492B-A19E-73240656573D}.Release|iPhone.Build.0 = Release|Any CPU
-		{7129BABF-BDFF-492B-A19E-73240656573D}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
-		{7129BABF-BDFF-492B-A19E-73240656573D}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
-		{7129BABF-BDFF-492B-A19E-73240656573D}.Debug|iPhone.ActiveCfg = Debug|Any CPU
-		{7129BABF-BDFF-492B-A19E-73240656573D}.Debug|iPhone.Build.0 = Debug|Any CPU
 	EndGlobalSection
 EndGlobal
