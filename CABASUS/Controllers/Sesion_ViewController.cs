@@ -11,7 +11,7 @@ namespace CABASUS.Controllers
 {
     public partial class Sesion_ViewController : UIViewController
     {
-        string ip = "192.168.0.20";
+        string ip = "192.168.1.74";
         HttpClient cliente = new HttpClient();
         string serverLogin;
         string serverConsulta;
@@ -305,7 +305,7 @@ namespace CABASUS.Controllers
             base.DidReceiveMemoryWarning();
         }
 
-        public void GenerarAlerta( UIView view,UIView contenido)
+        public void GenerarAlerta(UIView view,UIView contenido)
         {
             UIButton alerta = new UIButton(new CGRect(View.Frame.Width, View.Frame.Height, 0, 0));
             alerta.BackgroundColor = new UIColor(0 / 255, 0 / 255, 0 / 255, 127.5f / 255);

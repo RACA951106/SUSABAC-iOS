@@ -7,9 +7,11 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 using CABASUS.Modelos;
+using CoreGraphics;
 using Foundation;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
+using Photos;
 using UIKit;
 
 namespace CABASUS
@@ -185,6 +187,39 @@ namespace CABASUS
             };
             alert.AddButton("OK");
             alert.Show();
+        }
+
+        public void GuardarFoto(UIImage imagen, PHAssetCollection pHAssetCollection, PHFetchResult pHFetchResult)
+        {
+            PHPhotoLibrary.SharedPhotoLibrary.PerformChanges(() =>
+            {
+                var assetRequest = PHAssetChangeRequest.FromImage(imagen);
+                var assetPlaceholder = assetRequest.PlaceholderForCreatedAsset;
+                var albumChangeRequest = PHAssetCollectionChangeRequest.ChangeRequest(pHAssetCollection, pHFetchResult);
+                albumChangeRequest.AddAssets(new PHObject[] { assetPlaceholder });
+            }, (ok, error) =>
+            {
+                Console.WriteLine("added image to album");
+                Console.WriteLine(error);
+            });
+        }
+
+        public string GetLocalFilePath(string filename, string nombreenresources, string tipoenresources)
+        {
+            string docFolder = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
+            string dbPath = Path.Combine(docFolder, filename);
+            CopyDatabaseIfNotExists(dbPath, nombreenresources, tipoenresources);
+
+            return dbPath;
+        }
+
+        private void CopyDatabaseIfNotExists(string dbPath, string nameinres, string typeinres)
+        {
+            if (!File.Exists(dbPath))
+            {
+                var existingDb = NSBundle.MainBundle.PathForResource(nameinres, typeinres);
+                File.Copy(existingDb, dbPath);
+            }
         }
     }
 }
