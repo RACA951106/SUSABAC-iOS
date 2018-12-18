@@ -608,7 +608,7 @@
                                 <color key="color" red="0.79607843140000001" green="0.1176470588" blue="0.1176470588" alpha="1" colorSpace="calibratedRGB"/>
                             </activityIndicatorView>
                         </subviews>
-                        <color key="backgroundColor" cocoaTouchSystemColor="lightTextColor"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     </view>
                     <tabBarItem key="tabBarItem" tag="2" title="" image="timeline" id="hdx-5h-YQu">
                         <inset key="imageInsets" minX="0.0" minY="10" maxX="0.0" maxY="0.0"/>
@@ -637,7 +637,7 @@
                                 <color key="color" red="0.79607843140000001" green="0.1176470588" blue="0.1176470588" alpha="1" colorSpace="calibratedRGB"/>
                             </activityIndicatorView>
                         </subviews>
-                        <color key="backgroundColor" cocoaTouchSystemColor="lightTextColor"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     </view>
                     <tabBarItem key="tabBarItem" tag="3" title="" image="map" id="7cz-Rv-KZ5">
                         <inset key="imageInsets" minX="0.0" minY="10" maxX="0.0" maxY="0.0"/>
@@ -666,7 +666,7 @@
                                 <color key="color" red="0.79607843140000001" green="0.1176470588" blue="0.1176470588" alpha="1" colorSpace="calibratedRGB"/>
                             </activityIndicatorView>
                         </subviews>
-                        <color key="backgroundColor" cocoaTouchSystemColor="lightTextColor"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     </view>
                     <tabBarItem key="tabBarItem" tag="4" title="" image="bell" id="yBQ-1l-zgj">
                         <inset key="imageInsets" minX="0.0" minY="5" maxX="0.0" maxY="-5"/>
@@ -695,7 +695,7 @@
                                 <color key="color" red="0.79607843140000001" green="0.1176470588" blue="0.1176470588" alpha="1" colorSpace="calibratedRGB"/>
                             </activityIndicatorView>
                         </subviews>
-                        <color key="backgroundColor" cocoaTouchSystemColor="lightTextColor"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     </view>
                     <tabBarItem key="tabBarItem" tag="5" title="" image="menu" id="Jo6-us-vRV">
                         <inset key="imageInsets" minX="0.0" minY="10" maxX="0.0" maxY="0.0"/>

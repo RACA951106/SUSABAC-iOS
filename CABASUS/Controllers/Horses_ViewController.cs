@@ -7,6 +7,7 @@ namespace CABASUS.Controllers
     public partial class Horses_ViewController : UIViewController
     {
         ShareInSide S = new ShareInSide();
+
         public Horses_ViewController() : base("Horses_ViewController", null)
         {
         }
@@ -76,7 +77,11 @@ namespace CABASUS.Controllers
 
             #region consulta caballos 
 
+            #region Actualizar caballo
 
+
+
+            #endregion
 
             #endregion;
         }

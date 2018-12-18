@@ -97,13 +97,13 @@ namespace CABASUS.Controllers
                 animator.StartAnimation();
 
                 if(txt_username.IsEditing)
-                    accionTeclado(txt_dob, args.FrameEnd);
+                    accionTeclado(txt_username, args.FrameEnd);
 
                 if(txt_email.IsEditing)
-                    accionTeclado(txt_dob, args.FrameEnd);
+                    accionTeclado(txt_email, args.FrameEnd);
 
                 if(txt_pw.IsEditing)
-                    accionTeclado(txt_dob, args.FrameEnd);
+                    accionTeclado(txt_pw, args.FrameEnd);
 
                 if (txt_dob.IsEditing)
                     accionTeclado(txt_dob, args.FrameEnd);
