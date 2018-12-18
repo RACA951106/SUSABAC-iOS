@@ -57,14 +57,13 @@ namespace CABASUS.Controllers
             tableCaballos.Frame = new CGRect(0, 70, View.Frame.Width, View.Frame.Height - 70);
 
 
-            btnAgregar.Frame = new CGRect((View.Frame.Width / 2) - 30, (View.Frame.Height -150), 60, 60);
+            btnAgregar.Frame = new CGRect((View.Frame.Width / 2) - 30, (View.Frame.Height - 150), 60, 60);
             btnAgregar.Layer.CornerRadius = 30;
 
             progress.Frame = new CGRect((View.Frame.Width / 2) - (progress.Frame.Width / 2), (View.Frame.Height / 2) - (progress.Frame.Height / 2), progress.Frame.Width, progress.Frame.Height);
-
+            progress.Hidden = true;
 
             #endregion
-
 
             #region ocultar teclado al tocar la pantalla;
 
@@ -75,6 +74,11 @@ namespace CABASUS.Controllers
 
             #endregion;
 
+            #region consulta caballos 
+
+
+
+            #endregion;
         }
 
         public override void DidReceiveMemoryWarning()

@@ -96,10 +96,18 @@ namespace CABASUS.Controllers
                 UIViewPropertyAnimator animator = new UIViewPropertyAnimator(.3, UIViewAnimationCurve.Linear, action);
                 animator.StartAnimation();
 
+                if(txt_username.IsEditing)
+                    accionTeclado(txt_dob, args.FrameEnd);
+
+                if(txt_email.IsEditing)
+                    accionTeclado(txt_dob, args.FrameEnd);
+
+                if(txt_pw.IsEditing)
+                    accionTeclado(txt_dob, args.FrameEnd);
+
                 if (txt_dob.IsEditing)
-                {
-                    scroll_register.SetContentOffset(new CGPoint(0, 150), true);
-                }
+                    accionTeclado(txt_dob, args.FrameEnd);
+                
             });
 
 
@@ -452,6 +460,20 @@ namespace CABASUS.Controllers
         public override void DidReceiveMemoryWarning()
         {
             base.DidReceiveMemoryWarning();
+        }
+
+        private void accionTeclado(UITextField cajaTexto, CGRect teclado)
+        {
+            var vistaNivelScroll = View.Frame.Height - 35;
+            var visible = vistaNivelScroll - teclado.Height;
+
+            var frameCaja = View.ConvertRectFromView(cajaTexto.Frame, scroll_register);
+            var ycajatexto = frameCaja.Y - teclado.Y;
+            ycajatexto += (cajaTexto.Frame.Height + 50);
+
+            if (frameCaja.Y + cajaTexto.Frame.Height > teclado.Y)
+                scroll_register.SetContentOffset(new CGPoint(0, scroll_register.ContentOffset.Y + ycajatexto), true);
+
         }
     }
 }

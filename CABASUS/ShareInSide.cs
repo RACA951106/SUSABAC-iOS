@@ -12,6 +12,7 @@ using Foundation;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
 using Photos;
+using Security;
 using UIKit;
 
 namespace CABASUS

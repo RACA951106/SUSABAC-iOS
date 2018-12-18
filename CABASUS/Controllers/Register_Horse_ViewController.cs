@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using CABASUS.Modelos;
 using CoreGraphics;
 using Foundation;
@@ -21,11 +22,12 @@ namespace CABASUS.Controllers
         UIButton alerta;
         UITableView listViewBreed, listViewGender;
 
+
         public Register_Horse_ViewController() : base("Register_Horse_ViewController", null)
         {
         }
 
-        protected Register_Horse_ViewController(IntPtr handle) : base(handle){}
+        protected Register_Horse_ViewController(IntPtr handle) : base(handle) { }
 
         public override void ViewDidLoad()
         {
@@ -116,7 +118,8 @@ namespace CABASUS.Controllers
                     txt_height.Text = "";
                 }
             };
-            txt_oat.EditingChanged +=delegate {
+            txt_oat.EditingChanged += delegate
+            {
                 try
                 {
                     double.Parse(txt_oat.Text);
@@ -127,6 +130,10 @@ namespace CABASUS.Controllers
                     txt_oat.Text = "";
                 }
             };
+
+
+
+
             #endregion
 
             #region ocultar teclado al tocar la pantalla;
@@ -140,7 +147,7 @@ namespace CABASUS.Controllers
 
             #region mover pantalla cuando se este llenando el formulario;
 
-            UIKeyboard.Notifications.ObserveWillShow((sender, args) =>
+            UIKeyboard.Notifications.ObserveWillShow(async (sender, args) =>
             {
                 Action action = () =>
                 {
@@ -150,11 +157,16 @@ namespace CABASUS.Controllers
                 UIViewPropertyAnimator animator = new UIViewPropertyAnimator(.3, UIViewAnimationCurve.Linear, action);
                 animator.StartAnimation();
 
+                if (txt_nameHorse.IsEditing)
+                    accionTeclado(txt_nameHorse, args.FrameEnd);
+                if (txt_dob.IsEditing)
+                    accionTeclado(txt_dob, args.FrameEnd);
+                if (txt_oat.IsEditing)
+                    accionTeclado(txt_oat, args.FrameEnd);
+                if (txt_height.IsEditing)
+                    accionTeclado(txt_height, args.FrameEnd);
                 if (txt_weight.IsEditing)
-                {
-                    scroll.SetContentOffset(new CGPoint(0, 150), true);
-                }
-
+                    accionTeclado(txt_weight, args.FrameEnd);
             });
 
 
@@ -173,7 +185,8 @@ namespace CABASUS.Controllers
 
             #region abrir camara o galeria para la foto del ususario;
 
-            btn_foto.TouchUpInside += delegate {
+            btn_foto.TouchUpInside += delegate
+            {
                 GaleryCameraAccessController obj = new GaleryCameraAccessController();
 
                 var okCancelAlertController = UIAlertController.Create(null, "Selecciona una opcion", UIAlertControllerStyle.Alert);
@@ -189,7 +202,8 @@ namespace CABASUS.Controllers
 
             #region comprobar que no se pegue nada en la fecha
 
-            txt_dob.EditingChanged += delegate {
+            txt_dob.EditingChanged += delegate
+            {
 
                 var noLetras = txt_dob.Text.Replace("/", "");
                 noLetras = noLetras.Replace(" ", "");
@@ -247,7 +261,8 @@ namespace CABASUS.Controllers
 
             #endregion;
 
-            txt_gender.TouchUpInside += delegate {
+            txt_gender.TouchUpInside += delegate
+            {
 
                 var contenedor = new UIView();
                 if (View.Frame.Width == 320)
@@ -378,11 +393,13 @@ namespace CABASUS.Controllers
 
 
                 //cambiar cuando vuelva a editar
-                txt_nameHorse.EditingDidBegin += delegate {
+                txt_nameHorse.EditingDidBegin += delegate
+                {
 
                     txt_nameHorse.BackgroundColor = UIColor.White;
                 };
-                txt_weight.EditingDidBegin += delegate {
+                txt_weight.EditingDidBegin += delegate
+                {
                     txt_weight.BackgroundColor = UIColor.White;
                 };
 
@@ -391,15 +408,18 @@ namespace CABASUS.Controllers
                     txt_height.BackgroundColor = UIColor.White;
                 };
 
-                txt_breed.EditingDidEnd += delegate {
+                txt_breed.EditingDidEnd += delegate
+                {
                     txt_breed.BackgroundColor = UIColor.White;
                 };
 
-                txt_oat.EditingDidEnd += delegate {
+                txt_oat.EditingDidEnd += delegate
+                {
                     txt_oat.BackgroundColor = UIColor.White;
                 };
 
-                txt_breed.TouchUpInside += delegate {
+                txt_breed.TouchUpInside += delegate
+                {
                     txt_breed.SetTitleColor(UIColor.FromRGB(203, 203, 208), UIControlState.Normal);
                     txt_breed.SetTitle("Choose one", UIControlState.Normal);
                     txt_breed.BackgroundColor = UIColor.White;
@@ -425,7 +445,7 @@ namespace CABASUS.Controllers
                 }
                 #endregion;
 
-                if(horse && weight && height && breed && oat)
+                if (horse && weight && height && breed && oat)
                 {
                     #region guardar foto en la galeria si se cambio por la de defecto;
 
@@ -520,7 +540,7 @@ namespace CABASUS.Controllers
                         btn_done.Enabled = false;
                         btn_foto.Enabled = false;
 
-                        cliente.DefaultRequestHeaders.Authorization = 
+                        cliente.DefaultRequestHeaders.Authorization =
                             new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", new ShareInSide().consultxmlToken().token);
 
                         respuesta = await cliente.PostAsync(server, json);
@@ -563,7 +583,7 @@ namespace CABASUS.Controllers
                             progress.StopAnimating();
                             progress.Hidden = true;
 
-                            var detalle = this.Storyboard.InstantiateViewController("Horses_ViewController") as Horses_ViewController;
+                            var detalle = this.Storyboard.InstantiateViewController("Tabs_ViewController") as Tabs_ViewController;
                             detalle.ModalTransitionStyle = UIModalTransitionStyle.CrossDissolve;
                             detalle.ModalPresentationStyle = UIModalPresentationStyle.OverFullScreen;
                             this.PresentViewController(detalle, true, null);
@@ -625,7 +645,7 @@ namespace CABASUS.Controllers
             alerta.AddSubview(alerta1);
             view.AddSubview(alerta);
 
-            if (source == 1) 
+            if (source == 1)
                 listViewBreed.Source = new Adapters.Breed_Adapter(consulta, txt_breed, alerta);
             else
                 listViewGender.Source = new Adapters.Gender_Adapter(txt_gender, alerta);
@@ -641,12 +661,27 @@ namespace CABASUS.Controllers
 
             contenido.Frame = new CGRect(0, 0, alerta1.Frame.Width, alerta1.Frame.Height);
             alerta1.AddSubview(contenido);
-            alerta.TouchUpInside += delegate {
+            alerta.TouchUpInside += delegate
+            {
 
                 progress.Frame = new CGRect((View.Frame.Width / 2) - (progress.Frame.Width / 2), (View.Frame.Height / 1.5) - (progress.Frame.Height / 2), progress.Frame.Width, progress.Frame.Height);
 
                 alerta.RemoveFromSuperview();
             };
+        }
+
+        private void accionTeclado(UITextField cajaTexto, CGRect teclado)
+        {
+            var vistaNivelScroll = View.Frame.Height - 35;
+            var visible = vistaNivelScroll - teclado.Height;
+
+            var frameCaja = View.ConvertRectFromView(cajaTexto.Frame, scroll);
+            var ycajatexto = frameCaja.Y - teclado.Y;
+            ycajatexto += (cajaTexto.Frame.Height + 50);
+
+            if(frameCaja.Y + cajaTexto.Frame.Height > teclado.Y)
+                scroll.SetContentOffset(new CGPoint(0, scroll.ContentOffset.Y + ycajatexto), true);
+
         }
     }
 }
