@@ -2,12 +2,20 @@
 using CoreGraphics;
 using UIKit;
 using CABASUS.Adapters;
+using System.Net.Http;
+using Newtonsoft.Json;
+using CABASUS.Modelos;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace CABASUS.Controllers
 {
     public partial class Horses_ViewController : UIViewController
     {
         ShareInSide S = new ShareInSide();
+        string ip = "192.168.1.74";
+        HttpClient cliente = new HttpClient();
+        string serverHorses;
 
         public Horses_ViewController() : base("Horses_ViewController", null)
         {
@@ -15,7 +23,7 @@ namespace CABASUS.Controllers
 
         protected Horses_ViewController(IntPtr handle) : base(handle) { }
 
-        public override void ViewWillAppear(bool animated)
+        public override async void ViewWillAppear(bool animated)
         {
             base.ViewWillAppear(animated);
 
@@ -33,12 +41,15 @@ namespace CABASUS.Controllers
             }
 
             S.saveTabState("u");
+
+            await ConsultarCaballos();
         }
 
-        public override void ViewDidLoad()
+        public override async void ViewDidLoad()
         {
             base.ViewDidLoad();
             S.saveTabState("u");
+            serverHorses = "http://" + ip + ":5001/api/caballo/consultaridusuario";
 
             #region tamanio elementos
 
@@ -76,13 +87,49 @@ namespace CABASUS.Controllers
 
             #endregion;
 
+            #region consulatar caballos de la nube 
 
-            #region agragar acciones al table view en swipe;
-
-            tableCaballos.Source = new Hoses_Adapter();
-            tableCaballos.Delegate = new Horses_Adapter_Delegate();
+            await ConsultarCaballos();
 
             #endregion;
+        }
+
+        public async Task<bool> ConsultarCaballos()
+        {
+            progress.StartAnimating();
+            progress.Hidden = false;
+
+            try
+            {
+                cliente.Timeout = TimeSpan.FromSeconds(20);
+                cliente.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", new ShareInSide().consultxmlToken().token);
+                var respuesta = await cliente.GetAsync(serverHorses);
+                var datos = await respuesta.Content.ReadAsStringAsync();
+
+                if (respuesta.IsSuccessStatusCode)
+                {
+                    var listaCaballos = JsonConvert.DeserializeObject<List<caballos>>(datos);
+
+                    #region agragar acciones al table view en swipe;
+
+                    tableCaballos.Source = new Hoses_Adapter(listaCaballos);
+                    tableCaballos.ReloadData();
+                    tableCaballos.Delegate = new Horses_Adapter_Delegate(this);
+
+                    #endregion;
+                }
+                else
+                    S.Toast(datos);
+            }
+            catch (Exception ex)
+            {
+                S.Toast(ex.Message);
+            }
+
+            progress.StopAnimating();
+            progress.Hidden = true;
+
+            return true;
         }
 
         public override void DidReceiveMemoryWarning()

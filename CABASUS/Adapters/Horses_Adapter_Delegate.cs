@@ -5,6 +5,12 @@ namespace CABASUS.Adapters
 {
     class Horses_Adapter_Delegate: UITableViewDelegate
     {
+        UIViewController controlador;
+        public Horses_Adapter_Delegate(UIViewController controller)
+        {
+            controlador = controller;
+        }
+
         [Export("tableView:editActionsForRowAtIndexPath:")]
         public UITableViewRowAction[] EditActionsForRow(UITableView tableView, Foundation.NSIndexPath indexPath)
         {
