@@ -19,9 +19,6 @@ namespace CABASUS.Controllers
 		UIKit.UIImageView imgIconoBuscador { get; set; }
 
 		[Outlet]
-		UIKit.UIActivityIndicatorView progress { get; set; }
-
-		[Outlet]
 		UIKit.UITableView tableCaballos { get; set; }
 
 		[Outlet]
@@ -35,14 +32,9 @@ namespace CABASUS.Controllers
 		
 		void ReleaseDesignerOutlets ()
 		{
-			if (viewBuscadorFondo != null) {
-				viewBuscadorFondo.Dispose ();
-				viewBuscadorFondo = null;
-			}
-
-			if (txtBuscador != null) {
-				txtBuscador.Dispose ();
-				txtBuscador = null;
+			if (btnAgregar != null) {
+				btnAgregar.Dispose ();
+				btnAgregar = null;
 			}
 
 			if (imgIconoBuscador != null) {
@@ -50,19 +42,19 @@ namespace CABASUS.Controllers
 				imgIconoBuscador = null;
 			}
 
-			if (progress != null) {
-				progress.Dispose ();
-				progress = null;
-			}
-
-			if (btnAgregar != null) {
-				btnAgregar.Dispose ();
-				btnAgregar = null;
-			}
-
 			if (tableCaballos != null) {
 				tableCaballos.Dispose ();
 				tableCaballos = null;
+			}
+
+			if (txtBuscador != null) {
+				txtBuscador.Dispose ();
+				txtBuscador = null;
+			}
+
+			if (viewBuscadorFondo != null) {
+				viewBuscadorFondo.Dispose ();
+				viewBuscadorFondo = null;
 			}
 
 			if (viewLinea != null) {

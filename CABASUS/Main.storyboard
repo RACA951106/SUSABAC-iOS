@@ -552,11 +552,6 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </tableView>
-                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="EeO-4T-N4Y">
-                                <rect key="frame" x="276" y="325" width="37" height="37"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="color" red="0.79607843140000001" green="0.1176470588" blue="0.1176470588" alpha="1" colorSpace="calibratedRGB"/>
-                            </activityIndicatorView>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QJJ-0E-H32">
                                 <rect key="frame" x="187" y="518" width="30" height="60"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -579,7 +574,6 @@
                     <connections>
                         <outlet property="btnAgregar" destination="QJJ-0E-H32" id="TyP-tf-mnU"/>
                         <outlet property="imgIconoBuscador" destination="q6i-4V-7f4" id="FdK-Hy-oU2"/>
-                        <outlet property="progress" destination="EeO-4T-N4Y" id="cV9-94-HW1"/>
                         <outlet property="tableCaballos" destination="FgO-Di-d9A" id="1oJ-bw-jfk"/>
                         <outlet property="txtBuscador" destination="12C-ZH-0Z0" id="xoi-OA-RnR"/>
                         <outlet property="viewBuscadorFondo" destination="1ZU-FB-gqK" id="Yne-ne-liR"/>
@@ -750,7 +744,7 @@
         <image name="timeline" width="612" height="792"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="rZK-Gh-2VU"/>
+        <segue reference="dkg-mE-kcP"/>
         <segue reference="SsL-eK-Xtj"/>
     </inferredMetricsTieBreakers>
 </document>

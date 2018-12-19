@@ -16,6 +16,7 @@ namespace CABASUS.Controllers
         string ip = "192.168.1.74";
         HttpClient cliente = new HttpClient();
         string serverHorses;
+        UIRefreshControl refreshControl;
 
         public Horses_ViewController() : base("Horses_ViewController", null)
         {
@@ -51,6 +52,24 @@ namespace CABASUS.Controllers
             S.saveTabState("u");
             serverHorses = "http://" + ip + ":5001/api/caballo/consultaridusuario";
 
+            #region activar el refresh;
+
+            refreshControl = new UIRefreshControl();
+            refreshControl.TintColor = UIColor.FromRGB(215, 51, 39);
+            refreshControl.ValueChanged += async delegate
+            {
+                refreshControl.BeginRefreshing();
+                await ConsultarCaballos();
+                refreshControl.EndRefreshing();
+            };
+
+            if (UIDevice.CurrentDevice.CheckSystemVersion(10, 0))
+                tableCaballos.RefreshControl = refreshControl;
+            else
+                tableCaballos.AddSubview(refreshControl);
+
+            #endregion;
+
             #region tamanio elementos
 
             viewBuscadorFondo.Frame = new CGRect(0, 20, View.Frame.Width, 50);
@@ -73,9 +92,6 @@ namespace CABASUS.Controllers
             btnAgregar.Frame = new CGRect((View.Frame.Width / 2) - 30, (View.Frame.Height - 150), 60, 60);
             btnAgregar.Layer.CornerRadius = 30;
 
-            progress.Frame = new CGRect((View.Frame.Width / 2) - (progress.Frame.Width / 2), (View.Frame.Height / 2) - (progress.Frame.Height / 2), progress.Frame.Width, progress.Frame.Height);
-            progress.Hidden = true;
-
             #endregion
 
             #region ocultar teclado al tocar la pantalla;
@@ -96,8 +112,7 @@ namespace CABASUS.Controllers
 
         public async Task<bool> ConsultarCaballos()
         {
-            progress.StartAnimating();
-            progress.Hidden = false;
+            refreshControl.BeginRefreshing();
 
             try
             {
@@ -126,8 +141,7 @@ namespace CABASUS.Controllers
                 S.Toast(ex.Message);
             }
 
-            progress.StopAnimating();
-            progress.Hidden = true;
+            refreshControl.EndRefreshing();
 
             return true;
         }
