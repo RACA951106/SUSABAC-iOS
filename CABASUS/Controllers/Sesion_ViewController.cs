@@ -291,6 +291,7 @@ namespace CABASUS.Controllers
                 catch (Exception ex)
                 {
                     Console.WriteLine(ex.Message);
+                    new ShareInSide().Toast(ex.Message);
                     progreso.StopAnimating();
                     progreso.Hidden = true;
                 }

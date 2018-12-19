@@ -1,6 +1,7 @@
 ﻿using System;
 using CoreGraphics;
 using UIKit;
+using CABASUS.Adapters;
 
 namespace CABASUS.Controllers
 {
@@ -75,13 +76,11 @@ namespace CABASUS.Controllers
 
             #endregion;
 
-            #region consulta caballos 
 
-            #region Actualizar caballo
+            #region agragar acciones al table view en swipe;
 
-
-
-            #endregion
+            tableCaballos.Source = new Hoses_Adapter();
+            tableCaballos.Delegate = new Horses_Adapter_Delegate();
 
             #endregion;
         }
