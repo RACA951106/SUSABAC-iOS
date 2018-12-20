@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -23,6 +24,10 @@ namespace CABASUS.Controllers
         UITableView listViewBreed, listViewGender;
         string formato = "application/json";
         public bool indicadorAccion = true;
+        public string id_horse = "";
+        HttpClient cliente = new HttpClient();
+        internal int breed = 0;
+        internal string foto = "";
 
         public Register_Horse_ViewController() : base("Register_Horse_ViewController", null)
         {
@@ -30,12 +35,15 @@ namespace CABASUS.Controllers
 
         protected Register_Horse_ViewController(IntPtr handle) : base(handle) { }
 
-        public override void ViewDidLoad()
+        public override async void ViewDidLoad()
         {
             base.ViewDidLoad();
-            var prueba = indicadorAccion;
-            var sa = "";
-            // Perform any additional setup after loading the view, typically from a nib.
+
+            string serverActualizar = "http://" + ip + ":5001/api/Caballo/actualizar";
+            string server = "http://" + ip + ":5001/api/Caballo/registrar";
+            string serverConsult = "http://" + ip + ":5001/api/Caballo/consultaridcaballo/" + id_horse;
+
+            var listGender = new List<string>() { "Filly", "Gelding", "Mare", "Stallion" };
 
             #region Medidas y ubicacion de objetos en la interfaz 
 
@@ -108,7 +116,6 @@ namespace CABASUS.Controllers
                     txt_weight.Text = "";
                 }
             };
-
             txt_height.EditingChanged += delegate
             {
                 try
@@ -133,10 +140,6 @@ namespace CABASUS.Controllers
                     txt_oat.Text = "";
                 }
             };
-
-
-
-
             #endregion
 
             #region ocultar teclado al tocar la pantalla;
@@ -171,7 +174,6 @@ namespace CABASUS.Controllers
                 if (txt_weight.IsEditing)
                     accionTeclado(txt_weight, args.FrameEnd);
             });
-
 
             UIKeyboard.Notifications.ObserveWillHide((sender, args) =>
             {
@@ -290,7 +292,6 @@ namespace CABASUS.Controllers
 
             txt_breed.TouchUpInside += delegate
             {
-
                 #region Elementos graficos vista breed
 
                 var contenedor = new UIView();
@@ -321,10 +322,7 @@ namespace CABASUS.Controllers
 
                 txtSearch.EditingChanged += delegate
                 {
-                    var ruta = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "RazasGender.sqlite");
-                    var con = new SQLiteConnection(ruta);
-                    var consulta = con.Query<razas>("SELECT * FROM Razas WHERE raza like '%" + txtSearch.Text + "%'", new razas().id_raza);
-
+                    var consulta = listaRaza(0, txtSearch.Text);
                     listViewBreed.Source = new Adapters.Breed_Adapter(consulta, txt_breed, alerta);
                     //listView.ScrollToRow(NSIndexPath.FromRowSection(0,0), UITableViewScrollPosition.None, true);
                     listViewBreed.ReloadData();
@@ -332,7 +330,6 @@ namespace CABASUS.Controllers
 
 
                 #endregion
-
             };
 
             #region guardar datos al precionar boton aceptar;
@@ -504,61 +501,70 @@ namespace CABASUS.Controllers
                     #endregion;
 
                     #region APIS caballo
-                    string serverActualizar = "http://" + ip + ":5001/api/Caballo/actualizar";
-                    string server = "http://" + ip + ":5001/api/Caballo/registrar";
+
+                    HttpResponseMessage respuesta = null;
+                    string content = "";
+
+                    var campoGender = 0;
+                    var campoRaza = listaRaza(0, txt_breed.Title(UIControlState.Normal));
+
+
+                    if (txt_gender.Title(UIControlState.Normal) == "Filly")
+                        campoGender = 1;
+                    if (txt_gender.Title(UIControlState.Normal) == "Gelding")
+                        campoGender = 2;
+                    if (txt_gender.Title(UIControlState.Normal) == "Mare")
+                        campoGender = 3;
+                    if (txt_gender.Title(UIControlState.Normal) == "Stallion")
+                        campoGender = 4;
+
+
+
+                    caballos us = new caballos()
+                    {
+                        nombre = txt_nameHorse.Text,
+                        peso = double.Parse(txt_weight.Text),
+                        altura = double.Parse(txt_height.Text),
+                        raza = campoRaza[0].id_raza,
+                        fecha_nacimiento = txt_dob.Text,
+                        genero = campoGender,
+                        foto = "",
+                        avena = double.Parse(txt_oat.Text)
+                    };
+
+                    var json = new StringContent(JsonConvert.SerializeObject(us), Encoding.UTF8, formato);
+                    cliente.Timeout = TimeSpan.FromSeconds(20);
+
+                    progress.StartAnimating();
+                    progress.Hidden = false;
+
+                    txt_nameHorse.Enabled = false;
+                    txt_weight.Enabled = false;
+                    txt_height.Enabled = false;
+                    txt_breed.Enabled = false;
+                    txt_dob.Enabled = false;
+                    txt_gender.Enabled = false;
+                    txt_oat.Enabled = false;
+
+                    btn_done.Enabled = false;
+                    btn_foto.Enabled = false;
+
+                    cliente.DefaultRequestHeaders.Authorization =
+                        new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", new ShareInSide().consultxmlToken().token);
+
 
                     if (indicadorAccion)
                     {
                         #region usar API para registrar;
-
-                        caballos us = new caballos()
-                        {
-                            nombre = txt_nameHorse.Text,
-                            peso = double.Parse(txt_weight.Text),
-                            altura = double.Parse(txt_height.Text),
-                            raza = 1,
-                            fecha_nacimiento = txt_dob.Text,
-                            genero = 1,
-                            foto = "",
-                            avena = double.Parse(txt_oat.Text)
-                        };
-
-                        var json = new StringContent(JsonConvert.SerializeObject(us), Encoding.UTF8, formato);
-                        HttpResponseMessage respuesta = null;
-                        string content = "";
-
                         try
                         {
-                            HttpClient cliente = new HttpClient();
-                            cliente.Timeout = TimeSpan.FromSeconds(20);
-
-                            progress.StartAnimating();
-                            progress.Hidden = false;
-
-                            txt_nameHorse.Enabled = false;
-                            txt_weight.Enabled = false;
-                            txt_height.Enabled = false;
-                            txt_breed.Enabled = false;
-                            txt_dob.Enabled = false;
-                            txt_gender.Enabled = false;
-                            txt_oat.Enabled = false;
-
-                            btn_done.Enabled = false;
-                            btn_foto.Enabled = false;
-
-                            cliente.DefaultRequestHeaders.Authorization =
-                                new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", new ShareInSide().consultxmlToken().token);
-
                             respuesta = await cliente.PostAsync(server, json);
-
                             content = await respuesta.Content.ReadAsStringAsync();
-
                             respuesta.EnsureSuccessStatusCode();
 
                             if (respuesta.IsSuccessStatusCode)
                             {
                                 Console.WriteLine(content);
-
 
                                 //saber si la foto se cambio o no, para subirla o no XD
                                 if (btn_foto.Tag == 2)
@@ -610,6 +616,63 @@ namespace CABASUS.Controllers
                     else
                     {
                         #region usar API para actualizar
+                        try
+                        {
+                            us.id_caballo = id_horse;
+                            us.foto = foto;
+                            json = new StringContent(JsonConvert.SerializeObject(us), Encoding.UTF8, formato);
+
+                            respuesta = await cliente.PutAsync(serverActualizar, json);
+                            content = await respuesta.Content.ReadAsStringAsync();
+                            respuesta.EnsureSuccessStatusCode();
+
+                            if (respuesta.IsSuccessStatusCode)
+                            {
+                                Console.WriteLine(content);
+
+                                //saber si la foto se cambio o no, para subirla o no XD
+                                if (btn_foto.Tag == 2)
+                                {
+                                    var URL = await new ShareInSide().SubirImagen("caballos", content);
+
+                                    //actualizar la foto en los datos del ususario
+                                    server = "http://" + ip + ":5001/api/Caballo/actualizarFoto";
+
+
+                                    var claseSubirFoto = new caballos
+                                    {
+                                        foto = URL,
+                                        id_caballo = content
+                                    };
+
+                                    respuesta = await cliente.PostAsync(server, new StringContent(JsonConvert.SerializeObject(claseSubirFoto), Encoding.UTF8, formato));
+
+                                    content = await respuesta.Content.ReadAsStringAsync();
+                                    if (respuesta.IsSuccessStatusCode)
+                                        Console.WriteLine("foto guradada");
+                                    else
+                                        Console.WriteLine("no se pudo actualizar la foto");
+
+                                    Console.WriteLine(URL);
+                                }
+                                progress.StopAnimating();
+                                progress.Hidden = true;
+
+                                var detalle = this.Storyboard.InstantiateViewController("Tabs_ViewController") as Tabs_ViewController;
+                                detalle.ModalTransitionStyle = UIModalTransitionStyle.CrossDissolve;
+                                detalle.ModalPresentationStyle = UIModalPresentationStyle.OverFullScreen;
+                                this.PresentViewController(detalle, true, null);
+                            }
+                            else
+                            {
+                                Console.WriteLine(content);
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine(ex.Message);
+                            Console.WriteLine(content);
+                        }
                         #endregion
                     }
 
@@ -634,7 +697,70 @@ namespace CABASUS.Controllers
 
             #endregion;
 
+            if (!indicadorAccion)
+            {
+                try
+                {
+                    progress.StartAnimating();
+                    progress.Hidden = false;
 
+                    cliente.Timeout = TimeSpan.FromSeconds(20);
+                    cliente.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", new ShareInSide().consultxmlToken().token);
+                    var respuesta = await cliente.GetAsync(serverConsult);
+                    var data = await respuesta.Content.ReadAsStringAsync();
+
+                    if (respuesta.IsSuccessStatusCode)
+                    {
+                        var datosCaballos = JsonConvert.DeserializeObject<List<caballos>>(data);
+                        var nombreRaza = listaRaza(datosCaballos[0].raza, "");
+
+                        txt_nameHorse.Text = datosCaballos[0].nombre;
+                        txt_weight.Text = datosCaballos[0].peso.ToString();
+                        txt_height.Text = datosCaballos[0].altura.ToString();
+                        txt_breed.SetTitle(nombreRaza[0].raza, UIControlState.Normal);
+                        txt_dob.Text = datosCaballos[0].fecha_nacimiento;
+                        txt_gender.SetTitle(listGender[datosCaballos[0].genero - 1], UIControlState.Normal);
+                        txt_oat.Text = datosCaballos[0].avena.ToString();
+
+                        Action a = () =>
+                        {
+                            progress.Frame = new CGRect(btn_foto.Frame.X, btn_foto.Frame.Y, (btn_foto.Frame.Width / 2) - (progress.Frame.Width / 2), (btn_foto.Frame.Height / 2) - (progress.Frame.Height / 2));
+
+                        };
+                        UIViewPropertyAnimator Animar = new UIViewPropertyAnimator(.5, UIViewAnimationCurve.EaseInOut, a);
+                        Animar.StartAnimation();
+
+                        if (!string.IsNullOrEmpty(datosCaballos[0].foto))
+                        {
+                            HttpClient client = new HttpClient(){
+                                Timeout = TimeSpan.FromSeconds(20)
+
+                            };
+                            using(var httpResponse = await client.GetAsync(datosCaballos[0].foto)){
+
+                                if(httpResponse.StatusCode == System.Net.HttpStatusCode.OK)
+                                {
+                                    var img = await httpResponse.Content.ReadAsByteArrayAsync();
+                                    NSData nsData = NSData.FromArray(img);
+                                    btn_foto.SetImage(UIImage.LoadFromData(nsData), UIControlState.Normal);
+                                }
+
+                            }
+                            foto = datosCaballos[0].foto;
+                        }
+
+                        progress.StopAnimating();
+                        progress.Hidden = true;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Error : " + ex.Message);
+
+                    progress.StopAnimating();
+                    progress.Hidden = true;
+                }
+            }
         }
 
         public override void DidReceiveMemoryWarning()
@@ -645,11 +771,7 @@ namespace CABASUS.Controllers
 
         public void GenerarAlerta(UIView view, UIView contenido, int source)
         {
-            #region Consulta base interna
-            var ruta = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "RazasGender.sqlite");
-            var con = new SQLiteConnection(ruta);
-            var consulta = con.Query<razas>("SELECT * FROM Razas", new razas().id_raza);
-            #endregion;
+            var consulta = listaRaza(0, "");
 
             alerta = new UIButton(new CGRect(View.Frame.Width, View.Frame.Height, 0, 0));
             alerta.BackgroundColor = new UIColor(0 / 255, 0 / 255, 0 / 255, 127.5f / 255);
@@ -683,6 +805,21 @@ namespace CABASUS.Controllers
 
                 alerta.RemoveFromSuperview();
             };
+        }
+
+        internal List<razas> listaRaza(int idHorse, string nameHorse)
+        {
+            var ruta = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "RazasGender.sqlite");
+            var con = new SQLiteConnection(ruta);
+            List<razas> listRaza = new List<razas>();
+
+            if(idHorse > 0)
+                return listRaza = con.Query<razas>("SELECT * FROM Razas WHERE id_raza = " + idHorse, new razas().id_raza);
+            if(!string.IsNullOrEmpty(nameHorse))
+                return listRaza = con.Query<razas>("SELECT * FROM Razas WHERE raza like '%" + nameHorse + "%'", new razas().id_raza);
+            else
+                return listRaza = con.Query<razas>("SELECT * FROM Razas", new razas().id_raza);
+
         }
 
         private void accionTeclado(UITextField cajaTexto, CGRect teclado)

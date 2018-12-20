@@ -129,7 +129,7 @@ namespace CABASUS.Controllers
 
                     tableCaballos.Source = new Hoses_Adapter(listaCaballos);
                     tableCaballos.ReloadData();
-                    tableCaballos.Delegate = new Horses_Adapter_Delegate(this);
+                    tableCaballos.Delegate = new Horses_Adapter_Delegate(this, listaCaballos);
 
                     #endregion;
                 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Foundation;
 using UIKit;
 using CABASUS.Modelos;
+using CoreGraphics;
 
 namespace CABASUS.Adapters
 {
@@ -19,6 +20,7 @@ namespace CABASUS.Adapters
         {
             var cell = new UITableViewCell(UITableViewCellStyle.Default, "");
             cell.TextLabel.Text = listHorses[indexPath.Row].nombre;
+            cell.Tag = indexPath.Row;
 
             return cell;
         }
