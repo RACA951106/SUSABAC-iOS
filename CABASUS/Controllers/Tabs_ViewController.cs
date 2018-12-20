@@ -7,6 +7,7 @@ namespace CABASUS.Controllers
 {
     public partial class Tabs_ViewController : UITabBarController
     {
+        public int index = 1;
         public Tabs_ViewController() : base("Tabs_ViewController", null)
         {
         }
@@ -27,6 +28,7 @@ namespace CABASUS.Controllers
             View.Add(newView);
             View.SendSubviewToBack(newView);
 
+            SelectedIndex = index;
 
         }
 
