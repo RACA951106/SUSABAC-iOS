@@ -9,6 +9,7 @@ using CABASUS.Modelos;
 using Newtonsoft.Json;
 using System.Text.RegularExpressions;
 using ObjCRuntime;
+using System.Net;
 
 namespace CABASUS.Controllers
 {
@@ -25,7 +26,7 @@ namespace CABASUS.Controllers
         {
         }
 
-        public override void ViewDidLoad()
+        public override async void ViewDidLoad()
         {
             base.ViewDidLoad();
 
@@ -225,246 +226,546 @@ namespace CABASUS.Controllers
 
             #endregion;
 
-            #region guardar datos al precionar boton aceptar;
+            #region saber si se esta actualizando o insertando;
 
-            btn_done.TouchUpInside += async delegate
+            if (!indicadorAccion)
             {
-                btn_done.Enabled = false;
-                btn_foto.Enabled = false;
+                #region actualizar datos del usuario;
+
+                #region llenar campos con xml;
+
+                var datosUsuario = new ShareInSide().consultxmlUsuario();
+
+                txt_username.Text = datosUsuario.nombre;
+                txt_email.Text = datosUsuario.email;
+                txt_email.Enabled = false;
+                txt_pw.Text = datosUsuario.contrasena;
+                txt_dob.Text = datosUsuario.fecha_nacimiento;
+
+                #endregion;
+
+                #region descargar foto;
+
+                try
+                {
+                    const int _downloadImageTimeoutInSeconds = 15;
+                    HttpClient _httpClient = new HttpClient { Timeout = TimeSpan.FromSeconds(_downloadImageTimeoutInSeconds) };
+
+                    using (var httpResponse = await _httpClient.GetAsync(datosUsuario.foto)) 
+                    {
+                        if (httpResponse.StatusCode == HttpStatusCode.OK)
+                        {
+                            var img = await httpResponse.Content.ReadAsByteArrayAsync();
+
+                            NSData data = NSData.FromArray(img);
+
+                            btn_foto.SetImage(UIImage.LoadFromData(data), UIControlState.Normal);
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                }
+
+                #endregion;
+
+                btn_done.TouchUpInside += async delegate
+                {
+                    btn_done.Enabled = false;
+                    btn_foto.Enabled = false;
+
+                    #region comproba campos del formulario;
+
+                    Regex exregEmail = new Regex(@"^([0-9a-zA-Z]" + //Start with a digit or alphabetical
+                                                   @"([\+\-_\.][0-9a-zA-Z]+)*" + // No continuous or ending +-_. chars in email
+                                                   @")+" +
+                                                   @"@(([0-9a-zA-Z][-\w]*[0-9a-zA-Z]*\.)+[a-zA-Z0-9]{2,17})$");
+
+                    bool usuario = false, email = false, pass = false;
+                    string guardarEmail = "";
+
+                    if (string.IsNullOrEmpty(txt_username.Text))
+                    {
+                        txt_username.BackgroundColor = UIColor.FromRGB(255, 178, 178);
+                        txt_username.Placeholder = "llene este campo";
+                        usuario = false;
+                    }
+                    else
+                        usuario = true;
+                    if (string.IsNullOrEmpty(txt_email.Text))
+                    {
+                        txt_email.BackgroundColor = UIColor.FromRGB(255, 178, 178);
+                        txt_email.Placeholder = "llene este campo";
+                        email = false;
+                    }
+                    else if (!exregEmail.IsMatch(txt_email.Text))
+                    {
+                        guardarEmail = txt_email.Text;
+                        txt_email.Text = "";
+                        txt_email.BackgroundColor = UIColor.FromRGB(255, 178, 178);
+                        txt_email.Placeholder = "correo invalido";
+                        email = false;
+                    }
+                    else
+                        email = true;
+                    if (string.IsNullOrEmpty(txt_pw.Text))
+                    {
+                        txt_pw.BackgroundColor = UIColor.FromRGB(255, 178, 178);
+                        txt_pw.Placeholder = "llene este campo";
+                        pass = false;
+                    }
+                    else
+                        pass = true;
+
+                    //cambiar cuando vuelva a editar
+                    txt_username.EditingDidBegin += delegate
+                    {
+
+                        txt_username.BackgroundColor = UIColor.White;
+                    };
+                    txt_email.EditingDidBegin += delegate
+                    {
+
+                        txt_email.Text = guardarEmail;
+                        txt_email.BackgroundColor = UIColor.White;
+                    };
+                    txt_pw.EditingDidBegin += delegate
+                    {
+                        txt_pw.BackgroundColor = UIColor.White;
+                    };
+
+                    //comprobar si la fecha es correcta en caso de que este llena
+
+                    if (!string.IsNullOrEmpty(txt_dob.Text))
+                    {
+                        var separar = txt_dob.Text.Split('/');
+                        if (separar.Length == 3)
+                        {
+                            try
+                            {
+                                Convert.ToDateTime(separar[2] + "/" + separar[1] + "/" + separar[0]);
+                            }
+                            catch
+                            {
+                                txt_dob.Text = "";
+                                txt_dob.Placeholder = "fecha no valida";
+                            }
+                        }
+                    }
+                    #endregion;
+
+                    if (usuario && email && pass)
+                    {
+                        #region guardar foto en la galeria si se cambio por la de defecto;
+
+                        if (btn_foto.Tag == 2)
+                        {
+
+                            var documentsDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
+                            var directoryname = System.IO.Path.Combine(documentsDirectory, "FotosUsuario");
+                            System.IO.Directory.CreateDirectory(directoryname);
+                            string jpgFilename = System.IO.Path.Combine(directoryname, "FotoUsuario.jpg"); // hardcoded filename, overwritten each time. You can make it dynamic as per your requirement.
+
+                            UIImage imagen = new UIImage(jpgFilename);
+
+                            var assetCollection = new PHAssetCollection();
+                            var albumFound = false;
+                            var assetCollectionPlaceholder = new PHObjectPlaceholder();
+
+
+                            var fetchOptions = new PHFetchOptions();
+                            fetchOptions.Predicate = NSPredicate.FromFormat("title LIKE \"CABASUS\"");
+                            var collection = PHAssetCollection.FetchAssetCollections(PHAssetCollectionType.Album, PHAssetCollectionSubtype.Any, fetchOptions);
+
+                            if (collection.firstObject != null)
+                            {
+                                albumFound = true;
+                                assetCollection = collection.firstObject as PHAssetCollection;
+                                GuardarFoto(imagen, assetCollection, collection);
+
+                            }
+                            else
+                            {
+                                PHPhotoLibrary.SharedPhotoLibrary.PerformChanges(() =>
+                                {
+
+                                    var createAlbumRequest = PHAssetCollectionChangeRequest.CreateAssetCollection("CABASUS");
+                                    assetCollectionPlaceholder = createAlbumRequest.PlaceholderForCreatedAssetCollection;
+                                },
+                                (ok, error) =>
+                                {
+                                    albumFound = ok;
+                                    if (ok)
+                                    {
+                                        var collectionFetchResult = PHAssetCollection.FetchAssetCollections(new string[] { assetCollectionPlaceholder.LocalIdentifier }, null);
+                                        Console.WriteLine(collectionFetchResult);
+                                        collection = collectionFetchResult;
+                                        assetCollection = collectionFetchResult.firstObject as PHAssetCollection;
+                                        GuardarFoto(imagen, assetCollection, collection);
+                                    }
+                                });
+                            }
+                        }
+
+                        #endregion;
+
+                        #region usar API para registrar;
+
+                        string server = "http://" + ip + ":5001/api/Account/registrar";
+                        string formato = "application/json";
+
+                        usuarios us = new usuarios()
+                        {
+                            nombre = txt_username.Text,
+                            email = txt_email.Text,
+                            contrasena = txt_pw.Text,
+                            fecha_nacimiento = txt_dob.Text,
+                            id_dispositivo = UIDevice.CurrentDevice.IdentifierForVendor.AsString(),
+                            SO = "iOS",
+                            tokenFB = new ShareInSide().consultxmlTokenFB().token
+                        };
+
+                        var json = new StringContent(JsonConvert.SerializeObject(us), Encoding.UTF8, formato);
+                        HttpResponseMessage respuesta = null;
+                        string content = "";
+
+                        try
+                        {
+                            HttpClient cliente = new HttpClient();
+                            cliente.Timeout = TimeSpan.FromSeconds(20);
+
+                            progreso.StartAnimating();
+                            progreso.Hidden = false;
+
+                            txt_username.Enabled = false;
+                            txt_email.Enabled = false;
+                            txt_dob.Enabled = false;
+                            txt_pw.Enabled = false;
+
+                            respuesta = await cliente.PostAsync(server, json);
+
+                            content = await respuesta.Content.ReadAsStringAsync();
+
+                            respuesta.EnsureSuccessStatusCode();
+
+                            if (respuesta.IsSuccessStatusCode)
+                            {
+                                Console.WriteLine(content);
+                                var contenido = JsonConvert.DeserializeObject<tokens>(content);
+
+                                new ShareInSide().savexmlToken(contenido.token, contenido.expiration);
+
+                                string id = new ShareInSide().conseguirIDUsuarioDelToken(contenido.token);
+
+                                //saber si la foto se cambio o no, para subirla o no XD
+                                if (btn_foto.Tag == 2)
+                                {
+                                    var URL = await new ShareInSide().SubirImagen("usuarios", id);
+
+                                    //actualizar la foto en los datos del ususario
+                                    server = "http://" + ip + ":5001/api/Usuario/actualizarFoto?URL=" + URL;
+                                    cliente.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", new ShareInSide().consultxmlToken().token);
+                                    respuesta = await cliente.GetAsync(server);
+                                    content = await respuesta.Content.ReadAsStringAsync();
+                                    if (respuesta.IsSuccessStatusCode)
+                                        Console.WriteLine("foto guradada");
+                                    else
+                                        Console.WriteLine("no se pudo actualizar la foto");
+
+                                    Console.WriteLine(URL);
+                                }
+
+                                progreso.StopAnimating();
+                                progreso.Hidden = true;
+
+                                var detalle = this.Storyboard.InstantiateViewController("Tabs_ViewController") as Tabs_ViewController;
+                                detalle.ModalTransitionStyle = UIModalTransitionStyle.CrossDissolve;
+                                detalle.ModalPresentationStyle = UIModalPresentationStyle.OverFullScreen;
+                                this.PresentViewController(detalle, true, null);
+                            }
+                            else
+                            {
+                                Console.WriteLine(content);
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine(ex.Message);
+                            Console.WriteLine(content);
+                        }
+
+                        #endregion;
+                    }
+
+                    btn_done.Enabled = true;
+                    btn_foto.Enabled = true;
+                    progreso.StopAnimating();
+                    progreso.Hidden = true;
+
+                    txt_username.Enabled = true;
+                    txt_email.Enabled = true;
+                    txt_dob.Enabled = true;
+                    txt_pw.Enabled = true;
+                };
+
+                #endregion;
+            }
+            else
+            {
+                #region guardar datos al precionar boton aceptar;
+
+                btn_done.TouchUpInside += async delegate
+                {
+                    btn_done.Enabled = false;
+                    btn_foto.Enabled = false;
 
                 #region comproba campos del formulario;
 
                 Regex exregEmail = new Regex(@"^([0-9a-zA-Z]" + //Start with a digit or alphabetical
-                                           @"([\+\-_\.][0-9a-zA-Z]+)*" + // No continuous or ending +-_. chars in email
-                                           @")+" +
-                                           @"@(([0-9a-zA-Z][-\w]*[0-9a-zA-Z]*\.)+[a-zA-Z0-9]{2,17})$");
+                                               @"([\+\-_\.][0-9a-zA-Z]+)*" + // No continuous or ending +-_. chars in email
+                                               @")+" +
+                                               @"@(([0-9a-zA-Z][-\w]*[0-9a-zA-Z]*\.)+[a-zA-Z0-9]{2,17})$");
 
-                bool usuario = false, email = false, pass = false;
-                string guardarEmail = "";
+                    bool usuario = false, email = false, pass = false;
+                    string guardarEmail = "";
 
-                if (string.IsNullOrEmpty(txt_username.Text))
-                {
-                    txt_username.BackgroundColor = UIColor.FromRGB(255, 178, 178);
-                    txt_username.Placeholder = "llene este campo";
-                    usuario = false;
-                }
-                else
-                    usuario = true;
-                if (string.IsNullOrEmpty(txt_email.Text))
-                {
-                    txt_email.BackgroundColor = UIColor.FromRGB(255, 178, 178);
-                    txt_email.Placeholder = "llene este campo";
-                    email = false;
-                }
-                else if (!exregEmail.IsMatch(txt_email.Text))
-                {
-                    guardarEmail = txt_email.Text;
-                    txt_email.Text = "";
-                    txt_email.BackgroundColor = UIColor.FromRGB(255, 178, 178);
-                    txt_email.Placeholder = "correo invalido";
-                    email = false;
-                }
-                else
-                    email = true;
-                if (string.IsNullOrEmpty(txt_pw.Text))
-                {
-                    txt_pw.BackgroundColor = UIColor.FromRGB(255, 178, 178);
-                    txt_pw.Placeholder = "llene este campo";
-                    pass = false;
-                }
-                else
-                    pass = true;
+                    if (string.IsNullOrEmpty(txt_username.Text))
+                    {
+                        txt_username.BackgroundColor = UIColor.FromRGB(255, 178, 178);
+                        txt_username.Placeholder = "llene este campo";
+                        usuario = false;
+                    }
+                    else
+                        usuario = true;
+                    if (string.IsNullOrEmpty(txt_email.Text))
+                    {
+                        txt_email.BackgroundColor = UIColor.FromRGB(255, 178, 178);
+                        txt_email.Placeholder = "llene este campo";
+                        email = false;
+                    }
+                    else if (!exregEmail.IsMatch(txt_email.Text))
+                    {
+                        guardarEmail = txt_email.Text;
+                        txt_email.Text = "";
+                        txt_email.BackgroundColor = UIColor.FromRGB(255, 178, 178);
+                        txt_email.Placeholder = "correo invalido";
+                        email = false;
+                    }
+                    else
+                        email = true;
+                    if (string.IsNullOrEmpty(txt_pw.Text))
+                    {
+                        txt_pw.BackgroundColor = UIColor.FromRGB(255, 178, 178);
+                        txt_pw.Placeholder = "llene este campo";
+                        pass = false;
+                    }
+                    else
+                        pass = true;
 
                 //cambiar cuando vuelva a editar
-                txt_username.EditingDidBegin += delegate {
+                txt_username.EditingDidBegin += delegate
+                    {
 
-                    txt_username.BackgroundColor = UIColor.White;
-                };
-                txt_email.EditingDidBegin += delegate {
+                        txt_username.BackgroundColor = UIColor.White;
+                    };
+                    txt_email.EditingDidBegin += delegate
+                    {
 
-                    txt_email.Text = guardarEmail;
-                    txt_email.BackgroundColor = UIColor.White;
-                };
-                txt_pw.EditingDidBegin += delegate
-                {
-                    txt_pw.BackgroundColor = UIColor.White;
-                };
+                        txt_email.Text = guardarEmail;
+                        txt_email.BackgroundColor = UIColor.White;
+                    };
+                    txt_pw.EditingDidBegin += delegate
+                    {
+                        txt_pw.BackgroundColor = UIColor.White;
+                    };
 
                 //comprobar si la fecha es correcta en caso de que este llena
 
                 if (!string.IsNullOrEmpty(txt_dob.Text))
-                {
-                    var separar = txt_dob.Text.Split('/');
-                    if (separar.Length == 3)
                     {
+                        var separar = txt_dob.Text.Split('/');
+                        if (separar.Length == 3)
+                        {
+                            try
+                            {
+                                Convert.ToDateTime(separar[2] + "/" + separar[1] + "/" + separar[0]);
+                            }
+                            catch
+                            {
+                                txt_dob.Text = "";
+                                txt_dob.Placeholder = "fecha no valida";
+                            }
+                        }
+                    }
+                    #endregion;
+
+                    if (usuario && email && pass)
+                    {
+                        #region guardar foto en la galeria si se cambio por la de defecto;
+
+                        if (btn_foto.Tag == 2)
+                        {
+
+                            var documentsDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
+                            var directoryname = System.IO.Path.Combine(documentsDirectory, "FotosUsuario");
+                            System.IO.Directory.CreateDirectory(directoryname);
+                            string jpgFilename = System.IO.Path.Combine(directoryname, "FotoUsuario.jpg"); // hardcoded filename, overwritten each time. You can make it dynamic as per your requirement.
+
+                            UIImage imagen = new UIImage(jpgFilename);
+
+                            var assetCollection = new PHAssetCollection();
+                            var albumFound = false;
+                            var assetCollectionPlaceholder = new PHObjectPlaceholder();
+
+
+                            var fetchOptions = new PHFetchOptions();
+                            fetchOptions.Predicate = NSPredicate.FromFormat("title LIKE \"CABASUS\"");
+                            var collection = PHAssetCollection.FetchAssetCollections(PHAssetCollectionType.Album, PHAssetCollectionSubtype.Any, fetchOptions);
+
+                            if (collection.firstObject != null)
+                            {
+                                albumFound = true;
+                                assetCollection = collection.firstObject as PHAssetCollection;
+                                GuardarFoto(imagen, assetCollection, collection);
+
+                            }
+                            else
+                            {
+                                PHPhotoLibrary.SharedPhotoLibrary.PerformChanges(() =>
+                                {
+
+                                    var createAlbumRequest = PHAssetCollectionChangeRequest.CreateAssetCollection("CABASUS");
+                                    assetCollectionPlaceholder = createAlbumRequest.PlaceholderForCreatedAssetCollection;
+                                },
+                                (ok, error) =>
+                                {
+                                    albumFound = ok;
+                                    if (ok)
+                                    {
+                                        var collectionFetchResult = PHAssetCollection.FetchAssetCollections(new string[] { assetCollectionPlaceholder.LocalIdentifier }, null);
+                                        Console.WriteLine(collectionFetchResult);
+                                        collection = collectionFetchResult;
+                                        assetCollection = collectionFetchResult.firstObject as PHAssetCollection;
+                                        GuardarFoto(imagen, assetCollection, collection);
+                                    }
+                                });
+                            }
+                        }
+
+                        #endregion;
+
+                        #region usar API para registrar;
+
+                        string server = "http://" + ip + ":5001/api/Account/registrar";
+                        string formato = "application/json";
+
+                        usuarios us = new usuarios()
+                        {
+                            nombre = txt_username.Text,
+                            email = txt_email.Text,
+                            contrasena = txt_pw.Text,
+                            fecha_nacimiento = txt_dob.Text,
+                            id_dispositivo = UIDevice.CurrentDevice.IdentifierForVendor.AsString(),
+                            SO = "iOS",
+                            tokenFB = new ShareInSide().consultxmlTokenFB().token
+                        };
+
+                        var json = new StringContent(JsonConvert.SerializeObject(us), Encoding.UTF8, formato);
+                        HttpResponseMessage respuesta = null;
+                        string content = "";
+
                         try
                         {
-                            Convert.ToDateTime(separar[2] + "/" + separar[1] + "/" + separar[0]);
-                        }
-                        catch
-                        {
-                            txt_dob.Text = "";
-                            txt_dob.Placeholder = "fecha no valida";
-                        }
-                    }
-                }
-                #endregion;
+                            HttpClient cliente = new HttpClient();
+                            cliente.Timeout = TimeSpan.FromSeconds(20);
 
-                if(usuario && email && pass)
-                {
-                    #region guardar foto en la galeria si se cambio por la de defecto;
+                            progreso.StartAnimating();
+                            progreso.Hidden = false;
 
-                    if (btn_foto.Tag == 2)
-                    {
+                            txt_username.Enabled = false;
+                            txt_email.Enabled = false;
+                            txt_dob.Enabled = false;
+                            txt_pw.Enabled = false;
 
-                        var documentsDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
-                        var directoryname = System.IO.Path.Combine(documentsDirectory, "FotosUsuario");
-                        System.IO.Directory.CreateDirectory(directoryname);
-                        string jpgFilename = System.IO.Path.Combine(directoryname, "FotoUsuario.jpg"); // hardcoded filename, overwritten each time. You can make it dynamic as per your requirement.
+                            respuesta = await cliente.PostAsync(server, json);
 
-                        UIImage imagen = new UIImage(jpgFilename);
+                            content = await respuesta.Content.ReadAsStringAsync();
 
-                        var assetCollection = new PHAssetCollection();
-                        var albumFound = false;
-                        var assetCollectionPlaceholder = new PHObjectPlaceholder();
+                            respuesta.EnsureSuccessStatusCode();
 
-
-                        var fetchOptions = new PHFetchOptions();
-                        fetchOptions.Predicate = NSPredicate.FromFormat("title LIKE \"CABASUS\"");
-                        var collection = PHAssetCollection.FetchAssetCollections(PHAssetCollectionType.Album, PHAssetCollectionSubtype.Any, fetchOptions);
-
-                        if (collection.firstObject != null)
-                        {
-                            albumFound = true;
-                            assetCollection = collection.firstObject as PHAssetCollection;
-                            GuardarFoto(imagen, assetCollection, collection);
-
-                        }
-                        else
-                        {
-                            PHPhotoLibrary.SharedPhotoLibrary.PerformChanges(() =>
+                            if (respuesta.IsSuccessStatusCode)
                             {
+                                Console.WriteLine(content);
+                                var contenido = JsonConvert.DeserializeObject<tokens>(content);
 
-                                var createAlbumRequest = PHAssetCollectionChangeRequest.CreateAssetCollection("CABASUS");
-                                assetCollectionPlaceholder = createAlbumRequest.PlaceholderForCreatedAssetCollection;
-                            },
-                            (ok, error) =>
-                            {
-                                albumFound = ok;
-                                if (ok)
+                                new ShareInSide().savexmlToken(contenido.token, contenido.expiration);
+
+                                string id = new ShareInSide().conseguirIDUsuarioDelToken(contenido.token);
+
+                                new ShareInSide().savexmlUsuario(us);
+
+                                //saber si la foto se cambio o no, para subirla o no XD
+                                if (btn_foto.Tag == 2)
                                 {
-                                    var collectionFetchResult = PHAssetCollection.FetchAssetCollections(new string[] { assetCollectionPlaceholder.LocalIdentifier }, null);
-                                    Console.WriteLine(collectionFetchResult);
-                                    collection = collectionFetchResult;
-                                    assetCollection = collectionFetchResult.firstObject as PHAssetCollection;
-                                    GuardarFoto(imagen, assetCollection, collection);
+                                    var URL = await new ShareInSide().SubirImagen("usuarios", id);
+
+                                    //actualizar la foto en los datos del ususario
+                                    server = "http://" + ip + ":5001/api/Usuario/actualizarFoto?URL=" + URL;
+                                    cliente.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", new ShareInSide().consultxmlToken().token);
+                                    respuesta = await cliente.GetAsync(server);
+                                    content = await respuesta.Content.ReadAsStringAsync();
+                                    if (respuesta.IsSuccessStatusCode)
+                                    {
+                                        Console.WriteLine("foto guradada");
+                                        us.foto = URL;
+                                        new ShareInSide().savexmlUsuario(us);
+                                    }
+                                    else
+                                        Console.WriteLine("no se pudo actualizar la foto");
+
+                                    Console.WriteLine(URL);
                                 }
-                            });
-                        }
-                    }
 
-                    #endregion;
+                                progreso.StopAnimating();
+                                progreso.Hidden = true;
 
-                    #region usar API para registrar;
-
-                    string server = "http://" + ip + ":5001/api/Account/registrar";
-                    string formato = "application/json";
-
-                    usuarios us = new usuarios()
-                    {
-                        nombre = txt_username.Text,
-                        email = txt_email.Text,
-                        contrasena = txt_pw.Text,
-                        fecha_nacimiento = txt_dob.Text,
-                        id_dispositivo = UIDevice.CurrentDevice.IdentifierForVendor.AsString(),
-                        SO = "iOS",
-                        tokenFB = new ShareInSide().consultxmlTokenFB().token
-                    };
-
-                    var json = new StringContent(JsonConvert.SerializeObject(us), Encoding.UTF8, formato);
-                    HttpResponseMessage respuesta = null;
-                    string content = "";
-
-                    try
-                    {
-                        HttpClient cliente = new HttpClient();
-                        cliente.Timeout = TimeSpan.FromSeconds(20);
-
-                        progreso.StartAnimating();
-                        progreso.Hidden = false;
-
-                        txt_username.Enabled = false;
-                        txt_email.Enabled = false;
-                        txt_dob.Enabled = false;
-                        txt_pw.Enabled = false;
-
-                        respuesta = await cliente.PostAsync(server, json);
-
-                        content = await respuesta.Content.ReadAsStringAsync();
-
-                        respuesta.EnsureSuccessStatusCode();
-
-                        if (respuesta.IsSuccessStatusCode)
-                        {
-                            Console.WriteLine(content);
-                            var contenido = JsonConvert.DeserializeObject<tokens>(content);
-
-                            new ShareInSide().savexmlToken(contenido.token, contenido.expiration);
-
-                            string id = new ShareInSide().conseguirIDUsuarioDelToken(contenido.token);
-
-                            //saber si la foto se cambio o no, para subirla o no XD
-                            if (btn_foto.Tag == 2)
-                            {
-                                var URL = await new ShareInSide().SubirImagen("usuarios", id);
-
-                                //actualizar la foto en los datos del ususario
-                                server = "http://" + ip + ":5001/api/Usuario/actualizarFoto?URL=" + URL;
-                                cliente.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", new ShareInSide().consultxmlToken().token);
-                                respuesta = await cliente.GetAsync(server);
-                                content = await respuesta.Content.ReadAsStringAsync();
-                                if (respuesta.IsSuccessStatusCode)
-                                    Console.WriteLine("foto guradada");
-                                else
-                                    Console.WriteLine("no se pudo actualizar la foto");
-
-                                Console.WriteLine(URL);
+                                var detalle = this.Storyboard.InstantiateViewController("Tabs_ViewController") as Tabs_ViewController;
+                                detalle.ModalTransitionStyle = UIModalTransitionStyle.CrossDissolve;
+                                detalle.ModalPresentationStyle = UIModalPresentationStyle.OverFullScreen;
+                                this.PresentViewController(detalle, true, null);
                             }
-
-                            progreso.StopAnimating();
-                            progreso.Hidden = true;
-
-                            var detalle = this.Storyboard.InstantiateViewController("Tabs_ViewController") as Tabs_ViewController;
-                            detalle.ModalTransitionStyle = UIModalTransitionStyle.CrossDissolve;
-                            detalle.ModalPresentationStyle = UIModalPresentationStyle.OverFullScreen;
-                            this.PresentViewController(detalle, true, null);
+                            else
+                            {
+                                Console.WriteLine(content);
+                            }
                         }
-                        else
+                        catch (Exception ex)
                         {
+                            Console.WriteLine(ex.Message);
                             Console.WriteLine(content);
                         }
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine(ex.Message);
-                        Console.WriteLine(content);
+
+                        #endregion;
                     }
 
-                    #endregion;
-                }
+                    btn_done.Enabled = true;
+                    btn_foto.Enabled = true;
+                    progreso.StopAnimating();
+                    progreso.Hidden = true;
 
-                btn_done.Enabled = true;
-                btn_foto.Enabled = true;
-                progreso.StopAnimating();
-                progreso.Hidden = true;
+                    txt_username.Enabled = true;
+                    txt_email.Enabled = true;
+                    txt_dob.Enabled = true;
+                    txt_pw.Enabled = true;
+                };
 
-                txt_username.Enabled = true;
-                txt_email.Enabled = true;
-                txt_dob.Enabled = true;
-                txt_pw.Enabled = true;
-            };
+                #endregion;
+            }
 
             #endregion;
+
+
         }
 
         public void GuardarFoto(UIImage imagen, PHAssetCollection pHAssetCollection, PHFetchResult pHFetchResult)

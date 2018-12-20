@@ -264,6 +264,10 @@ namespace CABASUS.Controllers
                                     datos = await url.Content.ReadAsStringAsync();
                                     var usuario = JsonConvert.DeserializeObject<List<Modelos.usuarios>>(datos);
 
+                                    usuario[0].contrasena = txt_password.Text;
+
+                                    new ShareInSide().savexmlUsuario(usuario[0]);
+
                                     await new ShareInSide().DownloadImageAsync(usuario[0].foto);
 
                                     progreso.StopAnimating();

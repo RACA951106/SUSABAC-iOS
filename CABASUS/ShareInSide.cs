@@ -42,6 +42,24 @@ namespace CABASUS
             return datos;
         }
 
+        public void savexmlUsuario(usuarios usuario)
+        {
+
+            var data = new XmlSerializer(typeof(usuarios));
+            var Escritura = new StreamWriter(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "usuario.xml"));
+            data.Serialize(Escritura, usuario);
+            Escritura.Close();
+        }
+
+        public usuarios consultxmlUsuario()
+        {
+            var serializador = new XmlSerializer(typeof(usuarios));
+            var Lectura = new StreamReader(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "usuario.xml"));
+            var datos = (usuarios)serializador.Deserialize(Lectura);
+            Lectura.Close();
+            return datos;
+        }
+
         public void savexmlTokenFB(string token)
         {
             var tokens = new tokens();
