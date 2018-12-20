@@ -204,7 +204,7 @@ namespace CABASUS.Controllers
             };
 
             #endregion;
-
+             
             #region comprobar que no se pegue nada en la fecha
 
             txt_dob.EditingChanged += delegate
