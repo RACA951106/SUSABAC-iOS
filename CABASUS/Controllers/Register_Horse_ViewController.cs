@@ -21,7 +21,8 @@ namespace CABASUS.Controllers
         ShareInSide S = new ShareInSide();
         UIButton alerta;
         UITableView listViewBreed, listViewGender;
-
+        string formato = "application/json";
+        public bool indicadorAccion = true;
 
         public Register_Horse_ViewController() : base("Register_Horse_ViewController", null)
         {
@@ -32,6 +33,8 @@ namespace CABASUS.Controllers
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
+            var prueba = indicadorAccion;
+            var sa = "";
             // Perform any additional setup after loading the view, typically from a nib.
 
             #region Medidas y ubicacion de objetos en la interfaz 
@@ -500,106 +503,118 @@ namespace CABASUS.Controllers
 
                     #endregion;
 
-                    #region usar API para registrar;
-
+                    #region APIS caballo
+                    string serverActualizar = "http://" + ip + ":5001/api/Caballo/actualizar";
                     string server = "http://" + ip + ":5001/api/Caballo/registrar";
-                    string formato = "application/json";
 
-                    caballos us = new caballos()
+                    if (indicadorAccion)
                     {
-                        nombre = txt_nameHorse.Text,
-                        peso = double.Parse(txt_weight.Text),
-                        altura = double.Parse(txt_height.Text),
-                        raza = 1,
-                        fecha_nacimiento = txt_dob.Text,
-                        genero = 1,
-                        foto = "",
-                        avena = double.Parse(txt_oat.Text)
-                    };
+                        #region usar API para registrar;
 
-                    var json = new StringContent(JsonConvert.SerializeObject(us), Encoding.UTF8, formato);
-                    HttpResponseMessage respuesta = null;
-                    string content = "";
-
-                    try
-                    {
-                        HttpClient cliente = new HttpClient();
-                        cliente.Timeout = TimeSpan.FromSeconds(20);
-
-                        progress.StartAnimating();
-                        progress.Hidden = false;
-
-                        txt_nameHorse.Enabled = false;
-                        txt_weight.Enabled = false;
-                        txt_height.Enabled = false;
-                        txt_breed.Enabled = false;
-                        txt_dob.Enabled = false;
-                        txt_gender.Enabled = false;
-                        txt_oat.Enabled = false;
-
-                        btn_done.Enabled = false;
-                        btn_foto.Enabled = false;
-
-                        cliente.DefaultRequestHeaders.Authorization =
-                            new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", new ShareInSide().consultxmlToken().token);
-
-                        respuesta = await cliente.PostAsync(server, json);
-
-                        content = await respuesta.Content.ReadAsStringAsync();
-
-                        respuesta.EnsureSuccessStatusCode();
-
-                        if (respuesta.IsSuccessStatusCode)
+                        caballos us = new caballos()
                         {
-                            Console.WriteLine(content);
+                            nombre = txt_nameHorse.Text,
+                            peso = double.Parse(txt_weight.Text),
+                            altura = double.Parse(txt_height.Text),
+                            raza = 1,
+                            fecha_nacimiento = txt_dob.Text,
+                            genero = 1,
+                            foto = "",
+                            avena = double.Parse(txt_oat.Text)
+                        };
 
+                        var json = new StringContent(JsonConvert.SerializeObject(us), Encoding.UTF8, formato);
+                        HttpResponseMessage respuesta = null;
+                        string content = "";
 
-                            //saber si la foto se cambio o no, para subirla o no XD
-                            if (btn_foto.Tag == 2)
+                        try
+                        {
+                            HttpClient cliente = new HttpClient();
+                            cliente.Timeout = TimeSpan.FromSeconds(20);
+
+                            progress.StartAnimating();
+                            progress.Hidden = false;
+
+                            txt_nameHorse.Enabled = false;
+                            txt_weight.Enabled = false;
+                            txt_height.Enabled = false;
+                            txt_breed.Enabled = false;
+                            txt_dob.Enabled = false;
+                            txt_gender.Enabled = false;
+                            txt_oat.Enabled = false;
+
+                            btn_done.Enabled = false;
+                            btn_foto.Enabled = false;
+
+                            cliente.DefaultRequestHeaders.Authorization =
+                                new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", new ShareInSide().consultxmlToken().token);
+
+                            respuesta = await cliente.PostAsync(server, json);
+
+                            content = await respuesta.Content.ReadAsStringAsync();
+
+                            respuesta.EnsureSuccessStatusCode();
+
+                            if (respuesta.IsSuccessStatusCode)
                             {
-                                var URL = await new ShareInSide().SubirImagen("caballos", content);
-
-                                //actualizar la foto en los datos del ususario
-                                server = "http://" + ip + ":5001/api/Caballo/actualizarFoto";
+                                Console.WriteLine(content);
 
 
-                                var claseSubirFoto = new caballos
+                                //saber si la foto se cambio o no, para subirla o no XD
+                                if (btn_foto.Tag == 2)
                                 {
-                                    foto = URL,
-                                    id_caballo = content
-                                };
+                                    var URL = await new ShareInSide().SubirImagen("caballos", content);
 
-                                respuesta = await cliente.PostAsync(server, new StringContent(JsonConvert.SerializeObject(claseSubirFoto), Encoding.UTF8, formato));
+                                    //actualizar la foto en los datos del ususario
+                                    server = "http://" + ip + ":5001/api/Caballo/actualizarFoto";
 
-                                content = await respuesta.Content.ReadAsStringAsync();
-                                if (respuesta.IsSuccessStatusCode)
-                                    Console.WriteLine("foto guradada");
-                                else
-                                    Console.WriteLine("no se pudo actualizar la foto");
 
-                                Console.WriteLine(URL);
+                                    var claseSubirFoto = new caballos
+                                    {
+                                        foto = URL,
+                                        id_caballo = content
+                                    };
+
+                                    respuesta = await cliente.PostAsync(server, new StringContent(JsonConvert.SerializeObject(claseSubirFoto), Encoding.UTF8, formato));
+
+                                    content = await respuesta.Content.ReadAsStringAsync();
+                                    if (respuesta.IsSuccessStatusCode)
+                                        Console.WriteLine("foto guradada");
+                                    else
+                                        Console.WriteLine("no se pudo actualizar la foto");
+
+                                    Console.WriteLine(URL);
+                                }
+
+                                progress.StopAnimating();
+                                progress.Hidden = true;
+
+                                var detalle = this.Storyboard.InstantiateViewController("Tabs_ViewController") as Tabs_ViewController;
+                                detalle.ModalTransitionStyle = UIModalTransitionStyle.CrossDissolve;
+                                detalle.ModalPresentationStyle = UIModalPresentationStyle.OverFullScreen;
+                                this.PresentViewController(detalle, true, null);
                             }
-
-                            progress.StopAnimating();
-                            progress.Hidden = true;
-
-                            var detalle = this.Storyboard.InstantiateViewController("Tabs_ViewController") as Tabs_ViewController;
-                            detalle.ModalTransitionStyle = UIModalTransitionStyle.CrossDissolve;
-                            detalle.ModalPresentationStyle = UIModalPresentationStyle.OverFullScreen;
-                            this.PresentViewController(detalle, true, null);
+                            else
+                            {
+                                Console.WriteLine(content);
+                            }
                         }
-                        else
+                        catch (Exception ex)
                         {
+                            Console.WriteLine(ex.Message);
                             Console.WriteLine(content);
                         }
+
+                        #endregion;
                     }
-                    catch (Exception ex)
+                    else
                     {
-                        Console.WriteLine(ex.Message);
-                        Console.WriteLine(content);
+                        #region usar API para actualizar
+                        #endregion
                     }
 
-                    #endregion;
+
+                    #endregion
                 }
 
                 btn_done.Enabled = true;

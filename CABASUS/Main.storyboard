@@ -204,7 +204,7 @@
         <!--Register Horse View Controller-->
         <scene sceneID="tYY-51-PT7">
             <objects>
-                <viewController id="lsn-EW-yMF" customClass="Register_Horse_ViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="Register_Horse_ViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="lsn-EW-yMF" customClass="Register_Horse_ViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Z2b-n4-OaT"/>
                         <viewControllerLayoutGuide type="bottom" id="euA-y0-pWg"/>
@@ -744,7 +744,7 @@
         <image name="timeline" width="612" height="792"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="dkg-mE-kcP"/>
+        <segue reference="rZK-Gh-2VU"/>
         <segue reference="SsL-eK-Xtj"/>
     </inferredMetricsTieBreakers>
 </document>

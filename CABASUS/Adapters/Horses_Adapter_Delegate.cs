@@ -1,4 +1,5 @@
-﻿using Foundation;
+﻿using CABASUS.Controllers;
+using Foundation;
 using UIKit;
 
 namespace CABASUS.Adapters
@@ -12,7 +13,7 @@ namespace CABASUS.Adapters
         }
 
         [Export("tableView:editActionsForRowAtIndexPath:")]
-        public UITableViewRowAction[] EditActionsForRow(UITableView tableView, Foundation.NSIndexPath indexPath)
+        public UITableViewRowAction[] EditActionsForRow(UITableView tableView, NSIndexPath indexPath)
         {
             var deleteAction = UITableViewRowAction.Create
             (
@@ -24,7 +25,14 @@ namespace CABASUS.Adapters
             (
                 UITableViewRowActionStyle.Normal,
                 "Edit",
-                (arg1, arg2) => { }
+                (arg1, arg2) => {
+                    var detalle = controlador.Storyboard.InstantiateViewController("Register_Horse_ViewController") as Register_Horse_ViewController;
+                    detalle.indicadorAccion = false;
+                    detalle.ModalTransitionStyle = UIModalTransitionStyle.CrossDissolve;
+                    detalle.ModalPresentationStyle = UIModalPresentationStyle.OverFullScreen;
+                    controlador.PresentViewController(detalle, true, null);
+
+                }
             );
 
             editAction.BackgroundColor = UIColor.Black;
