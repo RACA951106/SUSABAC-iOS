@@ -12,7 +12,7 @@
         <!--Login View Controller-->
         <scene sceneID="Ld5-cf-kaX">
             <objects>
-                <viewController id="xhS-l0-QaQ" customClass="Login_ViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="Login_ViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="xhS-l0-QaQ" customClass="Login_ViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="hKS-Kx-4ly"/>
                         <viewControllerLayoutGuide type="bottom" id="kc7-I7-9AU"/>
@@ -33,9 +33,6 @@
                                 <state key="normal" title="CREATE ACCOUNT">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
-                                <connections>
-                                    <segue destination="FMl-mW-n1w" kind="presentation" id="7Cd-Rv-CLD"/>
-                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RWm-Tj-aLj">
                                 <rect key="frame" x="67" y="545" width="258" height="30"/>
@@ -44,9 +41,6 @@
                                 <state key="normal" title="LOG IN">
                                     <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
                                 </state>
-                                <connections>
-                                    <segue destination="ySu-iz-KLX" kind="presentation" id="b3d-Xg-Sc2"/>
-                                </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Already a user?" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="T9z-mZ-b71">
                                 <rect key="frame" x="137" y="516" width="118" height="21"/>
@@ -106,7 +100,7 @@
         <!--Sesion View Controller-->
         <scene sceneID="SOQ-LZ-fI7">
             <objects>
-                <viewController id="ySu-iz-KLX" customClass="Sesion_ViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="Sesion_ViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="ySu-iz-KLX" customClass="Sesion_ViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="PV3-hv-QaL"/>
                         <viewControllerLayoutGuide type="bottom" id="Y6F-uA-cQO"/>
@@ -173,9 +167,6 @@
                                 <state key="normal" title="&lt;">
                                     <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
-                                <connections>
-                                    <segue destination="xhS-l0-QaQ" kind="presentation" id="2Zb-DF-wkS"/>
-                                </connections>
                             </button>
                             <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="9gg-iz-j3g">
                                 <rect key="frame" x="169" y="449" width="37" height="37"/>
@@ -339,9 +330,6 @@
                                 <state key="normal" title="&lt;">
                                     <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
-                                <connections>
-                                    <segue destination="DVg-dl-11k" kind="presentation" id="rZK-Gh-2VU"/>
-                                </connections>
                             </button>
                             <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="F3D-F1-2c2">
                                 <rect key="frame" x="169" y="315" width="37" height="37"/>
@@ -380,7 +368,7 @@
         <!--Register View Controller-->
         <scene sceneID="LyN-7d-Th2">
             <objects>
-                <viewController id="FMl-mW-n1w" customClass="Register_ViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="Register_ViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="FMl-mW-n1w" customClass="Register_ViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Ygy-zY-cV2"/>
                         <viewControllerLayoutGuide type="bottom" id="AHK-84-ylS"/>
@@ -483,9 +471,6 @@
                                 <state key="normal" title="&lt;">
                                     <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
-                                <connections>
-                                    <segue destination="xhS-l0-QaQ" kind="presentation" id="SsL-eK-Xtj"/>
-                                </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -560,9 +545,6 @@
                                 <state key="normal" title="+">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
-                                <connections>
-                                    <segue destination="lsn-EW-yMF" kind="presentation" id="dkg-mE-kcP"/>
-                                </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -671,10 +653,10 @@
             </objects>
             <point key="canvasLocation" x="3" y="1055"/>
         </scene>
-        <!--Menu View Controller-->
+        <!--Settings View Controller-->
         <scene sceneID="m3n-Kd-85P">
             <objects>
-                <viewController id="NT2-YG-L0r" customClass="Menu_ViewController" sceneMemberID="viewController">
+                <viewController id="NT2-YG-L0r" customClass="Settings_ViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="cps-iN-gMu"/>
                         <viewControllerLayoutGuide type="bottom" id="bL0-M0-gbS"/>
@@ -683,11 +665,11 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="2oL-01-9eS">
-                                <rect key="frame" x="275" y="244" width="37" height="37"/>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="tUs-Es-a1U">
+                                <rect key="frame" x="0.0" y="20" width="375" height="598"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="color" red="0.79607843140000001" green="0.1176470588" blue="0.1176470588" alpha="1" colorSpace="calibratedRGB"/>
-                            </activityIndicatorView>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </tableView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     </view>
@@ -695,10 +677,13 @@
                         <inset key="imageInsets" minX="0.0" minY="10" maxX="0.0" maxY="0.0"/>
                     </tabBarItem>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
+                    <connections>
+                        <outlet property="listaSettings" destination="tUs-Es-a1U" id="lli-dz-lHi"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="uZE-dY-6sY" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="697" y="1055"/>
+            <point key="canvasLocation" x="696.79999999999995" y="1054.7226386806597"/>
         </scene>
         <!--Tabs View Controller-->
         <scene sceneID="3tx-XD-pww">
@@ -743,8 +728,4 @@
         <image name="menu" width="612" height="792"/>
         <image name="timeline" width="612" height="792"/>
     </resources>
-    <inferredMetricsTieBreakers>
-        <segue reference="rZK-Gh-2VU"/>
-        <segue reference="SsL-eK-Xtj"/>
-    </inferredMetricsTieBreakers>
 </document>

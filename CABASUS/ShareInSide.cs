@@ -6,11 +6,13 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
+using CABASUS.Controllers;
 using CABASUS.Modelos;
 using CoreGraphics;
 using Foundation;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
+using ObjCRuntime;
 using Photos;
 using Security;
 using UIKit;
@@ -220,6 +222,46 @@ namespace CABASUS
             {
                 var existingDb = NSBundle.MainBundle.PathForResource(nameinres, typeinres);
                 File.Copy(existingDb, dbPath);
+            }
+        }
+
+        public void Toastquestion(string mensaje, string pantalla, UIViewController controlador)
+        {
+            UIAlertView alert = new UIAlertView()
+            {
+                Message = mensaje
+            };
+            alert.AddButton("Si");
+            alert.AddButton("No");
+            alert.Delegate = new alert_delegate(controlador,pantalla);
+            alert.Show();
+        }
+    }
+
+    public class alert_delegate : UIAlertViewDelegate
+    {
+        UIViewController controlador;
+        string _pantalla;
+        public alert_delegate(UIViewController controller,string pantalla)
+        {
+            controlador = controller;
+            _pantalla = pantalla;
+        }
+
+        [Export("alertView:clickedButtonAtIndex:")]
+        public override void Clicked(UIAlertView alertview, nint buttonIndex)
+        {
+            switch (_pantalla)
+            {
+                case "settings":
+                    if (buttonIndex == 0)
+                    {
+                        var detalle = controlador.Storyboard.InstantiateViewController("Register_ViewController") as Register_ViewController;
+                        detalle.ModalTransitionStyle = UIModalTransitionStyle.CrossDissolve;
+                        detalle.ModalPresentationStyle = UIModalPresentationStyle.OverFullScreen;
+                        controlador.PresentViewController(detalle, true, null);
+                    }
+                    break;
             }
         }
     }

@@ -26,6 +26,11 @@ namespace CABASUS.Controllers
         UISwipeGestureRecognizer gestol = new UISwipeGestureRecognizer();
         private List<string> items;
         #endregion
+
+        public Login_ViewController() : base("Login_ViewController", null)
+        {
+        }
+
         public Login_ViewController(IntPtr handle) : base(handle)
         {
         }
@@ -190,6 +195,26 @@ namespace CABASUS.Controllers
             };
 
             #endregion
+
+            #region abrir pantallas con los botones;
+
+            btn_login.TouchUpInside+=delegate {
+
+                var detalle = this.Storyboard.InstantiateViewController("Sesion_ViewController") as Sesion_ViewController;
+                detalle.ModalTransitionStyle = UIModalTransitionStyle.CrossDissolve;
+                detalle.ModalPresentationStyle = UIModalPresentationStyle.OverFullScreen;
+                this.PresentViewController(detalle, true, null);
+            };
+
+            btn_createaccount.TouchUpInside += delegate {
+
+                var detalle = this.Storyboard.InstantiateViewController("Register_ViewController") as Register_ViewController;
+                detalle.ModalTransitionStyle = UIModalTransitionStyle.CrossDissolve;
+                detalle.ModalPresentationStyle = UIModalPresentationStyle.OverFullScreen;
+                this.PresentViewController(detalle, true, null);
+            };
+
+            #endregion;
 
         }
 

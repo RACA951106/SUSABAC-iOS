@@ -17,6 +17,10 @@ namespace CABASUS.Controllers
         string serverConsulta;
         string serverRecovery;
 
+        public Sesion_ViewController() : base("Sesion_ViewController", null)
+        {
+        }
+
         public Sesion_ViewController(IntPtr handle) : base(handle)
         { 
         } 
@@ -177,6 +181,7 @@ namespace CABASUS.Controllers
 
             };
             #endregion
+
             #region Cambiar de color EditText
             txt_email.EditingChanged += delegate
             {
@@ -297,6 +302,14 @@ namespace CABASUS.Controllers
                 }
                 btn_login.Enabled = true;
                 btn_recovery.Enabled = true;
+            };
+
+            btnback.TouchUpInside+=delegate {
+
+                var detalle = this.Storyboard.InstantiateViewController("Login_ViewController") as Login_ViewController;
+                detalle.ModalTransitionStyle = UIModalTransitionStyle.CrossDissolve;
+                detalle.ModalPresentationStyle = UIModalPresentationStyle.OverFullScreen;
+                this.PresentViewController(detalle, true, null);
             };
         }
 

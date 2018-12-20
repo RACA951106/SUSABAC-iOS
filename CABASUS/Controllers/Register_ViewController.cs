@@ -15,6 +15,7 @@ namespace CABASUS.Controllers
     public partial class Register_ViewController : UIViewController
     {
         string ip = "192.168.1.74";
+        public bool indicadorAccion = true;
 
         public Register_ViewController() : base("Register_ViewController", null)
         {
@@ -73,6 +74,29 @@ namespace CABASUS.Controllers
 
             progreso.Frame = new CGRect((View.Frame.Width / 2) - (progreso.Frame.Width / 2), (View.Frame.Height / 2) - (progreso.Frame.Height / 2), progreso.Frame.Width, progreso.Frame.Height);
             progreso.Hidden = true;
+            #endregion;
+
+            #region saber si se esta editando para cambiar la funcion del boton de regresar;
+
+            if (!indicadorAccion)
+            {
+                btnback.TouchUpInside+=delegate {
+                    var detalle = this.Storyboard.InstantiateViewController("Tabs_ViewController") as Tabs_ViewController;
+                    detalle.ModalTransitionStyle = UIModalTransitionStyle.CrossDissolve;
+                    detalle.ModalPresentationStyle = UIModalPresentationStyle.OverFullScreen;
+                    this.PresentViewController(detalle, true, null);
+                };
+            }
+            else
+            {
+                btnback.TouchUpInside += delegate {
+                    var detalle = this.Storyboard.InstantiateViewController("Login_ViewController") as Login_ViewController;
+                    detalle.ModalTransitionStyle = UIModalTransitionStyle.CrossDissolve;
+                    detalle.ModalPresentationStyle = UIModalPresentationStyle.OverFullScreen;
+                    this.PresentViewController(detalle, true, null);
+                };
+            }
+
             #endregion;
 
             #region ocultar teclado al tocar la pantalla;
