@@ -548,6 +548,7 @@ namespace CABASUS.Controllers
 
                     btn_done.Enabled = false;
                     btn_foto.Enabled = false;
+                    btn_back.Enabled = false;
 
                     cliente.DefaultRequestHeaders.Authorization =
                         new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", new ShareInSide().consultxmlToken().token);
@@ -618,6 +619,14 @@ namespace CABASUS.Controllers
                         #region usar API para actualizar
                         try
                         {
+                            Action a = () =>
+                            {
+                                progress.Frame = new CGRect((View.Frame.Width / 2) - (progress.Frame.Width / 2), (View.Frame.Height / 2) - (progress.Frame.Height / 2), progress.Frame.Width, progress.Frame.Height);
+                                View.AddSubview(progress);
+                            };
+                            UIViewPropertyAnimator Animar = new UIViewPropertyAnimator(.5, UIViewAnimationCurve.EaseInOut, a);
+                            Animar.StartAnimation();
+
                             us.id_caballo = id_horse;
                             us.foto = foto;
                             json = new StringContent(JsonConvert.SerializeObject(us), Encoding.UTF8, formato);
@@ -633,26 +642,27 @@ namespace CABASUS.Controllers
                                 //saber si la foto se cambio o no, para subirla o no XD
                                 if (btn_foto.Tag == 2)
                                 {
-                                    var URL = await new ShareInSide().SubirImagen("caballos", content);
+                                    var URL = await new ShareInSide().SubirImagen("caballos", id_horse);
 
                                     //actualizar la foto en los datos del ususario
                                     server = "http://" + ip + ":5001/api/Caballo/actualizarFoto";
 
-
-                                    var claseSubirFoto = new caballos
+                                    if (!URL.Equals("Error"))
                                     {
-                                        foto = URL,
-                                        id_caballo = content
-                                    };
+                                        var claseSubirFoto = new caballos
+                                        {
+                                            foto = URL,
+                                            id_caballo = id_horse
+                                        };
 
-                                    respuesta = await cliente.PostAsync(server, new StringContent(JsonConvert.SerializeObject(claseSubirFoto), Encoding.UTF8, formato));
+                                        respuesta = await cliente.PostAsync(server, new StringContent(JsonConvert.SerializeObject(claseSubirFoto), Encoding.UTF8, formato));
 
-                                    content = await respuesta.Content.ReadAsStringAsync();
-                                    if (respuesta.IsSuccessStatusCode)
-                                        Console.WriteLine("foto guradada");
-                                    else
-                                        Console.WriteLine("no se pudo actualizar la foto");
-
+                                        content = await respuesta.Content.ReadAsStringAsync();
+                                        if (respuesta.IsSuccessStatusCode)
+                                            Console.WriteLine("foto guradada");
+                                        else
+                                            Console.WriteLine("no se pudo actualizar la foto");
+                                    }
                                     Console.WriteLine(URL);
                                 }
                                 progress.StopAnimating();
@@ -693,6 +703,7 @@ namespace CABASUS.Controllers
                 txt_dob.Enabled = true;
                 txt_gender.Enabled = true;
                 txt_oat.Enabled = true;
+                btn_back.Enabled = true;
             };
 
             #endregion;
@@ -703,6 +714,17 @@ namespace CABASUS.Controllers
                 {
                     progress.StartAnimating();
                     progress.Hidden = false;
+
+                    txt_nameHorse.Enabled = false;
+                    txt_weight.Enabled = false;
+                    txt_height.Enabled = false;
+                    txt_breed.Enabled = false;
+                    txt_dob.Enabled = false;
+                    txt_gender.Enabled = false;
+                    txt_oat.Enabled = false;
+
+                    btn_done.Enabled = false;
+                    btn_foto.Enabled = false;
 
                     cliente.Timeout = TimeSpan.FromSeconds(20);
                     cliente.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", new ShareInSide().consultxmlToken().token);
@@ -718,14 +740,16 @@ namespace CABASUS.Controllers
                         txt_weight.Text = datosCaballos[0].peso.ToString();
                         txt_height.Text = datosCaballos[0].altura.ToString();
                         txt_breed.SetTitle(nombreRaza[0].raza, UIControlState.Normal);
+                        txt_breed.SetTitleColor(UIColor.Black, UIControlState.Normal);
                         txt_dob.Text = datosCaballos[0].fecha_nacimiento;
                         txt_gender.SetTitle(listGender[datosCaballos[0].genero - 1], UIControlState.Normal);
+                        txt_gender.SetTitleColor(UIColor.Black, UIControlState.Normal);
                         txt_oat.Text = datosCaballos[0].avena.ToString();
 
                         Action a = () =>
                         {
-                            progress.Frame = new CGRect(btn_foto.Frame.X, btn_foto.Frame.Y, (btn_foto.Frame.Width / 2) - (progress.Frame.Width / 2), (btn_foto.Frame.Height / 2) - (progress.Frame.Height / 2));
-
+                            progress.Frame = new CGRect((View.Frame.Width / 2) - (progress.Frame.Width / 2) , 50 - (progress.Frame.Height / 2), progress.Frame.Width, progress.Frame.Height);
+                            scroll.AddSubview(progress);
                         };
                         UIViewPropertyAnimator Animar = new UIViewPropertyAnimator(.5, UIViewAnimationCurve.EaseInOut, a);
                         Animar.StartAnimation();
@@ -751,6 +775,17 @@ namespace CABASUS.Controllers
 
                         progress.StopAnimating();
                         progress.Hidden = true;
+
+                        txt_nameHorse.Enabled = true;
+                        txt_weight.Enabled = true;
+                        txt_height.Enabled = true;
+                        txt_breed.Enabled = true;
+                        txt_dob.Enabled = true;
+                        txt_gender.Enabled = true;
+                        txt_oat.Enabled = true;
+
+                        btn_done.Enabled = true;
+                        btn_foto.Enabled = true;
                     }
                 }
                 catch (Exception ex)
@@ -759,8 +794,27 @@ namespace CABASUS.Controllers
 
                     progress.StopAnimating();
                     progress.Hidden = true;
+
+                    txt_nameHorse.Enabled = true;
+                    txt_weight.Enabled = true;
+                    txt_height.Enabled = true;
+                    txt_breed.Enabled = true;
+                    txt_dob.Enabled = true;
+                    txt_gender.Enabled = true;
+                    txt_oat.Enabled = true;
+
+                    btn_done.Enabled = true;
+                    btn_foto.Enabled = true;
                 }
             }
+
+            btn_back.TouchUpInside += delegate {
+                var detalle = this.Storyboard.InstantiateViewController("Tabs_ViewController") as Tabs_ViewController;
+                detalle.index = 0;
+                detalle.ModalTransitionStyle = UIModalTransitionStyle.CrossDissolve;
+                detalle.ModalPresentationStyle = UIModalPresentationStyle.OverFullScreen;
+                this.PresentViewController(detalle, true, null);
+            };
         }
 
         public override void DidReceiveMemoryWarning()

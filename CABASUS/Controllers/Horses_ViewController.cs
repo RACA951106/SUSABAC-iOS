@@ -90,7 +90,14 @@ namespace CABASUS.Controllers
 
 
             btnAgregar.Frame = new CGRect((View.Frame.Width / 2) - 30, (View.Frame.Height - 150), 60, 60);
+
+            UIImageView imgAdd = new UIImageView(new CGRect((btnAgregar.Frame.Width / 2) - 15, (btnAgregar.Frame.Height / 2) - 15, 30, 30));
+            imgAdd.Image = UIImage.FromFile("anadir").ImageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate);
+            imgAdd.TintColor = UIColor.White;
+
+            btnAgregar.AddSubview(imgAdd);
             btnAgregar.Layer.CornerRadius = 30;
+
 
             #endregion
 
@@ -108,6 +115,13 @@ namespace CABASUS.Controllers
             await ConsultarCaballos();
 
             #endregion;
+
+            btnAgregar.TouchUpInside += delegate {
+                var detalle = this.Storyboard.InstantiateViewController("Register_Horse_ViewController") as Register_Horse_ViewController;
+                detalle.ModalTransitionStyle = UIModalTransitionStyle.CrossDissolve;
+                detalle.ModalPresentationStyle = UIModalPresentationStyle.OverFullScreen;
+                this.PresentViewController(detalle, true, null);
+            };
         }
 
         public async Task<bool> ConsultarCaballos()
