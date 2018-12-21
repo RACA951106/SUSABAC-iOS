@@ -232,6 +232,9 @@ namespace CABASUS.Controllers
             {
                 #region actualizar datos del usuario;
 
+                btn_terms.Hidden = true;
+                btn_terms.Enabled = false;
+
                 #region llenar campos con xml;
 
                 var datosUsuario = new ShareInSide().consultxmlUsuario();
@@ -245,6 +248,10 @@ namespace CABASUS.Controllers
                 #endregion;
 
                 #region descargar foto;
+
+                progreso.StartAnimating();
+                progreso.Hidden = false;
+                progreso.Frame = new CGRect((View.Frame.Width / 2) - (progreso.Frame.Width / 2), (50) - (progreso.Frame.Height / 2), progreso.Frame.Width, progreso.Frame.Height);
 
                 try
                 {
@@ -267,6 +274,9 @@ namespace CABASUS.Controllers
                 {
                     Console.WriteLine(e.Message);
                 }
+
+                progreso.StopAnimating();
+                progreso.Hidden = true;
 
                 #endregion;
 
@@ -410,9 +420,9 @@ namespace CABASUS.Controllers
 
                         #endregion;
 
-                        #region usar API para registrar;
+                        #region usar API para actualizar;
 
-                        string server = "http://" + ip + ":5001/api/Account/registrar";
+                        string server = "http://" + ip + ":5001/api/Usuario/actualizar";
                         string formato = "application/json";
 
                         usuarios us = new usuarios()
@@ -420,10 +430,7 @@ namespace CABASUS.Controllers
                             nombre = txt_username.Text,
                             email = txt_email.Text,
                             contrasena = txt_pw.Text,
-                            fecha_nacimiento = txt_dob.Text,
-                            id_dispositivo = UIDevice.CurrentDevice.IdentifierForVendor.AsString(),
-                            SO = "iOS",
-                            tokenFB = new ShareInSide().consultxmlTokenFB().token
+                            fecha_nacimiento = txt_dob.Text
                         };
 
                         var json = new StringContent(JsonConvert.SerializeObject(us), Encoding.UTF8, formato);
@@ -434,16 +441,24 @@ namespace CABASUS.Controllers
                         {
                             HttpClient cliente = new HttpClient();
                             cliente.Timeout = TimeSpan.FromSeconds(20);
-
+                            cliente.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", new ShareInSide().consultxmlToken().token);
+                            
                             progreso.StartAnimating();
                             progreso.Hidden = false;
+
+                            Action action = () =>
+                            {
+                                progreso.Frame = new CGRect((View.Frame.Width / 2) - (progreso.Frame.Width / 2), (View.Frame.Height / 2) - (progreso.Frame.Height / 2), progreso.Frame.Width, progreso.Frame.Height);
+                            };
+                            UIViewPropertyAnimator animator = new UIViewPropertyAnimator(.5, UIViewAnimationCurve.EaseInOut, action);
+                            animator.StartAnimation();
 
                             txt_username.Enabled = false;
                             txt_email.Enabled = false;
                             txt_dob.Enabled = false;
                             txt_pw.Enabled = false;
 
-                            respuesta = await cliente.PostAsync(server, json);
+                            respuesta = await cliente.PutAsync(server, json);
 
                             content = await respuesta.Content.ReadAsStringAsync();
 
@@ -451,29 +466,40 @@ namespace CABASUS.Controllers
 
                             if (respuesta.IsSuccessStatusCode)
                             {
-                                Console.WriteLine(content);
-                                var contenido = JsonConvert.DeserializeObject<tokens>(content);
+                                var usuario_guardado = new ShareInSide().consultxmlUsuario();
+                                usuario_guardado.nombre = us.nombre;
+                                usuario_guardado.contrasena = us.contrasena;
+                                usuario_guardado.fecha_nacimiento = us.fecha_nacimiento;
 
-                                new ShareInSide().savexmlToken(contenido.token, contenido.expiration);
-
-                                string id = new ShareInSide().conseguirIDUsuarioDelToken(contenido.token);
+                                new ShareInSide().savexmlUsuario(usuario_guardado);
 
                                 //saber si la foto se cambio o no, para subirla o no XD
                                 if (btn_foto.Tag == 2)
                                 {
+                                    string id = new ShareInSide().conseguirIDUsuarioDelToken(new ShareInSide().consultxmlToken().token);
+
                                     var URL = await new ShareInSide().SubirImagen("usuarios", id);
 
-                                    //actualizar la foto en los datos del ususario
-                                    server = "http://" + ip + ":5001/api/Usuario/actualizarFoto?URL=" + URL;
-                                    cliente.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", new ShareInSide().consultxmlToken().token);
-                                    respuesta = await cliente.GetAsync(server);
-                                    content = await respuesta.Content.ReadAsStringAsync();
-                                    if (respuesta.IsSuccessStatusCode)
-                                        Console.WriteLine("foto guradada");
-                                    else
-                                        Console.WriteLine("no se pudo actualizar la foto");
+                                    if (URL != "Error")
+                                    {
+                                        //actualizar la foto en los datos del ususario
+                                        server = "http://" + ip + ":5001/api/Usuario/actualizarFoto?URL=" + URL;
+                                        cliente.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", new ShareInSide().consultxmlToken().token);
+                                        respuesta = await cliente.GetAsync(server);
+                                        content = await respuesta.Content.ReadAsStringAsync();
+                                        if (respuesta.IsSuccessStatusCode)
+                                        {
+                                            usuario_guardado.foto = URL;
+                                            new ShareInSide().savexmlUsuario(usuario_guardado);
+                                            Console.WriteLine("foto guradada");
+                                        }
+                                        else
+                                            Console.WriteLine("no se pudo actualizar la foto");
 
-                                    Console.WriteLine(URL);
+                                        Console.WriteLine(URL);
+                                    }
+                                    else
+                                        new ShareInSide().Toast("occurrio un error al subir la foto, revisa tu conexion mije :)");
                                 }
 
                                 progreso.StopAnimating();

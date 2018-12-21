@@ -274,6 +274,7 @@ namespace CABASUS.Controllers
                                     progreso.Hidden = true;
 
                                     var detalle = this.Storyboard.InstantiateViewController("Tabs_ViewController") as Tabs_ViewController;
+                                    detalle.index = 0;
                                     detalle.ModalTransitionStyle = UIModalTransitionStyle.CrossDissolve;
                                     detalle.ModalPresentationStyle = UIModalPresentationStyle.OverFullScreen;
                                     this.PresentViewController(detalle, true, null);
