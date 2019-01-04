@@ -46,6 +46,7 @@ namespace CABASUS.Controllers
 
             txtBuscar.ResignFirstResponder();
             txtBuscar.BecomeFirstResponder();
+            txtBuscar.InputAccessoryView = new CustomKeyboard(txtBuscar, null, null);
 
             collection.Frame = new CGRect(0, 70, View.Frame.Width, View.Frame.Height - 70);
             collection.RegisterClassForCell(typeof(Collection_Adapter_Celda), "celdaCollection");
@@ -75,7 +76,7 @@ namespace CABASUS.Controllers
 
             #region consulta caballos aleatorios
 
-            server += "caballo/caballosaleatorios";
+            string nserver = server + "caballo/caballosaleatorios";
 
             try
             {
@@ -86,7 +87,7 @@ namespace CABASUS.Controllers
                 HttpResponseMessage respuesta = null;
                 string content = "";
 
-                respuesta = await cliente.GetAsync(server);
+                respuesta = await cliente.GetAsync(nserver);
 
                 content = await respuesta.Content.ReadAsStringAsync();
 
@@ -130,6 +131,41 @@ namespace CABASUS.Controllers
                 this.PresentViewController(detalle, true, null);
             };
 
+
+            txtBuscar.EditingChanged += async delegate
+            {
+                nserver = server + "caballo/buscarCaballos?refe=" + txtBuscar.Text;
+                try
+                {
+                    var cliente = new HttpClient();
+                    cliente.Timeout = TimeSpan.FromSeconds(20);
+                    cliente.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", new ShareInSide().consultxmlToken().token);
+
+                    HttpResponseMessage respuesta = null;
+                    string content = "";
+                    
+                    respuesta = await cliente.GetAsync(nserver);
+
+                    content = await respuesta.Content.ReadAsStringAsync();
+
+                    respuesta.EnsureSuccessStatusCode();
+
+                    if (respuesta.IsSuccessStatusCode)
+                    {
+                        var listaCaballo = JsonConvert.DeserializeObject<List<caballos>>(content);
+
+                        collection.Source = new Collection_Adapter(listaCaballo, View.Frame.Width);
+                        collection.ReloadData();
+                    }
+                    else
+                        Console.WriteLine(content);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            };
+
             Action action = () => {
                 btnBack.Frame = new CGRect(0, 15, 50, 20);
                 txtBuscar.Frame = new CGRect(85, 5, txtBuscar.Frame.Width - 55, 40);
@@ -138,7 +174,7 @@ namespace CABASUS.Controllers
             };
 
 
-            UIViewPropertyAnimator animator = new UIViewPropertyAnimator(.5, UIViewAnimationCurve.Linear, action);
+            UIViewPropertyAnimator animator = new UIViewPropertyAnimator(.3, UIViewAnimationCurve.Linear, action);
             //await Task.Delay(1);
             animator.StartAnimation();
         }

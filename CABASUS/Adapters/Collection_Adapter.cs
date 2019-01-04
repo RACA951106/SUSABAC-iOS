@@ -52,12 +52,12 @@ namespace CABASUS.Adapters
 
         public override void ItemSelected(UICollectionView collectionView, NSIndexPath indexPath)
         {
-            UIAlertView uIAlertView = new UIAlertView()
-            {
-                Message = "Hola " + indexPath.Row
-            };
-            uIAlertView.AddButton("OK");
-            uIAlertView.Show();
+            //UIAlertView uIAlertView = new UIAlertView()
+            //{
+            //    Message = "Hola " + indexPath.Row
+            //};
+            //uIAlertView.AddButton("OK");
+            //uIAlertView.Show();
         }
 
     }

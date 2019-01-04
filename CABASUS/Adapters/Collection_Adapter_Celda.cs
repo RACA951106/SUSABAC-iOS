@@ -13,12 +13,14 @@ namespace CABASUS.Adapters
     {
         public UIImageView img;
         public UILabel lblNombre;
+        public UIActivityIndicatorView progreso;
 
         [Export("initWithFrame:")]
         public Collection_Adapter_Celda(CGRect frame) : base(frame)
         {
             img = new UIImageView();
             lblNombre = new UILabel();
+            progreso = new UIActivityIndicatorView();
 
             lblNombre.Text = "Fotitos";
             lblNombre.Frame = new CGRect(0, frame.Width - 30, frame.Width, 30);
@@ -28,9 +30,14 @@ namespace CABASUS.Adapters
 
             img.Frame = new CGRect(0, 0, frame.Width, frame.Width);
 
+
+            progreso.ActivityIndicatorViewStyle = UIActivityIndicatorViewStyle.Gray;
+            progreso.Frame = new CGRect((frame.Width / 2) - 10, (frame.Height / 2) - 10, 20, 20);
+            progreso.Hidden = true;
+
             ContentView.Layer.BorderWidth = 1;
             ContentView.Layer.BorderColor = UIColor.White.CGColor;
-            ContentView.AddSubviews(img, lblNombre);
+            ContentView.AddSubviews(img, lblNombre, progreso);
         }
 
         public async void updateCell(caballos caballo)
@@ -53,8 +60,13 @@ namespace CABASUS.Adapters
                 }
                 else
                 {
+                    progreso.Hidden = false;
+                    progreso.StartAnimating();
                     await new ShareInSide().descargaTemporal(caballo.foto, caballo.id_caballo);
                     img.Image = UIImage.FromFile(jpgFilename);
+                    progreso.StopAnimating();
+                    progreso.Hidden = true;
+
                 }
             }
             catch (Exception ex)
