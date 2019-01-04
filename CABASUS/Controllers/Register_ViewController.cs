@@ -15,7 +15,7 @@ namespace CABASUS.Controllers
 {
     public partial class Register_ViewController : UIViewController
     {
-        string ip = "192.168.1.74";
+        string ip = "192.168.0.20";
         public bool indicadorAccion = true;
 
         public Register_ViewController() : base("Register_ViewController", null)

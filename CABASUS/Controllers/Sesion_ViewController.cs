@@ -11,7 +11,7 @@ namespace CABASUS.Controllers
 {
     public partial class Sesion_ViewController : UIViewController
     {
-        string ip = "192.168.1.74";
+        string ip = "192.168.0.20";
         HttpClient cliente = new HttpClient();
         string serverLogin;
         string serverConsulta;

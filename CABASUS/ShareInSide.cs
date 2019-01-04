@@ -176,6 +176,89 @@ namespace CABASUS
             }
         }
 
+        public async Task<bool> descargaTemporal(string ulr, string nombreArchivo)
+        {
+            try
+            {
+                using (var httpResponse = await _httpClient.GetAsync(ulr))
+                {
+                    if (httpResponse.StatusCode == HttpStatusCode.OK)
+                    {
+                        var img = await httpResponse.Content.ReadAsByteArrayAsync();
+                        var size = new CGSize(200, 200);
+
+                        UIImage image = new UIImage();
+                        NSData data = NSData.FromArray(img);
+                        image = UIImage.LoadFromData(data);
+
+                        nfloat originalWidth = image.Size.Width;
+                        nfloat originalHeight = image.Size.Height;
+                        nfloat originalRatio = originalWidth / originalHeight;
+
+                        nfloat targetRatio = size.Width / size.Height;
+
+                        var targetFrame = new CGRect(x: 0.0, y: 0.0, width: size.Width, height: size.Height);
+
+                        if (originalRatio > targetRatio)
+                        {
+
+                            nfloat targetHeight = size.Height;
+                            nfloat targetWidth = targetHeight * originalRatio;
+                            targetFrame = new CGRect(x: (size.Width - targetWidth) * 0.5, y: (size.Height - targetHeight) * 0.5, width: targetWidth, height: targetHeight);
+
+                        }
+                        else if (originalRatio < targetRatio)
+                        {
+                            nfloat targetWidth = size.Width;
+                            nfloat targetHeight = targetWidth / originalRatio;
+                            targetFrame = new CGRect(x: (size.Width - targetWidth) * 0.5, y: (size.Height - targetHeight) * 0.5, width: targetWidth, height: targetHeight);
+                        }
+
+                        UIGraphics.BeginImageContext(size);
+                        image.Draw(targetFrame);
+                        var imageToSave = UIGraphics.GetImageFromCurrentImageContext();
+                        UIGraphics.EndImageContext();
+
+                        var documentsDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
+                        var directoryname = Path.Combine(documentsDirectory, "Temporal");
+                        Directory.CreateDirectory(directoryname);
+                        string jpgFilename = Path.Combine(directoryname, nombreArchivo + ".jpg"); // hardcoded filename, overwritten each time. You can make it dynamic as per your requirement.
+
+                        NSError error = null;
+                        imageToSave.AsJPEG().Save(jpgFilename, false, out error);
+                        return true;
+
+                    }
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message); 
+                return false;
+            }
+        }
+
+        public void DeleteDirectory(string target_dir)
+        {
+            string[] files = Directory.GetFiles(target_dir);
+            string[] dirs = Directory.GetDirectories(target_dir);
+
+            foreach (string file in files)
+            {
+                File.SetAttributes(file, FileAttributes.Normal);
+                File.Delete(file);
+            }
+
+            foreach (string dir in dirs)
+            {
+                DeleteDirectory(dir);
+            }
+
+            Directory.Delete(target_dir, false);
+        }
+
+
         public async Task<bool> EliminarImagen(string Contenedor, string id)
         {
             CloudStorageAccount cloudStorageAccount = CloudStorageAccount.Parse(

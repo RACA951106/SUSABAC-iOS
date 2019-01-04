@@ -173,6 +173,7 @@
     <InterfaceDefinition Include="LaunchScreen.storyboard" />
     <InterfaceDefinition Include="Main.storyboard" />
     <InterfaceDefinition Include="Resources\Controllers\Settings_ViewController.xib" />
+    <InterfaceDefinition Include="Resources\Controllers\Search_ViewController.xib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -245,6 +246,12 @@
       <DependentUpon>Settings_ViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="Adapters\Settings_Adapter.cs" />
+    <Compile Include="Controllers\Search_ViewController.cs" />
+    <Compile Include="Controllers\Search_ViewController.designer.cs">
+      <DependentUpon>Search_ViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Adapters\Collection_Adapter.cs" />
+    <Compile Include="Adapters\Collection_Adapter_Celda.cs" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\lupa_icon.png" />

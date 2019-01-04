@@ -18,7 +18,7 @@ namespace CABASUS.Controllers
 {
     public partial class Register_Horse_ViewController : UIViewController
     {
-        string ip = "192.168.1.74";
+        string ip = "192.168.0.20";
         ShareInSide S = new ShareInSide();
         UIButton alerta;
         UITableView listViewBreed, listViewGender;

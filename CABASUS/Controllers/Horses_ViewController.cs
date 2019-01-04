@@ -13,7 +13,7 @@ namespace CABASUS.Controllers
     public partial class Horses_ViewController : UIViewController
     {
         ShareInSide S = new ShareInSide();
-        string ip = "192.168.1.74";
+        string ip = "192.168.0.20";
         HttpClient cliente = new HttpClient();
         string serverHorses;
         UIRefreshControl refreshControl;
@@ -69,6 +69,13 @@ namespace CABASUS.Controllers
                 tableCaballos.AddSubview(refreshControl);
 
             #endregion;
+
+            txtBuscador.EditingDidBegin += delegate {
+                var detalle = this.Storyboard.InstantiateViewController("Search_ViewController") as Search_ViewController;
+                detalle.ModalTransitionStyle = UIModalTransitionStyle.CrossDissolve;
+                detalle.ModalPresentationStyle = UIModalPresentationStyle.OverFullScreen;
+                this.PresentViewController(detalle, true, null);
+            };
 
             #region tamanio elementos
 
