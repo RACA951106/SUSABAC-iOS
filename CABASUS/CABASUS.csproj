@@ -252,6 +252,7 @@
     </Compile>
     <Compile Include="Adapters\Collection_Adapter.cs" />
     <Compile Include="Adapters\Collection_Adapter_Celda.cs" />
+    <Compile Include="CustomKeyboard.cs" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\lupa_icon.png" />
