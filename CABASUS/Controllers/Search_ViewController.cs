@@ -112,18 +112,19 @@ namespace CABASUS.Controllers
 
             btnBack.TouchUpInside += delegate
             {
-                try
-                {
-                    var documentsDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
-                    var directoryname = Path.Combine(documentsDirectory, "Temporal");
-                    new ShareInSide().DeleteDirectory(directoryname);
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.Message);
-                }
+                //try
+                //{
+                //    var documentsDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
+                //    var directoryname = Path.Combine(documentsDirectory, "Temporal");
+                //    new ShareInSide().DeleteDirectory(directoryname);
+                //}
+                //catch (Exception ex)
+                //{
+                //    Console.WriteLine(ex.Message);
+                //}
 
-                var detalle = this.Storyboard.InstantiateViewController("Horses_ViewController") as Horses_ViewController;
+                var detalle = this.Storyboard.InstantiateViewController("Tabs_ViewController") as Tabs_ViewController;
+                detalle.index = 0;
                 detalle.ModalTransitionStyle = UIModalTransitionStyle.CrossDissolve;
                 detalle.ModalPresentationStyle = UIModalPresentationStyle.OverFullScreen;
                 this.PresentViewController(detalle, true, null);

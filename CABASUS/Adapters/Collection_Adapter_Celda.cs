@@ -54,6 +54,7 @@ namespace CABASUS.Adapters
                 else
                 {
                     await new ShareInSide().descargaTemporal(caballo.foto, caballo.id_caballo);
+                    img.Image = UIImage.FromFile(jpgFilename);
                 }
             }
             catch (Exception ex)
