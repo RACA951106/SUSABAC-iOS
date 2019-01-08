@@ -9,9 +9,9 @@ namespace CABASUS.Adapters
 {
     public class Hoses_Adapter : UITableViewSource
     {
-        List<caballos> listHorses;
+        List<compartidos> listHorses;
 
-        public Hoses_Adapter(List<caballos> caballos)
+        public Hoses_Adapter(List<compartidos> caballos)
         {
             listHorses = caballos;
         }
@@ -19,7 +19,7 @@ namespace CABASUS.Adapters
         public override UITableViewCell GetCell(UITableView tableView, NSIndexPath indexPath)
         {
             var cell = new UITableViewCell(UITableViewCellStyle.Default, "");
-            cell.TextLabel.Text = listHorses[indexPath.Row].nombre;
+            cell.TextLabel.Text = listHorses[indexPath.Row].nombre_caballo;
             cell.Tag = indexPath.Row;
 
             return cell;

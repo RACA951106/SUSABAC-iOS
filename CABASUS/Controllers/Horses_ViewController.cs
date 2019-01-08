@@ -13,7 +13,7 @@ namespace CABASUS.Controllers
     public partial class Horses_ViewController : UIViewController
     {
         ShareInSide S = new ShareInSide();
-        string ip = "192.168.0.20";
+        string ip = "192.168.1.74";
         HttpClient cliente = new HttpClient();
         string serverHorses;
         UIRefreshControl refreshControl;
@@ -50,7 +50,7 @@ namespace CABASUS.Controllers
         {
             base.ViewDidLoad();
             S.saveTabState("u");
-            serverHorses = "http://" + ip + ":5001/api/caballo/consultaridusuario";
+            serverHorses = "http://" + ip + ":5001/api/compartir/consultarcompartidos";
 
             #region activar el refresh;
 
@@ -81,7 +81,6 @@ namespace CABASUS.Controllers
 
             viewBuscadorFondo.Frame = new CGRect(0, 20, View.Frame.Width, 50);
 
-
             imgIconoBuscador.Image = UIImage.FromFile("lupa_icon.png");
             imgIconoBuscador.Frame = new CGRect(20, 15, 20, 20);
 
@@ -93,8 +92,7 @@ namespace CABASUS.Controllers
 
             viewLinea.Frame = new CGRect(20, viewBuscadorFondo.Frame.Height - 10, viewBuscadorFondo.Frame.Width - 40, 1);
 
-            tableCaballos.Frame = new CGRect(0, 70, View.Frame.Width, View.Frame.Height - 70);
-
+            tableCaballos.Frame = new CGRect(0, 70, View.Frame.Width, View.Frame.Height - 119);
 
             btnAgregar.Frame = new CGRect((View.Frame.Width / 2) - 30, (View.Frame.Height - 150), 60, 60);
 
@@ -144,7 +142,7 @@ namespace CABASUS.Controllers
 
                 if (respuesta.IsSuccessStatusCode)
                 {
-                    var listaCaballos = JsonConvert.DeserializeObject<List<caballos>>(datos);
+                    var listaCaballos = JsonConvert.DeserializeObject<List<compartidos>>(datos);
 
                     #region agragar acciones al table view en swipe;
 

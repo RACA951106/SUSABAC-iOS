@@ -13,7 +13,7 @@ namespace CABASUS.Controllers
 {
     public partial class Search_ViewController : UIViewController
     {
-        string IP = "192.168.0.20";
+        string IP = "192.168.1.74";
         string server = "";
 
         public Search_ViewController() : base("Search_ViewController", null)
@@ -130,7 +130,6 @@ namespace CABASUS.Controllers
                 detalle.ModalPresentationStyle = UIModalPresentationStyle.OverFullScreen;
                 this.PresentViewController(detalle, true, null);
             };
-
 
             txtBuscar.EditingChanged += async delegate
             {

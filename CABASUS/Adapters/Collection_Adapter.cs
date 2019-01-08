@@ -3,11 +3,16 @@ using System.Collections.Generic;
 using Foundation;
 using UIKit;
 using CABASUS.Modelos;
+using System.Net.Http;
+using Newtonsoft.Json;
 
 namespace CABASUS.Adapters
 {
     public class Collection_Adapter : UICollectionViewSource
     {
+        string IP = "192.168.1.74";
+        HttpClient cliente = new HttpClient();
+        string Server;
         List<caballos> caballos;
         double tview;
 
@@ -50,14 +55,23 @@ namespace CABASUS.Adapters
             return cell;
         }
 
-        public override void ItemSelected(UICollectionView collectionView, NSIndexPath indexPath)
+        public override async void ItemSelected(UICollectionView collectionView, NSIndexPath indexPath)
         {
-            //UIAlertView uIAlertView = new UIAlertView()
-            //{
-            //    Message = "Hola " + indexPath.Row
-            //};
-            //uIAlertView.AddButton("OK");
-            //uIAlertView.Show();
+            Server = "http://" + IP + ":5001/api/Compartir/registrar/" + caballos[indexPath.Row].id_caballo;
+            cliente.Timeout = TimeSpan.FromSeconds(20);
+            cliente.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", new ShareInSide().consultxmlToken().token);
+            var respuesta = await cliente.PostAsync(Server, new StringContent("", System.Text.Encoding.UTF8, "application/json"));
+            var datos = await respuesta.Content.ReadAsStringAsync();
+
+            if (respuesta.IsSuccessStatusCode)
+            {
+                new ShareInSide().Toast("si se compartio");
+            }
+            else
+            {
+                new ShareInSide().Toast("no se compartio");
+            }
+
         }
 
     }

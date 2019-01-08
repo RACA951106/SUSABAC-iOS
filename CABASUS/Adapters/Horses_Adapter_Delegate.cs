@@ -9,10 +9,10 @@ namespace CABASUS.Adapters
     class Horses_Adapter_Delegate: UITableViewDelegate
     {
         UIViewController controlador;
-        List<caballos> listHorses;
+        List<compartidos> listHorses;
 
 
-        public Horses_Adapter_Delegate(UIViewController controller, List<caballos> listHorses)
+        public Horses_Adapter_Delegate(UIViewController controller, List<compartidos> listHorses)
         {
             controlador = controller;
             this.listHorses = listHorses;
