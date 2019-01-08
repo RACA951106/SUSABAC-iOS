@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using CoreGraphics;
 using Foundation;
 using UIKit;
@@ -64,6 +64,7 @@ namespace CABASUS.Adapters
                     progreso.StartAnimating();
                     await new ShareInSide().descargaTemporal(caballo.foto, caballo.id_caballo);
                     img.Image = UIImage.FromFile(jpgFilename);
+
                     progreso.StopAnimating();
                     progreso.Hidden = true;
 

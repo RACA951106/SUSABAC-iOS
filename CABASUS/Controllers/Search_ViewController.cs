@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using UIKit;
 using CABASUS.Modelos;
 using System.IO;
+using System.Linq;
 
 namespace CABASUS.Controllers
 {
@@ -176,8 +177,10 @@ namespace CABASUS.Controllers
             UIViewPropertyAnimator animator = new UIViewPropertyAnimator(.3, UIViewAnimationCurve.Linear, action);
             //await Task.Delay(1);
             animator.StartAnimation();
-        }
 
+            var list = new List<string>();
+            list.RemoveAll(u => u.Equals("asdf"));
+        }
 
         public override void DidReceiveMemoryWarning()
         {
