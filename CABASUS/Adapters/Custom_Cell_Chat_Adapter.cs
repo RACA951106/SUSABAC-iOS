@@ -7,8 +7,7 @@ namespace CABASUS.Adapters
 {
     public partial class Custom_Cell_Chat_Adapter : UITableViewCell
     {
-        public static readonly NSString Key = new NSString("Custom_Cell_Chat_Adapter");
-        public static readonly UINib Nib;
+        public Custom_Cell_Chat_Adapter(IntPtr handle) : base(handle){}
 
         internal void ActualizarDatos(string mensaje, int origen)
         {

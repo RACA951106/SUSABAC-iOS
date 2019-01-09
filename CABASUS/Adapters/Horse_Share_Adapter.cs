@@ -37,6 +37,7 @@ namespace CABASUS.Adapters
         {
             var detalle = controlador.Storyboard.InstantiateViewController("Chat_Controller") as Chat_Controller;
             detalle.idChat = listHorses[indexPath.Row].id_caballo;
+            detalle.nombreCaballo = listHorses[indexPath.Row].nombre_caballo;
             detalle.ModalTransitionStyle = UIModalTransitionStyle.CrossDissolve;
             detalle.ModalPresentationStyle = UIModalPresentationStyle.OverFullScreen;
             controlador.PresentViewController(detalle, true, null);

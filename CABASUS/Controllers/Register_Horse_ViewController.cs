@@ -736,13 +736,18 @@ namespace CABASUS.Controllers
                         var datosCaballos = JsonConvert.DeserializeObject<List<caballos>>(data);
                         var nombreRaza = listaRaza(datosCaballos[0].raza, "");
 
+                        if (datosCaballos[0].genero > 0)
+                            txt_gender.SetTitle(listGender[datosCaballos[0].genero - 1], UIControlState.Normal);
+                        else
+
+
                         txt_nameHorse.Text = datosCaballos[0].nombre;
                         txt_weight.Text = datosCaballos[0].peso.ToString();
                         txt_height.Text = datosCaballos[0].altura.ToString();
                         txt_breed.SetTitle(nombreRaza[0].raza, UIControlState.Normal);
                         txt_breed.SetTitleColor(UIColor.Black, UIControlState.Normal);
                         txt_dob.Text = datosCaballos[0].fecha_nacimiento;
-                        txt_gender.SetTitle(listGender[datosCaballos[0].genero - 1], UIControlState.Normal);
+
                         txt_gender.SetTitleColor(UIColor.Black, UIControlState.Normal);
                         txt_oat.Text = datosCaballos[0].avena.ToString();
 

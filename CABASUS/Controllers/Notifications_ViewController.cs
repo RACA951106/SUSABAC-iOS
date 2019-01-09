@@ -62,8 +62,8 @@ namespace CABASUS.Controllers
 
             viewLineaBuscador.Frame = new CGRect(20, viewFondoBuscador.Frame.Height - 10, viewFondoBuscador.Frame.Width - 40, 1);
 
-            txtBuscador.ResignFirstResponder();
-            txtBuscador.BecomeFirstResponder();
+            //txtBuscador.ResignFirstResponder();
+            //txtBuscador.BecomeFirstResponder();
             txtBuscador.InputAccessoryView = new CustomKeyboard(txtBuscador, null, null);
 
             tableChat.Frame = new CGRect(0, 70, View.Frame.Width, View.Frame.Height - 119);
