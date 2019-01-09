@@ -32,14 +32,14 @@ namespace CABASUS.Controllers
 		
 		void ReleaseDesignerOutlets ()
 		{
-			if (collection != null) {
-				collection.Dispose ();
-				collection = null;
-			}
-
 			if (btnBack != null) {
 				btnBack.Dispose ();
 				btnBack = null;
+			}
+
+			if (collection != null) {
+				collection.Dispose ();
+				collection = null;
 			}
 
 			if (imgIconoBuscadorFondo != null) {

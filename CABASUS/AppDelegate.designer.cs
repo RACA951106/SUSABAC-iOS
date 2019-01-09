@@ -7,10 +7,9 @@
 using Foundation;
 using System.CodeDom.Compiler;
 
-namespace CABASUS.Controllers
+namespace CABASUS
 {
-	[Register ("GaleryCameraAccessController")]
-	partial class GaleryCameraAccessController
+	partial class AppDelegate
 	{
 		
 		void ReleaseDesignerOutlets ()

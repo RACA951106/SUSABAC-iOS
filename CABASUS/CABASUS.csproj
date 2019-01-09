@@ -253,6 +253,18 @@
     <Compile Include="Adapters\Collection_Adapter.cs" />
     <Compile Include="Adapters\Collection_Adapter_Celda.cs" />
     <Compile Include="CustomKeyboard.cs" />
+    <Compile Include="AppDelegate.designer.cs">
+      <DependentUpon>AppDelegate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Adapters\Horse_Share_Adapter.cs" />
+    <Compile Include="Controllers\Chat_Controller.cs" />
+    <Compile Include="Controllers\Chat_Controller.designer.cs">
+      <DependentUpon>Chat_Controller.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Adapters\Custom_Cell_Chat_Adapter.cs" />
+    <Compile Include="Adapters\Custom_Cell_Chat_Adapter.designer.cs">
+      <DependentUpon>Custom_Cell_Chat_Adapter.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\lupa_icon.png" />

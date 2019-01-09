@@ -1,6 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
+using System.Threading;
+using System.Threading.Tasks;
+using CABASUS.Adapters;
+using CABASUS.Modelos;
 using CoreGraphics;
+using Newtonsoft.Json;
 using UIKit;
 
 namespace CABASUS.Controllers
@@ -9,6 +15,7 @@ namespace CABASUS.Controllers
     {
         string IP = "192.168.1.74";
         string Server = "";
+        HttpClient cliente = new HttpClient();
 
         ShareInSide S = new ShareInSide();
         public Notifications_ViewController() : base("Notifications_ViewController", null)
@@ -36,7 +43,7 @@ namespace CABASUS.Controllers
             S.saveTabState("u");
         }
 
-        public override void ViewDidLoad()
+        public override async void ViewDidLoad()
         {
             base.ViewDidLoad();
 
@@ -74,16 +81,7 @@ namespace CABASUS.Controllers
 
             #region Consulta compartidos
 
-            Server = "http://" + IP + ":5001/api/compartir/consultarcompartidos";
-
-            try
-            {
-                var cliente = new HttpClient();
-            }
-            catch (Exception ex)
-            {
-
-            }
+            await ConsultarCaballos();
 
             #endregion
 
@@ -93,6 +91,44 @@ namespace CABASUS.Controllers
         {
             base.DidReceiveMemoryWarning();
             // Release any cached data, images, etc that aren't in use.
+        }
+
+        public async Task<bool> ConsultarCaballos()
+        {
+            //refreshControl.BeginRefreshing();
+
+            try
+            {
+                Server = "http://" + IP + ":5001/api/compartir/consultarcompartidos";
+
+                cliente.Timeout = TimeSpan.FromSeconds(20);
+                cliente.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", new ShareInSide().consultxmlToken().token);
+                var respuesta = await cliente.GetAsync(Server);
+                var datos = await respuesta.Content.ReadAsStringAsync();
+
+                if (respuesta.IsSuccessStatusCode)
+                {
+                    var listaCaballos = JsonConvert.DeserializeObject<List<compartidos>>(datos);
+
+                    #region agragar acciones al table view en swipe;
+
+                    tableChat.Source = new Horse_Share_Adapter(listaCaballos, this);
+                    tableChat.ReloadData();
+                    //tableChat.Delegate = new Horses_Adapter_Delegate(this, listaCaballos);
+
+                    #endregion;
+                }
+                else
+                    S.Toast(datos);
+            }
+            catch (Exception ex)
+            {
+                S.Toast(ex.Message);
+            }
+
+            //refreshControl.EndRefreshing();
+
+            return true;
         }
     }
 }
