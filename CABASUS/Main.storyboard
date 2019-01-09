@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="xhS-l0-QaQ">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
@@ -494,7 +494,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="WSq-ST-Jc3" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1352.8" y="183.95802098950526"/>
+            <point key="canvasLocation" x="1352.8" y="183.958"/>
         </scene>
         <!--Search View Controller-->
         <scene sceneID="C0n-IZ-ldQ">
@@ -644,7 +644,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="PXL-dv-cjq" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-2055.1999999999998" y="1054.7226386806597"/>
+            <point key="canvasLocation" x="-2055.2" y="1054.723"/>
         </scene>
         <!--Time Line View Controller-->
         <scene sceneID="Fch-pY-bhb">
@@ -767,7 +767,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hlj-9J-6Nz" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2.3999999999999999" y="1054.7226386806597"/>
+            <point key="canvasLocation" x="2.4" y="1054.723"/>
         </scene>
         <!--Chat Controller-->
         <scene sceneID="WNO-Kn-Tqg">
@@ -798,7 +798,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="rKx-Tx-A9I" customClass="Custom_Cell_Chat_Adapter">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="rKx-Tx-A9I" customClass="Custom_Cell_Chat_Adapter" reuseIdentifier="celdaChat">
                                         <rect key="frame" x="0.0" y="28" width="343" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="rKx-Tx-A9I" id="7Mc-0p-MIu">
@@ -851,7 +851,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="k6m-WA-HdG" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="0.80000000000000004" y="1709.5952023988007"/>
+            <point key="canvasLocation" x="0.8" y="1709.595"/>
         </scene>
         <!--Settings View Controller-->
         <scene sceneID="m3n-Kd-85P">
@@ -883,7 +883,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="uZE-dY-6sY" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="696.79999999999995" y="1054.7226386806597"/>
+            <point key="canvasLocation" x="696.8" y="1054.723"/>
         </scene>
         <!--Tabs View Controller-->
         <scene sceneID="3tx-XD-pww">
@@ -891,7 +891,7 @@
                 <tabBarController storyboardIdentifier="Tabs_ViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="DVg-dl-11k" customClass="Tabs_ViewController" sceneMemberID="viewController">
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <tabBar key="tabBar" contentMode="scaleToFill" translucent="NO" id="3vH-wj-r2b">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="49"/>
+                        <rect key="frame" x="0.0" y="617" width="375" height="50"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" red="0.79607843140000001" green="0.1176470588" blue="0.1176470588" alpha="1" colorSpace="calibratedRGB"/>
                         <color key="tintColor" red="0.79607843140000001" green="0.1176470588" blue="0.1176470588" alpha="1" colorSpace="calibratedRGB"/>
@@ -921,7 +921,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="bell" width="612" height="792"/>
         <image name="cabasuslogo.png" width="625" height="209"/>
         <image name="horse" width="612" height="792"/>
         <image name="map" width="612" height="792"/>
