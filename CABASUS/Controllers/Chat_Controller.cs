@@ -58,9 +58,9 @@ namespace CABASUS.Controllers
             g.CancelsTouchesInView = false; //for iOS5
 
             View.AddGestureRecognizer(g);
-
-            #endregion;
-
+             
+            #endregion;  
+             
             #region mover pantalla cuando se este llenando el formulario;
 
             UIKeyboard.Notifications.ObserveWillShow(async (sender, args) =>
