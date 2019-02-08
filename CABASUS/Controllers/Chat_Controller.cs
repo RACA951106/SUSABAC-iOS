@@ -94,8 +94,8 @@ namespace CABASUS.Controllers
 
             btnBack.TouchUpInside += delegate {
 
-                var detalle = Storyboard.InstantiateViewController("Tabs_ViewController") as Tabs_ViewController;
-                detalle.index = 3;
+                var detalle = Storyboard.InstantiateViewController("Hamburguer_ViewController") as Hamburguer_ViewController;
+                //detalle.index = 3;
                 detalle.ModalTransitionStyle = UIModalTransitionStyle.CrossDissolve;
                 detalle.ModalPresentationStyle = UIModalPresentationStyle.OverFullScreen;
                 this.PresentViewController(detalle, true, null);

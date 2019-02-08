@@ -7,21 +7,15 @@
 using Foundation;
 using System;
 using System.CodeDom.Compiler;
+using UIKit;
 
-namespace CABASUS.Controllers
+namespace CABASUS
 {
-    [Register ("Tabs_ViewController")]
-    partial class Tabs_ViewController
+    [Register ("Hamburger_Container_ViewController")]
+    partial class Hamburger_Container_ViewController
     {
-        [Outlet]
-        UIKit.UITabBar barra { get; set; }
-
         void ReleaseDesignerOutlets ()
         {
-            if (barra != null) {
-                barra.Dispose ();
-                barra = null;
-            }
         }
     }
 }

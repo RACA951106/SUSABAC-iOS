@@ -212,10 +212,6 @@
     <Compile Include="Controllers\Register_Horse_ViewController.designer.cs">
       <DependentUpon>Register_Horse_ViewController.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controllers\Tabs_ViewController.cs" />
-    <Compile Include="Controllers\Tabs_ViewController.designer.cs">
-      <DependentUpon>Tabs_ViewController.cs</DependentUpon>
-    </Compile>
     <Compile Include="Controllers\Horses_ViewController.cs" />
     <Compile Include="Controllers\Horses_ViewController.designer.cs">
       <DependentUpon>Horses_ViewController.cs</DependentUpon>
@@ -264,6 +260,18 @@
     <Compile Include="Adapters\Custom_Cell_Chat_Adapter.cs" />
     <Compile Include="Adapters\Custom_Cell_Chat_Adapter.designer.cs">
       <DependentUpon>Custom_Cell_Chat_Adapter.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controllers\Hamburguer_ViewController.cs" />
+    <Compile Include="Controllers\Hamburguer_ViewController.designer.cs">
+      <DependentUpon>Hamburguer_ViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controllers\Hamburger_Container_ViewController.cs" />
+    <Compile Include="Controllers\Hamburger_Container_ViewController.designer.cs">
+      <DependentUpon>Hamburger_Container_ViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controllers\TransitionSegue.cs" />
+    <Compile Include="Controllers\TransitionSegue.designer.cs">
+      <DependentUpon>TransitionSegue.cs</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>

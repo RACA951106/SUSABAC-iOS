@@ -82,8 +82,8 @@ namespace CABASUS.Controllers
             if (!indicadorAccion)
             {
                 btnback.TouchUpInside+=delegate {
-                    var detalle = this.Storyboard.InstantiateViewController("Tabs_ViewController") as Tabs_ViewController;
-                    detalle.index = 4;
+                    var detalle = this.Storyboard.InstantiateViewController("Hamburguer_ViewController") as Hamburguer_ViewController;
+                    //detalle.index = 4;
                     detalle.ModalTransitionStyle = UIModalTransitionStyle.CrossDissolve;
                     detalle.ModalPresentationStyle = UIModalPresentationStyle.OverFullScreen;
                     this.PresentViewController(detalle, true, null);
@@ -505,7 +505,7 @@ namespace CABASUS.Controllers
                                 progreso.StopAnimating();
                                 progreso.Hidden = true;
 
-                                var detalle = this.Storyboard.InstantiateViewController("Tabs_ViewController") as Tabs_ViewController;
+                                var detalle = this.Storyboard.InstantiateViewController("Hamburguer_ViewController") as Hamburguer_ViewController;
                                 detalle.ModalTransitionStyle = UIModalTransitionStyle.CrossDissolve;
                                 detalle.ModalPresentationStyle = UIModalPresentationStyle.OverFullScreen;
                                 this.PresentViewController(detalle, true, null);
@@ -756,7 +756,7 @@ namespace CABASUS.Controllers
                                 progreso.StopAnimating();
                                 progreso.Hidden = true;
 
-                                var detalle = this.Storyboard.InstantiateViewController("Tabs_ViewController") as Tabs_ViewController;
+                                var detalle = this.Storyboard.InstantiateViewController("Hamburguer_ViewController") as Hamburguer_ViewController;
                                 detalle.ModalTransitionStyle = UIModalTransitionStyle.CrossDissolve;
                                 detalle.ModalPresentationStyle = UIModalPresentationStyle.OverFullScreen;
                                 this.PresentViewController(detalle, true, null);
